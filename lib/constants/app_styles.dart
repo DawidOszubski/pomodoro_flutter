@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pomodoro_flutter/constants/app_colors.dart';
 
 class AppStyles {
   static const detailsTitleStyle = TextStyle(
@@ -7,4 +8,14 @@ class AppStyles {
 
   static const detailsBodyStyle =
       TextStyle(color: Colors.black, fontSize: 18.0);
+
+  static const buttonTextStyle = TextStyle(
+    color: AppColors.backgroundColor,
+    fontSize: 18.0,
+  );
+
+  static const buttonTextDarkerStyle = TextStyle(
+    color: AppColors.darkBrown,
+    fontSize: 18.0,
+  );
 }

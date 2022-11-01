@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/flashcard_screen.dart';
 import 'package:pomodoro_flutter/views/learn/learn_screen.dart';
@@ -8,6 +9,7 @@ import 'package:pomodoro_flutter/views/time%20table/time_table_screen.dart';
 import 'package:pomodoro_flutter/widgets/home_page_list_item_widget.dart';
 
 import '../constants/app_assets.dart';
+import 'change_color_screen.dart';
 
 class HomePageScreen extends ConsumerStatefulWidget {
   const HomePageScreen({Key? key}) : super(key: key);
@@ -71,7 +73,7 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isAluniaTheme = ref.watch(aluniaThemeProvider);
+    final isAluniaTheme = ref.watch(isAluniaThemeProvider);
     final themeData = ref.watch(appThemeProvider);
     //final primaryColor = themeData["primaryColor"];
     /*WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -108,13 +110,34 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen> {
                             : Image.asset(AppAssets.titleMain),
                       ),
                       Positioned(
+                        right: 0,
+                        top: 0,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                  type: PageTransitionType.fade,
+                                  duration: const Duration(
+                                    milliseconds: 350,
+                                  ),
+                                  child: ChangeColorScreen()),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.settings,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Positioned(
                         bottom: 40,
                         left: 0,
                         right: 0,
                         child: InkWell(
                           onTap: () {
-                            ref.read(aluniaThemeProvider.state).state =
-                                !ref.read(aluniaThemeProvider.state).state;
+                            ref.read(isAluniaThemeProvider.state).state =
+                                !ref.read(isAluniaThemeProvider.state).state;
                           },
                           child: Container(
                             margin: const EdgeInsets.only(

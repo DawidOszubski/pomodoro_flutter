@@ -2,46 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
-import 'package:pomodoro_flutter/views/learn/pomodoro/pomodoro_screen.dart';
 
-class LearnScreenListItemWidget extends ConsumerWidget {
+class LearnScreenListItemWidget extends ConsumerStatefulWidget {
   const LearnScreenListItemWidget({
     Key? key,
     required this.title,
+    required this.nextScreen,
   }) : super(key: key);
 
   final String title;
+  final Widget nextScreen;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _LearnScreenListItemWidgetState createState() =>
+      _LearnScreenListItemWidgetState();
+}
+
+class _LearnScreenListItemWidgetState
+    extends ConsumerState<LearnScreenListItemWidget> {
+  @override
+  Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            PageTransition(
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          PageTransition(
               type: PageTransitionType.rightToLeft,
-              duration: const Duration(milliseconds: 250),
-              child: const PomodoroScreen(),
-            ),
-          );
-        },
-        child: Card(
-          elevation: 2,
-          child: ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(title),
-                Icon(
-                  Icons.arrow_forward_ios_outlined,
-                  color: theme.mainColor,
-                ),
-              ],
-            ),
+              duration: const Duration(
+                milliseconds: 350,
+              ),
+              child: widget.nextScreen),
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        elevation: 4.0,
+        child: ListTile(
+          trailing: Icon(
+            Icons.arrow_forward_ios_outlined,
+            color: theme.mainColor,
           ),
+          title: Text(widget.title),
         ),
       ),
     );

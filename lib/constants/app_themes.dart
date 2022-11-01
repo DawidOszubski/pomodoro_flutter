@@ -4,17 +4,24 @@ import 'app_colors.dart';
 
 class AppThemes {
   static final mainTheme = AppThemeModel(
-    mainColor: AppColors.mainColor,
+    mainColor: AppColors.mainColorBrown,
     backgroundColor: AppColors.backgroundColor,
-    mainColorDarker: AppColors.mainColorDarker,
-    mainColorLighter: AppColors.mainColorLighter,
+    mainColorDarker: AppColors.mainColorDarkerBrown,
+    mainColorLighter: AppColors.mainColorLighterBrown,
   );
 
   static final aluniaTheme = AppThemeModel(
-    mainColor: AppColors.mainColorAlunia,
-    backgroundColor: AppColors.backgroundColorAlunia,
-    mainColorDarker: AppColors.mainColorDarkerAlunia,
-    mainColorLighter: AppColors.mainColorLighterAlunia,
+    mainColor: AppColors.mainColorBlue,
+    backgroundColor: AppColors.backgroundColorBlue,
+    mainColorDarker: AppColors.mainColorDarkerBlue,
+    mainColorLighter: AppColors.mainColorLighterBlue,
+  );
+
+  static final pomodoroTheme = AppThemeModel(
+    mainColor: AppColors.mainColorRed,
+    backgroundColor: AppColors.backgroundColorRed,
+    mainColorDarker: AppColors.mainColorDarkerRed,
+    mainColorLighter: AppColors.mainColorLighterRed,
   );
 }
 

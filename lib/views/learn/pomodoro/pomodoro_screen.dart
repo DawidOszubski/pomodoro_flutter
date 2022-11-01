@@ -2,8 +2,10 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
+import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 
 import '../../../constants/app_assets.dart';
+import '../../../widgets/custom_button_widget.dart';
 
 class PomodoroScreen extends ConsumerStatefulWidget {
   const PomodoroScreen({Key? key}) : super(key: key);
@@ -12,85 +14,103 @@ class PomodoroScreen extends ConsumerStatefulWidget {
   _PomodoroScreenState createState() => _PomodoroScreenState();
 }
 
-class _PomodoroScreenState extends ConsumerState<PomodoroScreen> {
+class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(milliseconds: 1500),
+    vsync: this,
+  );
+  late final Animation<Offset> _offsetAnimation = Tween<Offset>(
+    begin: const Offset(1, 0.0),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
     final theme = ref.watch(appThemeProvider);
-    return Scaffold(
-      backgroundColor: theme.backgroundColor,
-      appBar: AppBar(
-        title: Text("Pomodoro"),
-        centerTitle: true,
-        foregroundColor: theme.backgroundColor,
-        backgroundColor: theme.mainColor,
-        actions: [
-          InkWell(
-            onTap: () {
-              cardKey.currentState!.toggleCard();
-            },
+    return BaseScreenWidget(
+      onTap: () {
+        cardKey.currentState!.toggleCard();
+      },
+      mainColor: theme.mainColor,
+      screenTitle: "Pomodoro",
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          FlipCard(
+            key: cardKey,
+            flipOnTouch: true,
+            front: front(theme.mainColorLighter),
+            back: back(),
+          ),
+          SlideTransition(
+            position: _offsetAnimation,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Icon(Icons.help_outline_outlined),
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Czas jednej\nsekcji",
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      Text("25 min"),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          )
+          ),
+          Column(
+            children: [
+              CustomButtonWidget(
+                buttonColor: theme.mainColor,
+                buttonText: "Gotowe zestawy",
+                shadowColor: theme.mainColorDarker,
+                onTap: () {
+                  if (_controller.isAnimating || _controller.isCompleted) {
+                    setState(() {
+                      _controller.reverse();
+                    });
+                  } else {
+                    _controller.forward();
+                  }
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24.0),
+                child: CustomButtonWidget(
+                  buttonColor: theme.mainColor,
+                  buttonText: "Dostosuj",
+                  shadowColor: theme.mainColorDarker,
+                  onTap: () {
+                    if (_controller.isAnimating || _controller.isCompleted) {
+                      setState(() {
+                        _controller.reverse();
+                      });
+                    } else {
+                      _controller.forward();
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ],
-      ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            FlipCard(
-              key: cardKey,
-              flipOnTouch: false,
-              front: front(theme.mainColorLighter),
-              back: back(),
-            ),
-            Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(
-                    left: 40.0,
-                    right: 40.0,
-                    bottom: 12,
-                    top: 24,
-                  ),
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: theme.mainColor,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          offset: Offset(5, 5),
-                          blurRadius: 11)
-                    ],
-                  ),
-                  child: Text("Wybierz gotowy zestaw"),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    left: 40.0,
-                    right: 40.0,
-                    bottom: 24,
-                    top: 12,
-                  ),
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: theme.mainColor,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          offset: Offset(5, 5),
-                          blurRadius: 11)
-                    ],
-                  ),
-                  child: Text("Dostosuj swoje wybory"),
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -103,7 +123,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen> {
         children: [
           Container(
             margin: EdgeInsets.symmetric(
-              vertical: 40,
+              vertical: 20,
               horizontal: 40,
             ),
             decoration: BoxDecoration(color: Colors.white, boxShadow: [
@@ -163,7 +183,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen> {
         children: [
           Container(
             margin: EdgeInsets.symmetric(
-              vertical: 40,
+              vertical: 20,
               horizontal: 40,
             ),
             decoration: BoxDecoration(color: Colors.white, boxShadow: [

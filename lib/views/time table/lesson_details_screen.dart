@@ -161,8 +161,8 @@ Future<void> editWidget(
                 ),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5),
-                    borderSide:
-                        const BorderSide(color: AppColors.mainColorLighter)),
+                    borderSide: const BorderSide(
+                        color: AppColors.mainColorLighterBrown)),
                 fillColor: Colors.white,
                 filled: true,
               )),

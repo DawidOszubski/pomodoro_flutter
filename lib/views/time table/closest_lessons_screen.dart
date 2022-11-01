@@ -70,7 +70,7 @@ class _ClosestLessonsScreenState extends State<ClosestLessonsScreen> {
           margin: EdgeInsets.symmetric(vertical: 10),
           padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 20.0),
           decoration: BoxDecoration(
-            color: AppColors.mainColor,
+            color: AppColors.mainColorBrown,
             /*  gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
