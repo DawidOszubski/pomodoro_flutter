@@ -7,8 +7,9 @@ class AppAssets {
   static const String dayPlanIcon = 'assets/icons/ic_day_plan.png';
   static const String titleImage = 'assets/images/img_title.png';
   static const String aluniaHiImage = 'assets/images/alunia_hi.png';
-  static const String titleAlunia = 'assets/images/title4.png';
-  static const String titleMain = 'assets/images/title2.png';
+  static const String titleBlue = 'assets/images/titleBlue.png';
+  static const String titleRed = 'assets/images/titleRed.png';
+  static const String titleBrown = 'assets/images/titleBrown.png';
   static const String testIcon = 'assets/images/test.png';
   static const String aluniaOmgImage = 'assets/images/alunia_omg.png';
   static const String aluniaHmmImage = 'assets/images/alunia_hmm.png';

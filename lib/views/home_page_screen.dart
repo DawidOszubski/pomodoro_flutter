@@ -75,6 +75,8 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen> {
   Widget build(BuildContext context) {
     final isAluniaTheme = ref.watch(isAluniaThemeProvider);
     final themeData = ref.watch(appThemeProvider);
+    final redTheme = ref.watch(redThemeProvider);
+    final blueTheme = ref.watch(blueThemeProvider);
     //final primaryColor = themeData["primaryColor"];
     /*WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.forward();
@@ -105,9 +107,11 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen> {
                           right: 24.0 * 2,
                           top: 30,
                         ),
-                        child: isAluniaTheme
-                            ? Image.asset(AppAssets.titleAlunia)
-                            : Image.asset(AppAssets.titleMain),
+                        child: redTheme
+                            ? Image.asset(AppAssets.titleRed)
+                            : blueTheme
+                                ? Image.asset(AppAssets.titleBlue)
+                                : Image.asset(AppAssets.titleBrown),
                       ),
                       Positioned(
                         right: 0,
@@ -124,14 +128,14 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen> {
                                   child: ChangeColorScreen()),
                             );
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.settings,
                             color: Colors.white,
                           ),
                         ),
                       ),
                       Positioned(
-                        bottom: 40,
+                        bottom: 0,
                         left: 0,
                         right: 0,
                         child: InkWell(
@@ -146,7 +150,7 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen> {
                             ),
                             color: Colors.transparent,
                             width: MediaQuery.of(context).size.width / 2,
-                            height: 60,
+                            height: 70,
                           ),
                         ),
                       ),

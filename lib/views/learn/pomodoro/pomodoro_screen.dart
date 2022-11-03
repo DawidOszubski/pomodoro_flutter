@@ -1,6 +1,7 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 
@@ -45,34 +46,87 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          FlipCard(
+          CircularPercentIndicator(
+            radius: 90.0,
+            animation: true,
+            animationDuration: 1200,
+            lineWidth: 12.0,
+            percent: 1,
+            center: Text(
+              "25 min",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                  color: theme.mainColor),
+            ),
+            circularStrokeCap: CircularStrokeCap.butt,
+            backgroundColor: theme.backgroundColor,
+            progressColor: theme.mainColor,
+          ),
+          /* FlipCard(
             key: cardKey,
             flipOnTouch: true,
             front: front(theme.mainColorLighter),
             back: back(),
-          ),
+          ),*/
           SlideTransition(
             position: _offsetAnimation,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Czas jednej\nsekcji",
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      Text("25 min"),
-                    ],
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: theme.mainColor,
                   ),
-                ],
-              ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 40),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: theme.backgroundColor,
+                        boxShadow: [
+                          BoxShadow(
+                              color: theme.mainColorDarker,
+                              offset: Offset(2, 2),
+                              spreadRadius: 1,
+                              blurRadius: 6),
+                          BoxShadow(
+                              color: theme.mainColorLighter,
+                              offset: Offset(-2, -2),
+                              spreadRadius: 1,
+                              blurRadius: 12),
+                        ]),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Czas jednej\nsekcji",
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 8.0,
+                            ),
+                            Text("25 min"),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Icon(
+                    Icons.arrow_forward_ios_outlined,
+                    color: theme.mainColor,
+                  ),
+                ),
+              ],
             ),
           ),
           Column(

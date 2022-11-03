@@ -29,6 +29,8 @@ dependencies:
   date_picker_timeline: ^1.2.3
   infinite_scroll_tab_view: ^1.0.3
   flip_card: ^0.6.0
+  percent_indicator: ^4.2.2
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:

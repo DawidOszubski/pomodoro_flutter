@@ -18,6 +18,7 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
+    final isAluniaTheme = ref.watch(isAluniaThemeProvider);
     return BaseScreenWidget(
       mainColor: theme.mainColor,
       screenTitle: "Czas na naukę",
@@ -49,14 +50,16 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
               ],
             ),
           ),
-          Positioned(
-            bottom: -5,
-            right: -5,
-            child: Image.asset(
-              AppAssets.aluniaHmmImage,
-              scale: 0.8,
-            ),
-          ),
+          isAluniaTheme
+              ? Positioned(
+                  bottom: -5,
+                  right: -5,
+                  child: Image.asset(
+                    AppAssets.aluniaHmmImage,
+                    scale: 0.8,
+                  ),
+                )
+              : Container(),
         ],
       ),
     );
