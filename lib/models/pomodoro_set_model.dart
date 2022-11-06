@@ -1,9 +1,6 @@
 class PomodoroSetModel {
   final String learnSectionTimer;
-  final String shortBreakeTime;
-  final String longBreakeTime;
-  final int sectionNumber;
+  final String breakTime;
 
-  PomodoroSetModel.name(this.learnSectionTimer, this.shortBreakeTime,
-      this.longBreakeTime, this.sectionNumber);
+  PomodoroSetModel.name(this.learnSectionTimer, this.breakTime);
 }

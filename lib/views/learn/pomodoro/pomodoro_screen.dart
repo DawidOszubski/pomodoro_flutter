@@ -14,6 +14,7 @@ import 'package:pomodoro_flutter/widgets/bottom_sheet_base_widget.dart';
 
 import '../../../widgets/custom_button_widget.dart';
 import '../../../widgets/pomodoro/pomodoro_set_widget.dart';
+import 'create_new_pomodoro_set_screen.dart';
 
 class PomodoroScreen extends ConsumerStatefulWidget {
   const PomodoroScreen({Key? key}) : super(key: key);
@@ -63,6 +64,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
     GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
     final theme = ref.watch(appThemeProvider);
     return BaseScreenWidget(
+      resizeToAvoidBottomInsets: false,
       onTap: () {
         //  cardKey.currentState!.toggleCard();
         BottomSheetWidget.show(
@@ -144,7 +146,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
               ),
             ),
           ),
-          Row(
+          /* Row(
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -165,7 +167,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                 ),
               ),
             ],
-          ),
+          ),*/
           const SizedBox(
             height: 50.0,
           ),
@@ -213,16 +215,10 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                         children: [
                           Expanded(
                             child: CarouselSlider(
-                              items: [
-                                Text(
-                                  "Czas jednej\nsekcji\n${learnTime[_currentIndex]}",
-                                  textAlign: TextAlign.center,
-                                ),
-                                Text(
-                                  "Czas",
-                                  textAlign: TextAlign.center,
-                                ),
-                                PomodoroSetWidget(),
+                              items: const [
+                                PomodoroSetWidget(learnTime: 25, breakTime: 5),
+                                PomodoroSetWidget(learnTime: 35, breakTime: 8),
+                                PomodoroSetWidget(learnTime: 45, breakTime: 12),
                               ],
                               carouselController: buttonCarouselController,
                               options: CarouselOptions(
@@ -302,7 +298,13 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                   buttonGradientColor: theme.gradientButton,
                   buttonText: "Stwórz własny",
                   shadowColor: theme.mainColorDarker,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            type: PageTransitionType.fade,
+                            child: CreateNewPomodoroSetScreen()));
+                  },
                 ),
               ),
             ],

@@ -11,12 +11,14 @@ class BaseScreenWidget extends ConsumerStatefulWidget {
     required this.screenTitle,
     required this.body,
     this.onTap,
+    this.resizeToAvoidBottomInsets,
   }) : super(key: key);
 
   final Color mainColor;
   final String screenTitle;
   final Widget body;
   final void Function()? onTap;
+  final bool? resizeToAvoidBottomInsets;
 
   @override
   _BaseScreenWidgetState createState() => _BaseScreenWidgetState();
@@ -27,6 +29,7 @@ class _BaseScreenWidgetState extends ConsumerState<BaseScreenWidget> {
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: widget.resizeToAvoidBottomInsets,
       body: Stack(
         children: [
           Container(
