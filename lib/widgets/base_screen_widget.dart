@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pomodoro_flutter/providers/theme_provider.dart';
 
 import '../constants/app_colors.dart';
 
-class BaseScreenWidget extends StatefulWidget {
+class BaseScreenWidget extends ConsumerStatefulWidget {
   const BaseScreenWidget({
     Key? key,
     required this.mainColor,
@@ -17,19 +19,20 @@ class BaseScreenWidget extends StatefulWidget {
   final void Function()? onTap;
 
   @override
-  State<BaseScreenWidget> createState() => _BaseScreenWidgetState();
+  _BaseScreenWidgetState createState() => _BaseScreenWidgetState();
 }
 
-class _BaseScreenWidgetState extends State<BaseScreenWidget> {
+class _BaseScreenWidgetState extends ConsumerState<BaseScreenWidget> {
   @override
   Widget build(BuildContext context) {
+    final theme = ref.watch(appThemeProvider);
     return Scaffold(
       body: Stack(
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            color: widget.mainColor,
+            decoration: BoxDecoration(gradient: theme.gradient),
             child: SafeArea(
               child: Stack(
                 children: [

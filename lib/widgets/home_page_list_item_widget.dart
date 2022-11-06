@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
@@ -44,22 +45,23 @@ class _HomePageListItemWidgetState extends ConsumerState<HomePageListItemWidget>
     final themeData = ref.watch(appThemeProvider);
     final DecorationTween decorationTween = DecorationTween(
       begin: BoxDecoration(
-        color: themeData.mainColor,
+        //color: themeData.mainColor,
+        gradient: themeData.gradientButton,
         borderRadius: const BorderRadius.all(
           Radius.circular(20.0),
         ),
         boxShadow: [
           BoxShadow(
             color: themeData.mainColorLighter,
-            offset: const Offset(-4.0, -4.0),
-            blurRadius: 10.0,
-            spreadRadius: 1.0,
+            offset: const Offset(-2.0, -2.0),
+            blurRadius: 20.0,
+            spreadRadius: 0.0,
           ),
           BoxShadow(
             color: themeData.mainColorDarker,
             offset: const Offset(4.0, 4.0),
             blurRadius: 3.0,
-            spreadRadius: 2.0,
+            spreadRadius: 1.0,
           ),
         ],
       ),

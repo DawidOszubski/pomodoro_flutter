@@ -31,6 +31,8 @@ dependencies:
   flip_card: ^0.6.0
   percent_indicator: ^4.2.2
   carousel_slider: ^4.1.1
+  circular_countdown_timer: ^0.2.3
+  flutter_svg: ^1.1.6
 
 dev_dependencies:
   flutter_test:

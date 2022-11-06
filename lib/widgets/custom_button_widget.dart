@@ -6,13 +6,13 @@ class CustomButtonWidget extends StatefulWidget {
   const CustomButtonWidget({
     Key? key,
     required this.buttonText,
-    required this.buttonColor,
+    required this.buttonGradientColor,
     required this.shadowColor,
     required this.onTap,
   }) : super(key: key);
 
   final String buttonText;
-  final Color buttonColor;
+  final Gradient buttonGradientColor;
   final Color shadowColor;
   final void Function()? onTap;
 
@@ -43,7 +43,8 @@ class _CustomButtonWidgetState extends State<CustomButtonWidget> {
           horizontal: 18.0,
         ),
         decoration: BoxDecoration(
-            color: widget.buttonColor,
+            //color: widget.buttonColor,
+            gradient: widget.buttonGradientColor,
             borderRadius: BorderRadius.circular(20.0),
             boxShadow: [
               BoxShadow(

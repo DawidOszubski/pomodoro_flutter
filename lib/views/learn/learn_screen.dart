@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/learn/pomodoro/pomodoro_screen.dart';
@@ -16,6 +17,15 @@ class LearnScreen extends ConsumerStatefulWidget {
 
 class _LearnScreenState extends ConsumerState<LearnScreen> {
   @override
+  void initState() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+      systemNavigationBarColor: Colors.white,
+      statusBarColor: Colors.transparent,
+    ));
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
     final isAluniaTheme = ref.watch(isAluniaThemeProvider);
@@ -28,7 +38,7 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              children: const [
+              children: [
                 LearnScreenListItemWidget(
                   title: "Pomodoro",
                   nextScreen: PomodoroScreen(),
@@ -63,37 +73,5 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
         ],
       ),
     );
-
-    /*Scaffold(
-      backgroundColor: theme.backgroundColor,
-      appBar: AppBar(
-        title: Text("Czas na naukę"),
-        centerTitle: true,
-        foregroundColor: theme.backgroundColor,
-        backgroundColor: theme.mainColor,
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                LearnScreenListItemWidget(title: "Pomodoro"),
-                LearnScreenListItemWidget(title: "Test"),
-                LearnScreenListItemWidget(title: "Inne"),
-              ],
-            ),
-            Positioned(
-              bottom: -5,
-              right: -5,
-              child: Image.asset(
-                AppAssets.aluniaHmmImage,
-                scale: 0.8,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );*/
   }
 }

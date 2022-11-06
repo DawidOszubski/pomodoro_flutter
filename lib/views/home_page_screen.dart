@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:pomodoro_flutter/main.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/flashcard_screen.dart';
 import 'package:pomodoro_flutter/views/learn/learn_screen.dart';
@@ -18,40 +19,8 @@ class HomePageScreen extends ConsumerStatefulWidget {
   _HomePageScreenState createState() => _HomePageScreenState();
 }
 
-class _HomePageScreenState extends ConsumerState<HomePageScreen> {
-/*  late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 2),
-    vsync: this,
-  );
-  late final Animation<Offset> _offsetAnimation = Tween<Offset>(
-    begin: const Offset(2, 0.0),
-    end: const Offset(0.0, 0.0),
-  ).animate(CurvedAnimation(
-    parent: _controller,
-    curve: Curves.elasticOut,
-  ));
-  late final AnimationController _controller2 = AnimationController(
-    duration: const Duration(seconds: 2),
-    vsync: this,
-  );
-  late final Animation<Offset> _offsetAnimation2 = Tween<Offset>(
-    begin: const Offset(4.0, 0.0),
-    end: const Offset(0.0, 0.0),
-  ).animate(CurvedAnimation(
-    parent: _controller2,
-    curve: Curves.elasticOut,
-  ));
-  late final AnimationController _controller3 = AnimationController(
-    duration: const Duration(seconds: 2),
-    vsync: this,
-  );
-  late final Animation<Offset> _offsetAnimation3 = Tween<Offset>(
-    begin: const Offset(6.0, 0.0),
-    end: const Offset(0.0, 0.0),
-  ).animate(CurvedAnimation(
-    parent: _controller3,
-    curve: Curves.elasticOut,
-  ));*/
+class _HomePageScreenState extends ConsumerState<HomePageScreen>
+    with RouteAware {
   late List<Widget> mainScreenTabsList = [];
   @override
   void initState() {
@@ -60,40 +29,32 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      routeObserver.subscribe(this, ModalRoute.of(context)!);
+    });
     super.initState();
   }
 
   @override
-  void dispose() {
-    /*_controller.dispose();
-    _controller2.dispose();
-    _controller3.dispose();*/
-    super.dispose();
+  void didPopNext() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+      systemNavigationBarColor: Colors.transparent,
+      statusBarColor: Colors.transparent,
+    ));
+    super.didPopNext();
   }
 
   @override
   Widget build(BuildContext context) {
     final isAluniaTheme = ref.watch(isAluniaThemeProvider);
-    final themeData = ref.watch(appThemeProvider);
+    final theme = ref.watch(appThemeProvider);
     final redTheme = ref.watch(redThemeProvider);
     final blueTheme = ref.watch(blueThemeProvider);
-    //final primaryColor = themeData["primaryColor"];
-    /*WidgetsBinding.instance.addPostFrameCallback((_) {
-      _controller.forward();
-      _controller2.forward();
-      _controller3.forward();
-    });*/
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemNavigationBarColor: themeData.mainColor,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-    );
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: themeData.mainColor,
+        decoration: BoxDecoration(gradient: theme.gradient),
         child: SafeArea(
           child: Stack(
             children: [

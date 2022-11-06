@@ -19,11 +19,11 @@ final appThemeProvider = Provider((ref) {
   final isBlueTheme = ref.watch(blueThemeProvider);
   final isRedTheme = ref.watch(redThemeProvider);
   if (isBlueTheme) {
-    return AppThemes.aluniaTheme;
+    return AppThemes.blueTheme;
   }
   if (isRedTheme) {
-    return AppThemes.pomodoroTheme;
+    return AppThemes.redTheme;
   } else {
-    return AppThemes.mainTheme;
+    return AppThemes.brownTheme;
   }
 });

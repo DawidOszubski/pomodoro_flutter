@@ -44,6 +44,7 @@ class _LearnScreenListItemWidgetState
           trailing: Icon(
             Icons.arrow_forward_ios_outlined,
             color: theme.mainColor,
+            size: 25,
           ),
           title: Text(widget.title),
         ),
