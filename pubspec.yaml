@@ -33,6 +33,7 @@ dependencies:
   carousel_slider: ^4.1.1
   circular_countdown_timer: ^0.2.3
   flutter_svg: ^1.1.6
+  modal_bottom_sheet: ^2.1.2
 
 dev_dependencies:
   flutter_test:

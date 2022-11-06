@@ -20,7 +20,7 @@ class AppColors {
     tileMode: TileMode.mirror,
   );
   static const blueGradientButtons = LinearGradient(
-    begin: Alignment.centerLeft,
+    begin: Alignment.topLeft,
     end: Alignment(0, 1),
     colors: <Color>[
       Color.fromRGBO(82, 192, 255, 1),
@@ -47,21 +47,17 @@ class AppColors {
       Color.fromRGBO(238, 189, 143, 1),
       Color.fromRGBO(218, 170, 124, 1),
       Color.fromRGBO(199, 152, 106, 1),
-      Color.fromRGBO(180, 134, 89, 1),
-      Color.fromRGBO(161, 116, 71, 1),
-      Color.fromRGBO(142, 99, 55, 1),
     ],
     tileMode: TileMode.mirror,
   );
   static const brownGradientButtons = LinearGradient(
-    begin: Alignment.centerLeft,
+    begin: Alignment.topLeft,
     end: Alignment(0, 1),
     colors: <Color>[
       Color.fromRGBO(238, 189, 143, 1),
+      Color.fromRGBO(238, 189, 143, 1),
       Color.fromRGBO(218, 170, 124, 1),
       Color.fromRGBO(199, 152, 106, 1),
-      Color.fromRGBO(180, 134, 89, 1),
-      Color.fromRGBO(180, 134, 89, 1),
     ],
     tileMode: TileMode.mirror,
   );
@@ -88,9 +84,10 @@ class AppColors {
     tileMode: TileMode.mirror,
   );
   static const redGradientButtons = LinearGradient(
-    begin: Alignment.centerLeft,
+    begin: Alignment.topLeft,
     end: Alignment(0, 1),
     colors: <Color>[
+      Color.fromRGBO(170, 60, 57, 1),
       Color.fromRGBO(159, 52, 49, 1),
       Color.fromRGBO(147, 45, 41, 1),
       Color.fromRGBO(136, 37, 34, 1),
