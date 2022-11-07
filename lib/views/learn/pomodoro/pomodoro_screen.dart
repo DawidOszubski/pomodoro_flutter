@@ -12,6 +12,7 @@ import 'package:pomodoro_flutter/views/learn/pomodoro/timer_screen.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 import 'package:pomodoro_flutter/widgets/bottom_sheet_base_widget.dart';
 
+import '../../../models/pomodoro_set_model.dart';
 import '../../../widgets/custom_button_widget.dart';
 import '../../../widgets/pomodoro/pomodoro_set_widget.dart';
 import 'create_new_pomodoro_set_screen.dart';
@@ -54,6 +55,21 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
 
     super.dispose();
   }
+
+  List<PomodoroSetModel> pomodoroSetList = [
+    PomodoroSetModel(
+      learnSectionTime: 25,
+      breakTime: 5,
+    ),
+    PomodoroSetModel(
+      learnSectionTime: 35,
+      breakTime: 8,
+    ),
+    PomodoroSetModel(
+      learnSectionTime: 45,
+      breakTime: 12,
+    ),
+  ];
 
   var isTimerSet = false;
   int _currentIndex = 0;
@@ -109,7 +125,9 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                                       duration: const Duration(
                                         milliseconds: 650,
                                       ),
-                                      child: TimerScreen(),
+                                      child: TimerScreen(
+                                          pomodoroSetModel:
+                                              pomodoroSetList[_currentIndex]),
                                     ),
                                   );
                                 }
@@ -215,10 +233,19 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                         children: [
                           Expanded(
                             child: CarouselSlider(
-                              items: const [
-                                PomodoroSetWidget(learnTime: 25, breakTime: 5),
-                                PomodoroSetWidget(learnTime: 35, breakTime: 8),
-                                PomodoroSetWidget(learnTime: 45, breakTime: 12),
+                              items: [
+                                PomodoroSetWidget(
+                                    learnTime:
+                                        pomodoroSetList[0].learnSectionTime,
+                                    breakTime: pomodoroSetList[0].breakTime),
+                                PomodoroSetWidget(
+                                    learnTime:
+                                        pomodoroSetList[1].learnSectionTime,
+                                    breakTime: pomodoroSetList[1].breakTime),
+                                PomodoroSetWidget(
+                                    learnTime:
+                                        pomodoroSetList[2].learnSectionTime,
+                                    breakTime: pomodoroSetList[2].breakTime),
                               ],
                               carouselController: buttonCarouselController,
                               options: CarouselOptions(

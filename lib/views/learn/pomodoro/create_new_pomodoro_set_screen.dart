@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
 
 import '../../../providers/theme_provider.dart';
 
@@ -47,7 +48,7 @@ class _CreateNewPomodoroSetScreenState
                 },
                 child: Center(
                   child: Container(
-                    height: MediaQuery.of(context).size.height / 2,
+                    height: MediaQuery.of(context).size.height / 1.5,
                     //padding: EdgeInsets.all(24.0),
                     // margin:
                     //    EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0 * 8),
@@ -73,7 +74,7 @@ class _CreateNewPomodoroSetScreenState
                                 right: 4,
                                 bottom: 0,
                                 child: InkWell(
-                                  onTap: (){
+                                  onTap: () {
                                     Navigator.pop(context);
                                   },
                                   child: Padding(
@@ -87,6 +88,9 @@ class _CreateNewPomodoroSetScreenState
                               )
                             ],
                           ),
+                        ),
+                        SizedBox(
+                          height: 30,
                         ),
                         Expanded(
                           child: Padding(
@@ -133,6 +137,30 @@ class _CreateNewPomodoroSetScreenState
                               ],
                             ),
                           ),
+                        ),
+                        SizedBox(
+                          height: 60,
+                        ),
+                        CustomButtonWidget(
+                          buttonText: "Stwórz",
+                          onTap: () {},
+                          buttonGradientColor: theme.gradientButton,
+                          shadowColor: theme.mainColorDarker,
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text("Anuluj"),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 24,
                         ),
                       ],
                     ),

@@ -1,102 +1,50 @@
-import 'package:circular_countdown_timer/circular_countdown_timer.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:pomodoro_flutter/models/pomodoro_set_model.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 
 class TimerScreen extends ConsumerStatefulWidget {
-  const TimerScreen({Key? key}) : super(key: key);
+  const TimerScreen({
+    Key? key,
+    required this.pomodoroSetModel,
+  }) : super(key: key);
+
+  final PomodoroSetModel pomodoroSetModel;
 
   @override
   _TimerScreenState createState() => _TimerScreenState();
 }
 
 class _TimerScreenState extends ConsumerState<TimerScreen> {
-  var time = 10;
-
-  DateTime? date;
-
   @override
   void initState() {
-    date = DateTime.utc(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        DateTime.now().hour,
-        DateTime.now().minute,
-        DateTime.now().second + time);
+    startTime(60);
     super.initState();
   }
 
-  final controller = CountDownController();
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  //var timeRemaining = 25.0;
+  var timerVar = 0.0;
+  Timer? timer;
+  int remainingSeconds = 60;
+  String time = "01:00";
   @override
   Widget build(BuildContext context) {
+    var timeRemaining = widget.pomodoroSetModel.learnSectionTime;
     final theme = ref.watch(appThemeProvider);
+
     return BaseScreenWidget(
       screenTitle: "Uczymy się!",
-      body: /*CircularCountDownTimer(
-        duration: time,
-        initialDuration: 0,
-        controller: controller,
-        width: 200,
-        height: MediaQuery.of(context).size.height / 2,
-        ringColor: Colors.grey[300]!,
-        ringGradient: null,
-        fillColor: theme.mainColor,
-        fillGradient: null,
-        backgroundColor: theme.mainColor,
-        backgroundGradient: null,
-        strokeWidth: 20.0,
-        strokeCap: StrokeCap.round,
-        textStyle: TextStyle(
-            fontSize: 33.0, color: Colors.white, fontWeight: FontWeight.bold),
-        textFormat: CountdownTextFormat.S,
-        isReverse: false,
-        isReverseAnimation: false,
-        isTimerTextShown: true,
-        autoStart: true,
-        onStart: () {
-          debugPrint('Countdown Started');
-        },
-        onComplete: () {
-          debugPrint('Countdown Ended');
-        },
-        onChange: (String timeStamp) {
-          debugPrint('Countdown Changed $timeStamp');
-        },
-        timeFormatterFunction: (defaultFormatterFunction, duration) {
-          if (date!.difference(DateTime.now()).inMicroseconds <= 0) {
-            return "Czas na\nprzerwę!";
-          } else {
-            if (date!.difference(DateTime.now()).inMinutes < 10) {
-              if ((date!.difference(DateTime.now()).inSeconds) -
-                      (date!.difference(DateTime.now()).inMinutes) * 60 <
-                  10) {
-                return "0${date!.difference(DateTime.now()).inMinutes}:0${(date!.difference(DateTime.now()).inSeconds) - (date!.difference(DateTime.now()).inMinutes) * 60}";
-              } else {
-                return "0${date!.difference(DateTime.now()).inMinutes}:${(date!.difference(DateTime.now()).inSeconds) - (date!.difference(DateTime.now()).inMinutes) * 60}";
-              }
-            } else {
-              if ((date!.difference(DateTime.now()).inSeconds) -
-                      (date!.difference(DateTime.now()).inMinutes) * 60 <
-                  10) {
-                return "${date!.difference(DateTime.now()).inMinutes}:0${(date!.difference(DateTime.now()).inSeconds) - (date!.difference(DateTime.now()).inMinutes) * 60}";
-              } else {
-                return "${date!.difference(DateTime.now()).inMinutes}:${(date!.difference(DateTime.now()).inSeconds) - (date!.difference(DateTime.now()).inMinutes) * 60}";
-              }
-            }
-          }
-          //return DateTime.now().difference(date);
-          // return DateFormat("mm:ss").format(DateTime.now().difference(date));
-          /*if (duration.inSeconds == time) {
-            return "Przerwa";
-          } else {
-            return (time - double.parse(controller.getTime()!)).toString();
-          }*/
-        },
-      ),*/
-          Hero(
+      body: Hero(
         tag: "timer",
         child: Material(
           color: Colors.white,
@@ -111,7 +59,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                   animation: false,
                   animationDuration: 1200,
                   lineWidth: 12.0,
-                  percent: 1,
+                  percent: timerVar / 60,
                   center: Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
@@ -121,7 +69,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                     height: 145,
                     child: Center(
                       child: Text(
-                        "25 min",
+                        time, //"${widget.pomodoroSetModel.learnSectionTime - timer} min",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20.0,
@@ -155,5 +103,29 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
       ),
       mainColor: theme.mainColor,
     );
+  }
+
+  startTime(int seconds) {
+    const duration = Duration(seconds: 1);
+    remainingSeconds = seconds;
+    timer = Timer.periodic(duration, (Timer timer) {
+      if (remainingSeconds == 0) {
+        setState(() {
+          time = "00:00";
+        });
+        timer.cancel();
+      } else {
+        int minutes = remainingSeconds ~/ 60;
+        int seconds = (remainingSeconds % 60);
+        setState(() {
+          time = minutes.toString().padLeft(2, "0") +
+              ":" +
+              seconds.toString().padLeft(2, "0");
+
+          remainingSeconds--;
+          timerVar++;
+        });
+      }
+    });
   }
 }
