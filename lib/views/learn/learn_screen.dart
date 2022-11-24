@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/learn/pomodoro/pomodoro_screen.dart';
+import 'package:pomodoro_flutter/views/learn/pomodoro/test_screen.dart';
+import 'package:pomodoro_flutter/views/learn/pomodoro/zadanka_screen.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 
 import '../../constants/app_assets.dart';
@@ -47,15 +49,15 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
                   height: 15.0,
                 ),
                 LearnScreenListItemWidget(
-                  title: "Test",
-                  nextScreen: PomodoroScreen(),
+                  title: "Testy",
+                  nextScreen: TestScreen(),
                 ),
                 SizedBox(
                   height: 15.0,
                 ),
                 LearnScreenListItemWidget(
-                  title: "Inne",
-                  nextScreen: PomodoroScreen(),
+                  title: "Zadanka",
+                  nextScreen: ZadankaScreen(),
                 ),
               ],
             ),

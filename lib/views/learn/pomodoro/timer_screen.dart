@@ -22,7 +22,7 @@ class TimerScreen extends ConsumerStatefulWidget {
 class _TimerScreenState extends ConsumerState<TimerScreen> {
   @override
   void initState() {
-    startTime(60);
+    startTime(60 * 25);
     super.initState();
   }
 
@@ -33,10 +33,10 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
   }
 
   //var timeRemaining = 25.0;
-  var timerVar = 0.0;
+  var timerVar = 0;
   Timer? timer;
-  int remainingSeconds = 60;
-  String time = "01:00";
+  int remainingSeconds = 60 * 25;
+  String time = "25:00";
   @override
   Widget build(BuildContext context) {
     var timeRemaining = widget.pomodoroSetModel.learnSectionTime;
@@ -59,7 +59,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                   animation: false,
                   animationDuration: 1200,
                   lineWidth: 12.0,
-                  percent: timerVar / 60,
+                  percent: timerVar / (60 * 25),
                   center: Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
