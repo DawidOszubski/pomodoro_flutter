@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -7,7 +5,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/constants/app_styles.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
 import 'package:pomodoro_flutter/models/flash_card_model.dart';
-import 'package:pomodoro_flutter/views/flash%20cards/flashcard_details_screen.dart';
+import 'package:pomodoro_flutter/providers/flashcard_provider.dart';
 import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
 import 'package:pomodoro_flutter/widgets/flash%20cards/flash_card_item_widget.dart';
 import 'package:pomodoro_flutter/widgets/pop_up_widget.dart';
@@ -16,6 +14,7 @@ import 'package:pomodoro_flutter/widgets/text_field_widget.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/base_screen_widget.dart';
 import '../../widgets/rounded_add_button_widget.dart';
+import 'flashcard_details_screen.dart';
 
 class FlashCardScreen extends ConsumerStatefulWidget {
   const FlashCardScreen({Key? key}) : super(key: key);
@@ -36,6 +35,7 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
+    final getFlashcards = ref.watch(getFlashcardsProvider);
     return BaseScreenWidget(
       mainColor: theme.mainColor,
       onTap: () {
@@ -47,7 +47,72 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
       ),
       body: Stack(
         children: [
-          ListView.builder(
+          getFlashcards.when(
+              data: (flashcards) {
+                if (flashcards != null) {
+                  return ListView.builder(
+                    itemCount: flashcards.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onLongPress: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.fade,
+                              duration: const Duration(
+                                milliseconds: 350,
+                              ),
+                              child: deleteWidget(theme, flashcards[index]),
+                            ),
+                          );
+                        },
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                duration: const Duration(
+                                  milliseconds: 350,
+                                ),
+                                child: FlashCardDetailsScreen(
+                                  title: flashcards[index].title,
+                                )),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0,
+                            vertical: 12.0,
+                          ),
+                          child: FlashCardItemWidget(
+                            flashcard: flashcards[index],
+                            theme: theme,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  return Center(
+                    child: Container(
+                      child: Text("Brak elementów do wyświetlenia"),
+                    ),
+                  );
+                }
+              },
+              error: (err, s) => Center(
+                    child: Container(
+                      child: Text("Error"),
+                    ),
+                  ),
+              loading: () {
+                return Center(
+                  child: Container(
+                    child: Text("Loading"),
+                  ),
+                );
+              }),
+          /*ListView.builder(
             itemCount: flashcards.length,
             itemBuilder: (context, index) {
               return InkWell(
@@ -88,7 +153,7 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
                 ),
               );
             },
-          ),
+          ),*/
           Positioned(
             bottom: 24.0,
             right: 24.0,
@@ -134,14 +199,14 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
                                 onTap: () {
                                   if (flashCardController.text.isNotEmpty) {
                                     final flashCard = FlashCardModel(
-                                        id: 1,
-                                        title: flashCardController.text,
-                                        subject: "subject",
-                                        progressCount: 0,
-                                        flashcardCount: 15);
+                                      title: flashCardController.text,
+                                      subject: "Anatomia",
+                                    );
                                     setState(() {
+                                      ref.watch(
+                                          addFlashcardProvider(flashCard));
                                       Navigator.pop(context);
-                                      flashcards.add(flashCard);
+                                      ref.refresh(getFlashcardsProvider);
                                     });
                                   }
                                 },
@@ -180,7 +245,7 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
     );
   }
 
-  Widget deleteWidget(AppThemeModel theme, int index) {
+  Widget deleteWidget(AppThemeModel theme, FlashCardModel flashCard) {
     return PopUpWidget(
         title: "Usuwanie fiszek",
         body: Padding(
@@ -203,13 +268,15 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
                 children: [
                   InkWell(
                     onTap: () {
+                      ref.watch(deleteFlashcardProvider(flashCard));
                       Navigator.pop(context);
-                      Timer(
+                      ref.refresh(getFlashcardsProvider);
+                      /*Timer(
                         Duration(milliseconds: 400),
                         () => setState(() {
                           flashcards.removeAt(index);
                         }),
-                      );
+                      );*/
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),

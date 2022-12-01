@@ -76,15 +76,21 @@ class _FlashCardItemWidgetState extends State<FlashCardItemWidget> {
                     horizontal: 24.0,
                     vertical: 4.0,
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: LinearProgressIndicator(
-                      minHeight: 10,
-                      value: widget.flashcard.progressCount /
-                          widget.flashcard.flashcardCount,
-                      color: widget.theme.mainColor,
-                      backgroundColor:
-                          widget.theme.mainColorLighter.withOpacity(0.4),
+                  child: Visibility(
+                    visible: widget.flashcard.progressCount != null,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: LinearProgressIndicator(
+                        minHeight: 10,
+                        value: (widget.flashcard.progressCount != null &&
+                                widget.flashcard.flashcardCount != null)
+                            ? (widget.flashcard.progressCount! /
+                                widget.flashcard.flashcardCount!)
+                            : 0,
+                        color: widget.theme.mainColor,
+                        backgroundColor:
+                            widget.theme.mainColorLighter.withOpacity(0.4),
+                      ),
                     ),
                   ),
                 ),
@@ -92,7 +98,8 @@ class _FlashCardItemWidgetState extends State<FlashCardItemWidget> {
             ),
           ),
           Visibility(
-            visible: widget.flashcard.flashcardCount > 0,
+            visible: widget.flashcard.flashcardCount != null &&
+                widget.flashcard.flashcardCount! > 0,
             maintainAnimation: true,
             maintainSize: true,
             maintainState: true,
