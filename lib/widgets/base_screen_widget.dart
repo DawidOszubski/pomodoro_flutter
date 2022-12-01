@@ -12,6 +12,7 @@ class BaseScreenWidget extends ConsumerStatefulWidget {
     required this.body,
     this.onTap,
     this.resizeToAvoidBottomInsets,
+    this.actionIcon,
   }) : super(key: key);
 
   final Color mainColor;
@@ -19,6 +20,7 @@ class BaseScreenWidget extends ConsumerStatefulWidget {
   final Widget body;
   final void Function()? onTap;
   final bool? resizeToAvoidBottomInsets;
+  final Icon? actionIcon;
 
   @override
   _BaseScreenWidgetState createState() => _BaseScreenWidgetState();
@@ -62,16 +64,17 @@ class _BaseScreenWidgetState extends ConsumerState<BaseScreenWidget> {
                         visible: widget.onTap != null,
                         child: InkWell(
                           onTap: widget.onTap,
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
                               vertical: 18.0,
                               horizontal: 20.0,
                             ),
-                            child: Icon(
-                              Icons.help_outlined,
-                              color: Colors.white,
-                              size: 24.0,
-                            ),
+                            child: widget.actionIcon ??
+                                const Icon(
+                                  Icons.help_outlined,
+                                  color: Colors.white,
+                                  size: 24.0,
+                                ),
                           ),
                         ),
                       ),
@@ -82,12 +85,18 @@ class _BaseScreenWidgetState extends ConsumerState<BaseScreenWidget> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          widget.screenTitle,
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: Text(
+                            widget.screenTitle,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ],
                     ),

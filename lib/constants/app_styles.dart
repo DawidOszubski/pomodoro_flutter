@@ -18,4 +18,25 @@ class AppStyles {
     color: AppColors.darkBrown,
     fontSize: 18.0,
   );
+
+  static const yesNoButtonOptionsStyle = TextStyle(
+    fontSize: 18.0,
+    letterSpacing: 1.12,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const popUpTitleStyle = TextStyle(
+    fontSize: 18.0,
+    fontWeight: FontWeight.bold,
+    letterSpacing: 1.12,
+  );
+
+  static const textStyle = TextStyle(
+    fontSize: 16.0,
+  );
+
+  static const secondaryButtonStyle = TextStyle(
+    fontSize: 16.0,
+    fontWeight: FontWeight.bold,
+  );
 }

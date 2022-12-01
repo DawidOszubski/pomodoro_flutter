@@ -40,17 +40,17 @@ class _CustomButtonWidgetState extends State<CustomButtonWidget> {
       child: Container(
         padding: const EdgeInsets.symmetric(
           vertical: 12.0,
-          horizontal: 18.0,
+          horizontal: 30.0,
         ),
         decoration: BoxDecoration(
             //color: widget.buttonColor,
             gradient: widget.buttonGradientColor,
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(15.0),
             boxShadow: [
               BoxShadow(
                   color: widget.shadowColor,
-                  offset: const Offset(4, 4),
-                  blurRadius: 8,
+                  offset: const Offset(2, 2),
+                  blurRadius: 6,
                   spreadRadius: 1),
             ]),
         child: Text(
