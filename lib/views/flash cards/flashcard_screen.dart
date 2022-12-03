@@ -2,20 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:pomodoro_flutter/constants/app_styles.dart';
-import 'package:pomodoro_flutter/constants/app_themes.dart';
 import 'package:pomodoro_flutter/providers/flashcard_provider.dart';
-import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
 import 'package:pomodoro_flutter/widgets/flash%20cards/flash_card_item_widget.dart';
-import 'package:pomodoro_flutter/widgets/pop_up_widget.dart';
-import 'package:pomodoro_flutter/widgets/text_field_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../models/flashcards_model/flash_card_model.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/base_screen_widget.dart';
 import '../../widgets/rounded_add_button_widget.dart';
-import 'flashcard_details_screen.dart';
+import 'add_new_flashcard_set_screen.dart';
 
 class FlashCardScreen extends ConsumerStatefulWidget {
   const FlashCardScreen({Key? key}) : super(key: key);
@@ -54,41 +49,14 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
                   return ListView.builder(
                     itemCount: flashcards.length,
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        onLongPress: () {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.fade,
-                              duration: const Duration(
-                                milliseconds: 350,
-                              ),
-                              child: deleteWidget(theme, flashcards[index]),
-                            ),
-                          );
-                        },
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                duration: const Duration(
-                                  milliseconds: 350,
-                                ),
-                                child: FlashCardDetailsScreen(
-                                  flashCard: flashcards[index],
-                                )),
-                          ).then((value) => ref.refresh(getFlashcardsProvider));
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0,
-                            vertical: 12.0,
-                          ),
-                          child: FlashCardItemWidget(
-                            flashcard: flashcards[index],
-                            theme: theme,
-                          ),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24.0,
+                          vertical: 12.0,
+                        ),
+                        child: FlashCardItemWidget(
+                          flashcard: flashcards[index],
+                          theme: theme,
                         ),
                       );
                     },
@@ -128,48 +96,6 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
                   },
                 );
               }),
-          /*ListView.builder(
-            itemCount: flashcards.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onLongPress: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.fade,
-                      duration: const Duration(
-                        milliseconds: 350,
-                      ),
-                      child: deleteWidget(theme, index),
-                    ),
-                  );
-                },
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        duration: const Duration(
-                          milliseconds: 350,
-                        ),
-                        child: FlashCardDetailsScreen(
-                          title: flashcards[index].title,
-                        )),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0,
-                    vertical: 12.0,
-                  ),
-                  child: FlashCardItemWidget(
-                    flashcard: flashcards[index],
-                    theme: theme,
-                  ),
-                ),
-              );
-            },
-          ),*/
           Positioned(
             bottom: 24.0,
             right: 24.0,
@@ -187,67 +113,7 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
                       duration: const Duration(
                         milliseconds: 350,
                       ),
-                      child: PopUpWidget(
-                        title: "Stwórz nowe fiszki",
-                        body: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24.0),
-                                child: TextFieldWidget(
-                                  validator: flashCardValidator,
-                                  textFieldTitle: "Nazwa fiszek",
-                                  controller: flashCardController,
-                                  color: theme.mainColor,
-                                  autofocus: true,
-                                  hint: "Wpisz nazwę fiszek",
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 24.0 * 2,
-                              ),
-                              CustomButtonWidget(
-                                buttonText: "Dodaj",
-                                buttonGradientColor: theme.gradientButton,
-                                shadowColor: theme.mainColorDarker,
-                                onTap: () {
-                                  if (flashCardController.text.isNotEmpty) {
-                                    final flashCard = FlashCardModel(
-                                      title: flashCardController.text,
-                                      subject: "Anatomia",
-                                    );
-                                    setState(() {
-                                      ref.watch(
-                                          addFlashcardProvider(flashCard));
-                                      Navigator.pop(context);
-                                      ref.refresh(getFlashcardsProvider);
-                                    });
-                                  }
-                                },
-                              ),
-                              const SizedBox(
-                                height: 6.0,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Text(
-                                    "Anuluj",
-                                    style: AppStyles.secondaryButtonStyle
-                                        .copyWith(color: theme.mainColor),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        mainColor: theme.mainColor,
-                      ),
+                      child: CreateNewFlashcardSetScreen(theme: theme),
                     ),
                   );
                 },
@@ -259,71 +125,5 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
       screenTitle: "Fiszki",
       resizeToAvoidBottomInsets: false,
     );
-  }
-
-  Widget deleteWidget(AppThemeModel theme, FlashCardModel flashCard) {
-    return PopUpWidget(
-        title: "Usuwanie fiszek",
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 12.0,
-              ),
-              Text(
-                "Czy jestes pewien, że chcesz usunąć te fiszki?",
-                textAlign: TextAlign.center,
-                style: AppStyles.textStyle,
-              ),
-              SizedBox(
-                height: 24.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      ref.watch(deleteFlashcardProvider(flashCard));
-                      Navigator.pop(context);
-                      ref.refresh(getFlashcardsProvider);
-                      /*Timer(
-                        Duration(milliseconds: 400),
-                        () => setState(() {
-                          flashcards.removeAt(index);
-                        }),
-                      );*/
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        "TAK",
-                        style: AppStyles.yesNoButtonOptionsStyle
-                            .copyWith(color: theme.mainColor),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        "NIE",
-                        style: AppStyles.yesNoButtonOptionsStyle
-                            .copyWith(color: theme.mainColor),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 24.0,
-              ),
-            ],
-          ),
-        ),
-        mainColor: theme.mainColor);
   }
 }

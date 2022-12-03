@@ -22,3 +22,10 @@ final addCountFlashcardProvider = FutureProvider.autoDispose
     .family<int, FlashCardModel>((ref, flashCardModel) async {
   return ref.watch(flashcardServiceProvider).updateFlashcardSet(flashCardModel);
 });
+
+final changeNameFlashcardProvider = FutureProvider.autoDispose
+    .family<int, FlashCardModel>((ref, flashCardModel) async {
+  return ref
+      .watch(flashcardServiceProvider)
+      .changeFlashcardSetName(flashcard: flashCardModel);
+});
