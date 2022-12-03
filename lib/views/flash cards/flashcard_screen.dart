@@ -4,13 +4,14 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/constants/app_styles.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
-import 'package:pomodoro_flutter/models/flash_card_model.dart';
 import 'package:pomodoro_flutter/providers/flashcard_provider.dart';
 import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
 import 'package:pomodoro_flutter/widgets/flash%20cards/flash_card_item_widget.dart';
 import 'package:pomodoro_flutter/widgets/pop_up_widget.dart';
 import 'package:pomodoro_flutter/widgets/text_field_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../models/flashcards_model/flash_card_model.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/base_screen_widget.dart';
 import '../../widgets/rounded_add_button_widget.dart';
@@ -75,9 +76,9 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
                                   milliseconds: 350,
                                 ),
                                 child: FlashCardDetailsScreen(
-                                  title: flashcards[index].title,
+                                  flashCard: flashcards[index],
                                 )),
-                          );
+                          ).then((value) => ref.refresh(getFlashcardsProvider));
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -106,10 +107,25 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
                     ),
                   ),
               loading: () {
-                return Center(
-                  child: Container(
-                    child: Text("Loading"),
-                  ),
+                return ListView.builder(
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey.withOpacity(0.2),
+                      highlightColor: Colors.white.withOpacity(0.4),
+                      period: Duration(milliseconds: 1200),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24.0,
+                          vertical: 12.0,
+                        ),
+                        child: FlashCardItemWidget(
+                          flashcard: FlashCardModel(title: "", subject: ""),
+                          theme: theme,
+                        ),
+                      ),
+                    );
+                  },
                 );
               }),
           /*ListView.builder(

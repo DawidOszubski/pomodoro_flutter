@@ -11,8 +11,8 @@ FlashCardModel _$FlashCardModelFromJson(Map<String, dynamic> json) =>
       id: json['id'] as int?,
       title: json['title'] as String,
       subject: json['subject'] as String,
-      progressCount: json['progressCount'] as int?,
-      flashcardCount: json['flashcardCount'] as int?,
+      progressCount: json['progressCount'] as int? ?? 0,
+      flashcardCount: json['flashcardCount'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$FlashCardModelToJson(FlashCardModel instance) =>

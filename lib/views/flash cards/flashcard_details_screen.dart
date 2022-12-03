@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
-import 'package:pomodoro_flutter/views/flash%20cards/add_new_flashcard_screen.dart';
+import 'package:pomodoro_flutter/providers/flashcard_provider.dart';
 import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
 import 'package:pomodoro_flutter/widgets/rounded_add_button_widget.dart';
 import 'package:pomodoro_flutter/widgets/search_bar_widget.dart';
 
 import '../../constants/app_styles.dart';
+import '../../models/flashcards_model/flash_card_model.dart';
 import '../../providers/search_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/base_screen_widget.dart';
@@ -16,10 +17,10 @@ import 'add_new.dart';
 class FlashCardDetailsScreen extends ConsumerStatefulWidget {
   const FlashCardDetailsScreen({
     Key? key,
-    required this.title,
+    required this.flashCard,
   }) : super(key: key);
 
-  final String title;
+  final FlashCardModel flashCard;
 
   @override
   _FlashCardDetailsScreenState createState() => _FlashCardDetailsScreenState();
@@ -60,7 +61,7 @@ class _FlashCardDetailsScreenState extends ConsumerState<FlashCardDetailsScreen>
       },
       child: BaseScreenWidget(
         mainColor: theme.mainColor,
-        screenTitle: widget.title,
+        screenTitle: widget.flashCard.title,
         resizeToAvoidBottomInsets: false,
         body: isEmpty
             ? noItemsWidget(
@@ -217,13 +218,21 @@ class _FlashCardDetailsScreenState extends ConsumerState<FlashCardDetailsScreen>
                       child: RoundedAddButtonWidget(
                         theme: theme,
                         onTap: () {
-                          Navigator.push(
+                          final flashCard = FlashCardModel(
+                            id: widget.flashCard.id,
+                            title: widget.flashCard.title,
+                            subject: widget.flashCard.subject,
+                            progressCount: 1,
+                            flashcardCount: widget.flashCard.flashcardCount + 1,
+                          );
+                          ref.read(addCountFlashcardProvider(flashCard));
+                          /* Navigator.push(
                             context,
                             PageTransition(
                               type: PageTransitionType.fade,
                               child: AddNewFlashCardScreen(),
                             ),
-                          );
+                          );*/
                         },
                       ),
                     ),

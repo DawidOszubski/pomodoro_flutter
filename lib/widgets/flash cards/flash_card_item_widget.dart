@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
-import 'package:pomodoro_flutter/models/flash_card_model.dart';
+
+import '../../models/flashcards_model/flash_card_model.dart';
 
 class FlashCardItemWidget extends StatefulWidget {
   const FlashCardItemWidget({
@@ -47,14 +48,32 @@ class _FlashCardItemWidgetState extends State<FlashCardItemWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-            child: Text(
-              widget.flashcard.title,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 24.0),
+                child: Text(
+                  widget.flashcard.title,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  print("tap");
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Icon(
+                    Icons.edit,
+                    size: 20,
+                    color: widget.theme.mainColorDarker,
+                  ),
+                ),
+              ),
+            ],
           ),
           Visibility(
             visible: widget.flashcard.progressCount != 0,
@@ -76,21 +95,18 @@ class _FlashCardItemWidgetState extends State<FlashCardItemWidget> {
                     horizontal: 24.0,
                     vertical: 4.0,
                   ),
-                  child: Visibility(
-                    visible: widget.flashcard.progressCount != null,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: LinearProgressIndicator(
-                        minHeight: 10,
-                        value: (widget.flashcard.progressCount != null &&
-                                widget.flashcard.flashcardCount != null)
-                            ? (widget.flashcard.progressCount! /
-                                widget.flashcard.flashcardCount!)
-                            : 0,
-                        color: widget.theme.mainColor,
-                        backgroundColor:
-                            widget.theme.mainColorLighter.withOpacity(0.4),
-                      ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: LinearProgressIndicator(
+                      minHeight: 10,
+                      value: (widget.flashcard.progressCount != 0 &&
+                              widget.flashcard.flashcardCount != 0)
+                          ? (widget.flashcard.progressCount /
+                              widget.flashcard.flashcardCount)
+                          : 0,
+                      color: widget.theme.mainColor,
+                      backgroundColor:
+                          widget.theme.mainColorLighter.withOpacity(0.4),
                     ),
                   ),
                 ),
@@ -107,7 +123,10 @@ class _FlashCardItemWidgetState extends State<FlashCardItemWidget> {
                 alignment: Alignment.centerRight,
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
-                  child: Text("${widget.flashcard.flashcardCount}"),
+                  child: Text(
+                    "Liczba fiszek: ${widget.flashcard.flashcardCount}",
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
                 )),
           ),
         ],

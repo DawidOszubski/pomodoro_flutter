@@ -36,6 +36,7 @@ dependencies:
   modal_bottom_sheet: ^2.1.2
   flutter_secure_storage: ^5.0.2
   form_field_validator: ^1.1.0
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:
