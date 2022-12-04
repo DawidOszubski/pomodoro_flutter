@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
+import 'package:pomodoro_flutter/models/flashcards_model/flashcard_item_model.dart';
 import 'package:pomodoro_flutter/providers/flashcard_provider.dart';
 import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
 import 'package:pomodoro_flutter/widgets/rounded_add_button_widget.dart';
@@ -218,14 +219,14 @@ class _FlashCardDetailsScreenState extends ConsumerState<FlashCardDetailsScreen>
                       child: RoundedAddButtonWidget(
                         theme: theme,
                         onTap: () {
-                          final flashCard = FlashCardModel(
-                            id: widget.flashCard.id,
-                            title: widget.flashCard.title,
-                            subject: widget.flashCard.subject,
-                            progressCount: 1,
-                            flashcardCount: widget.flashCard.flashcardCount + 1,
+                          final flashcard = FlashcardItemModel(
+                            question: "Jakieś pytanie",
+                            answerText: "Jakaś odpowiedź",
+                            flashcardSetId: widget.flashCard.id!,
+                            answerMultipleChoice: null,
+                            answerTF: null,
                           );
-                          ref.read(addCountFlashcardProvider(flashCard));
+                          ref.read(addNewFlashcardItemProvider(flashcard));
                           /* Navigator.push(
                             context,
                             PageTransition(

@@ -131,7 +131,7 @@ class _FlashCardItemWidgetState extends ConsumerState<FlashCardItemWidget> {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24.0),
                     child: Text(
-                      "Progres:",
+                      "Postęp:",
                       style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                   ),
