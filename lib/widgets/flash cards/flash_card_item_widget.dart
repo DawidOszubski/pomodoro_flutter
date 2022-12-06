@@ -82,15 +82,18 @@ class _FlashCardItemWidgetState extends ConsumerState<FlashCardItemWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 24.0),
-                  child: Text(
-                    widget.flashcard.title,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 24.0),
+                    child: Text(
+                      widget.flashcard.title,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
                   ),
                 ),
                 InkWell(

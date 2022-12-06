@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
-import 'package:pomodoro_flutter/models/flashcards_model/flashcard_item_model.dart';
-import 'package:pomodoro_flutter/providers/flashcard_provider.dart';
 import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
 import 'package:pomodoro_flutter/widgets/rounded_add_button_widget.dart';
 import 'package:pomodoro_flutter/widgets/search_bar_widget.dart';
@@ -14,6 +12,7 @@ import '../../providers/search_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/base_screen_widget.dart';
 import 'add_new.dart';
+import 'add_new_flashcard_screen.dart';
 
 class FlashCardDetailsScreen extends ConsumerStatefulWidget {
   const FlashCardDetailsScreen({
@@ -219,21 +218,21 @@ class _FlashCardDetailsScreenState extends ConsumerState<FlashCardDetailsScreen>
                       child: RoundedAddButtonWidget(
                         theme: theme,
                         onTap: () {
-                          final flashcard = FlashcardItemModel(
+                          /*   final flashcard = FlashcardItemModel(
                             question: "Jakieś pytanie",
                             answerText: "Jakaś odpowiedź",
                             flashcardSetId: widget.flashCard.id!,
                             answerMultipleChoice: null,
                             answerTF: null,
                           );
-                          ref.read(addNewFlashcardItemProvider(flashcard));
-                          /* Navigator.push(
+                          ref.read(addNewFlashcardItemProvider(flashcard));*/
+                          Navigator.push(
                             context,
                             PageTransition(
                               type: PageTransitionType.fade,
                               child: AddNewFlashCardScreen(),
                             ),
-                          );*/
+                          );
                         },
                       ),
                     ),
