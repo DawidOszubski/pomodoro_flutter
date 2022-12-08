@@ -65,7 +65,7 @@ class ChangeFlashcardSetNameScreen extends ConsumerWidget {
 
                   ref.read(changeNameFlashcardProvider(flashCard));
                   Navigator.pop(context);
-                  ref.refresh(getFlashcardsProvider);
+                  ref.refresh(getFlashcardSetsProvider);
                 }
               },
             ),

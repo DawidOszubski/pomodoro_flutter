@@ -5,14 +5,25 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
+import 'package:pomodoro_flutter/models/enum/flashcard_enum.dart';
 import 'package:pomodoro_flutter/widgets/flash%20cards/big_input_widget.dart';
+import 'package:pomodoro_flutter/widgets/flash%20cards/checkbox_answer_widget.dart';
 
+import '../../constants/app_constants.dart';
 import '../../constants/app_styles.dart';
+import '../../models/flashcards_model/flashcard_item_model.dart';
+import '../../providers/flashcard_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/base_screen_widget.dart';
+import '../../widgets/custom_button_widget.dart';
 
 class AddNewFlashCardScreen extends ConsumerStatefulWidget {
-  const AddNewFlashCardScreen({Key? key}) : super(key: key);
+  const AddNewFlashCardScreen({
+    Key? key,
+    required this.flashcardId,
+  }) : super(key: key);
+
+  final int flashcardId;
 
   @override
   _AddNewFlashCardScreenState createState() => _AddNewFlashCardScreenState();
@@ -23,7 +34,24 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
 
   File? image;
   var loadImage = false;
-  var isTrue = true;
+  bool? isTrue;
+  String selectedAnswerType = "Otwarte";
+  AnswerType answerType = AnswerType.open;
+  final frontPageController = TextEditingController();
+  final backPagController = TextEditingController();
+  final List<String> items = [
+    'Otwarte',
+    'Wielokrotnego wyboru',
+    'Prawda/Fałsz'
+  ];
+
+  @override
+  void dispose() {
+    frontPageController.dispose();
+    backPagController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
@@ -34,75 +62,134 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
       child: BaseScreenWidget(
         screenTitle: "Dodaj nową fiszkę",
         body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Text(
-                  "Pytanie",
-                  style: TextStyle(color: Colors.grey, fontSize: 20),
+          child: Container(
+            height: MediaQuery.of(context).size.height -
+                AppConstants.screenSizeTopPadding,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Text(
+                    "Strona przednia", //"Pytanie",
+                    style: TextStyle(color: Colors.grey, fontSize: 20),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 8.0,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: BigInputWidget(
-                  controller: TextEditingController(),
-                  color: theme.mainColor,
+                SizedBox(
+                  height: 16.0,
                 ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: InkWell(
-                      onTap: () async {
-                        try {
-                          await pickImage();
-                        } catch (e) {
-                          print(e);
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: BigInputWidget(
+                    controller: frontPageController,
+                    color: theme.mainColor,
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: InkWell(
+                        onTap: () async {
+                          try {
+                            await pickImage();
+                          } catch (e) {
+                            print(e);
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Dodaj obraz",
+                            style: AppStyles.secondaryButtonStyle
+                                .copyWith(color: theme.mainColor),
+                          ),
+                        )),
+                  ),
+                ),
+                image != null
+                    ? Image.file(
+                        image!,
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(),
+                const SizedBox(
+                  height: 24.0 * 2,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Text(
+                    "Strona tylnia", // "Odpowiedź",
+                    style: TextStyle(color: Colors.grey, fontSize: 20),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                /* Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: CustomDropdownButton2(
+                    buttonWidth: double.infinity,
+                    dropdownPadding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    dropdownWidth: MediaQuery.of(context).size.width - 48,
+                    buttonPadding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                    hint: 'Wybierz rodzaj odpowiedzi',
+                    iconEnabledColor: theme.mainColor,
+                    icon: const RotatedBox(
+                        quarterTurns: 1,
+                        child: Icon(Icons.arrow_forward_ios_outlined)),
+                    iconSize: 20,
+                    dropdownItems: items,
+                    value: selectedAnswerType,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedAnswerType = value!;
+                        isTrue = null;
+                        if (value == items[0]) {
+                          answerType = AnswerType.open;
+                        } else if (value == items[1]) {
+                          answerType = AnswerType.multipleChoice;
+                        } else {
+                          isTrue = true;
+                          answerType = AnswerType.tf;
                         }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Dodaj obraz",
-                          style: AppStyles.secondaryButtonStyle
-                              .copyWith(color: theme.mainColor),
-                        ),
-                      )),
+                      });
+                    },
+                  ),
                 ),
-              ),
-              image != null
-                  ? Image.file(
-                      image!,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    )
-                  : Container(),
-              SizedBox(
-                height: 24.0 * 2,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Text(
-                  "Odpowiedź",
-                  style: TextStyle(color: Colors.grey, fontSize: 20),
+                const SizedBox(
+                  height: 16.0,
+                ),*/
+                answerTypeWidget(theme: theme, answerType: answerType),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 24.0),
+                      child: CustomButtonWidget(
+                          buttonText: 'Dodaj',
+                          onTap: frontPageController.text.isNotEmpty &&
+                                  backPagController.text.isNotEmpty
+                              ? () {
+                                  final flashcard = FlashcardItemModel(
+                                    question: frontPageController.text,
+                                    answerText: backPagController.text,
+                                    flashcardSetId: widget.flashcardId,
+                                  );
+                                  ref.read(
+                                      addNewFlashcardItemProvider(flashcard));
+                                }
+                              : null,
+                          buttonGradientColor: theme.gradientButton,
+                          shadowColor: theme.mainColorDarker),
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 8.0,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: answerNotChosen(),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         mainColor: theme.mainColor,
@@ -128,95 +215,135 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
     }
   }
 
+  Widget answerTypeWidget(
+      {required AnswerType answerType, required AppThemeModel theme}) {
+    switch (answerType) {
+      case AnswerType.open:
+        return answerText(theme: theme);
+      case AnswerType.multipleChoice:
+        return answerMultiple(theme: theme);
+      case AnswerType.tf:
+        return answerTF(theme: theme);
+    }
+  }
+
   Widget answerText({required AppThemeModel theme}) {
-    return BigInputWidget(
-      controller: TextEditingController(),
-      color: theme.mainColor,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: BigInputWidget(
+        controller: backPagController,
+        color: theme.mainColor,
+      ),
     );
   }
 
   Widget answerTF({required AppThemeModel theme}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            InkWell(
-              onTap: () {
-                if (!isTrue) {
-                  setState(() {
-                    isTrue = true;
-                  });
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: theme.mainColor, width: 2)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        right: 24.0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  if (!isTrue!) {
+                    setState(() {
+                      isTrue = true;
+                    });
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: isTrue ? theme.mainColor : Colors.white,
+                        border: Border.all(color: theme.mainColor, width: 2)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isTrue! ? theme.mainColor : Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Text("PRAWDA"),
-          ],
-        ),
-        Row(
-          children: [
-            InkWell(
-              onTap: () {
-                if (isTrue) {
-                  setState(() {
-                    isTrue = false;
-                  });
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: theme.mainColor, width: 2)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
+              Text("PRAWDA"),
+            ],
+          ),
+          Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  if (isTrue!) {
+                    setState(() {
+                      isTrue = false;
+                    });
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: !isTrue ? theme.mainColor : Colors.white,
+                        border: Border.all(color: theme.mainColor, width: 2)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: !isTrue! ? theme.mainColor : Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Text("FAŁSZ"),
-          ],
-        ),
-      ],
+              Text("FAŁSZ"),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  Widget answerMultiple() {
-    return Container();
+  Widget answerMultiple({required AppThemeModel theme}) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        right: 24.0,
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              CheckboxAnswerWidget(),
+              Expanded(
+                  child: Padding(
+                padding: const EdgeInsets.only(left: 12.0),
+                child: TextField(),
+              )),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   Widget answerNotChosen() {
     return Container(
       width: double.infinity,
-      height: 300,
+      height: 200,
       child: Column(
         children: [
           Expanded(

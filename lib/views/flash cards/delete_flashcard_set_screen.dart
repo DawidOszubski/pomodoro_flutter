@@ -43,7 +43,7 @@ class DeleteFlashcardSetScreen extends ConsumerWidget {
                     onTap: () {
                       ref.watch(deleteFlashcardProvider(flashcard));
                       Navigator.pop(context);
-                      ref.refresh(getFlashcardsProvider);
+                      ref.refresh(getFlashcardSetsProvider);
                       /*Timer(
                         Duration(milliseconds: 400),
                         () => setState(() {

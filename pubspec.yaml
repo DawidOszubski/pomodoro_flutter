@@ -38,6 +38,7 @@ dependencies:
   form_field_validator: ^1.1.0
   shimmer: ^2.0.0
   image_picker: ^0.8.6
+  dropdown_button2: ^1.9.2
 
 dev_dependencies:
   flutter_test:

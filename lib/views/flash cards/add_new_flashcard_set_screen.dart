@@ -60,7 +60,7 @@ class CreateNewFlashcardSetScreen extends ConsumerWidget {
 
                   ref.watch(addFlashcardProvider(flashCard));
                   Navigator.pop(context);
-                  ref.refresh(getFlashcardsProvider);
+                  ref.refresh(getFlashcardSetsProvider);
                 }
               },
             ),

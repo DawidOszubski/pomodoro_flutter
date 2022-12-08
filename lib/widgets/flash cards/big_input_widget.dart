@@ -24,6 +24,7 @@ class _BigInputWidgetState extends State<BigInputWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLength: 255,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       maxLines: 6,
       validator: widget.validator,

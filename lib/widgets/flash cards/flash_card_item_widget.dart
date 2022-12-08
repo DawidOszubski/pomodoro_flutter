@@ -32,9 +32,6 @@ class _FlashCardItemWidgetState extends ConsumerState<FlashCardItemWidget> {
           context,
           PageTransition(
             type: PageTransitionType.fade,
-            duration: const Duration(
-              milliseconds: 350,
-            ),
             child: DeleteFlashcardSetScreen(
                 theme: widget.theme, flashcard: widget.flashcard),
           ),
@@ -51,7 +48,7 @@ class _FlashCardItemWidgetState extends ConsumerState<FlashCardItemWidget> {
               child: FlashCardDetailsScreen(
                 flashCard: widget.flashcard,
               )),
-        ).then((value) => ref.refresh(getFlashcardsProvider));
+        ).then((value) => ref.refresh(getFlashcardSetsProvider));
       },
       child: Container(
         decoration: BoxDecoration(

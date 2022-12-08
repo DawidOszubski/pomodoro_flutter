@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/models/flashcards_model/flashcard_item_model.dart';
 import 'package:pomodoro_flutter/services/database_helper.dart';
@@ -127,14 +128,32 @@ class FlashcardService {
             flashCardItemModel.answerTF,
             flashCardItemModel.answerMultipleChoice,
             flashCardItemModel.flashcardSetId,
-          ]).then(
-        (value) => updateNumberOfFlashcards(
-            flashcardSetId: flashCardItemModel.flashcardSetId),
-      );
+          ]).then((value) {
+        debugPrint('Dodano nową fiszkę');
+        return updateNumberOfFlashcards(
+            flashcardSetId: flashCardItemModel.flashcardSetId);
+      });
     } catch (e) {
       print(e);
       return 0;
     }
+  }
+
+  Future<List<FlashcardItemModel>?> getAllFlashcardsInSet() async {
+    final db = await DatabaseHelper.getDB();
+    try {
+      final List<Map<String, dynamic>> maps = await db.query(dbNameFlashCards);
+
+      if (maps.isEmpty) {
+        return null;
+      }
+
+      return List.generate(
+          maps.length, (index) => FlashcardItemModel.fromJson(maps[index]));
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 }
 

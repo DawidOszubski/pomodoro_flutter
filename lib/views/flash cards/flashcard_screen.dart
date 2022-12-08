@@ -31,7 +31,7 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
-    final getFlashcards = ref.watch(getFlashcardsProvider);
+    final getFlashcards = ref.watch(getFlashcardSetsProvider);
     return BaseScreenWidget(
       mainColor: theme.mainColor,
       onTap: () {
