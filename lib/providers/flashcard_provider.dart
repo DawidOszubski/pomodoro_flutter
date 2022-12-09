@@ -38,7 +38,9 @@ final addNewFlashcardItemProvider = FutureProvider.autoDispose
       .createFlashcard(flashCardItemModel: flashCardItemModel);
 });
 
-final getFlashcardsProvider =
-    FutureProvider.autoDispose<List<FlashcardItemModel>?>((ref) async {
-  return ref.watch(flashcardServiceProvider).getAllFlashcardsInSet();
+final getFlashcardsProvider = FutureProvider.autoDispose
+    .family<List<FlashcardItemModel>?, int>((ref, flashcardSetId) async {
+  return ref
+      .watch(flashcardServiceProvider)
+      .getAllFlashcardsInSet(flashcardSetId: flashcardSetId);
 });

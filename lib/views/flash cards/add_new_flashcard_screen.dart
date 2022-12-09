@@ -62,131 +62,157 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
       child: BaseScreenWidget(
         screenTitle: "Dodaj nową fiszkę",
         body: SingleChildScrollView(
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height -
                 AppConstants.screenSizeTopPadding,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Stack(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Text(
-                    "Strona przednia", //"Pytanie",
-                    style: TextStyle(color: Colors.grey, fontSize: 20),
-                  ),
-                ),
-                SizedBox(
-                  height: 16.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: BigInputWidget(
-                    controller: frontPageController,
-                    color: theme.mainColor,
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: InkWell(
-                        onTap: () async {
-                          try {
-                            await pickImage();
-                          } catch (e) {
-                            print(e);
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Dodaj obraz",
-                            style: AppStyles.secondaryButtonStyle
-                                .copyWith(color: theme.mainColor),
-                          ),
-                        )),
-                  ),
-                ),
-                image != null
-                    ? Image.file(
-                        image!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      )
-                    : Container(),
-                const SizedBox(
-                  height: 24.0 * 2,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Text(
-                    "Strona tylnia", // "Odpowiedź",
-                    style: TextStyle(color: Colors.grey, fontSize: 20),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16.0,
-                ),
-                /* Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: CustomDropdownButton2(
-                    buttonWidth: double.infinity,
-                    dropdownPadding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    dropdownWidth: MediaQuery.of(context).size.width - 48,
-                    buttonPadding: const EdgeInsets.only(left: 12.0, right: 12.0),
-                    hint: 'Wybierz rodzaj odpowiedzi',
-                    iconEnabledColor: theme.mainColor,
-                    icon: const RotatedBox(
-                        quarterTurns: 1,
-                        child: Icon(Icons.arrow_forward_ios_outlined)),
-                    iconSize: 20,
-                    dropdownItems: items,
-                    value: selectedAnswerType,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedAnswerType = value!;
-                        isTrue = null;
-                        if (value == items[0]) {
-                          answerType = AnswerType.open;
-                        } else if (value == items[1]) {
-                          answerType = AnswerType.multipleChoice;
-                        } else {
-                          isTrue = true;
-                          answerType = AnswerType.tf;
-                        }
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 16.0,
-                ),*/
-                answerTypeWidget(theme: theme, answerType: answerType),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 24.0),
-                      child: CustomButtonWidget(
-                          buttonText: 'Dodaj',
-                          onTap: frontPageController.text.isNotEmpty &&
-                                  backPagController.text.isNotEmpty
-                              ? () {
-                                  final flashcard = FlashcardItemModel(
-                                    question: frontPageController.text,
-                                    answerText: backPagController.text,
-                                    flashcardSetId: widget.flashcardId,
-                                  );
-                                  ref.read(
-                                      addNewFlashcardItemProvider(flashcard));
-                                }
-                              : null,
-                          buttonGradientColor: theme.gradientButton,
-                          shadowColor: theme.mainColorDarker),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Text(
+                        "Strona przednia", //"Pytanie",
+                        style: TextStyle(color: Colors.grey, fontSize: 20),
+                      ),
                     ),
-                  ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: BigInputWidget(
+                        controller: frontPageController,
+                        color: theme.mainColor,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: InkWell(
+                            onTap: () async {
+                              try {
+                                await pickImage();
+                              } catch (e) {
+                                print(e);
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Dodaj obraz",
+                                style: AppStyles.secondaryButtonStyle
+                                    .copyWith(color: theme.mainColor),
+                              ),
+                            )),
+                      ),
+                    ),
+                    image != null
+                        ? Image.file(
+                            image!,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          )
+                        : Container(),
+                    const SizedBox(
+                      height: 24.0 * 2,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Text(
+                        "Strona tylnia", // "Odpowiedź",
+                        style: TextStyle(color: Colors.grey, fontSize: 20),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    /* Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: CustomDropdownButton2(
+                        buttonWidth: double.infinity,
+                        dropdownPadding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        dropdownWidth: MediaQuery.of(context).size.width - 48,
+                        buttonPadding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                        hint: 'Wybierz rodzaj odpowiedzi',
+                        iconEnabledColor: theme.mainColor,
+                        icon: const RotatedBox(
+                            quarterTurns: 1,
+                            child: Icon(Icons.arrow_forward_ios_outlined)),
+                        iconSize: 20,
+                        dropdownItems: items,
+                        value: selectedAnswerType,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedAnswerType = value!;
+                            isTrue = null;
+                            if (value == items[0]) {
+                              answerType = AnswerType.open;
+                            } else if (value == items[1]) {
+                              answerType = AnswerType.multipleChoice;
+                            } else {
+                              isTrue = true;
+                              answerType = AnswerType.tf;
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),*/
+                    answerTypeWidget(theme: theme, answerType: answerType),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            CustomButtonWidget(
+                                buttonText: 'Dodaj',
+                                onTap: frontPageController.text.isNotEmpty &&
+                                        backPagController.text.isNotEmpty
+                                    ? () {
+                                        final flashcard = FlashcardItemModel(
+                                          question: frontPageController.text,
+                                          answerText: backPagController.text,
+                                          flashcardSetId: widget.flashcardId,
+                                        );
+                                        ref.read(addNewFlashcardItemProvider(
+                                            flashcard));
+                                        setState(() {
+                                          frontPageController.clear();
+                                          backPagController.clear();
+                                        });
+                                      }
+                                    : null,
+                                buttonGradientColor: theme.gradientButton,
+                                shadowColor: theme.mainColorDarker),
+                            const SizedBox(
+                              height: 12.0,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Text(
+                                  "Anuluj",
+                                  style: AppStyles.secondaryButtonStyle
+                                      .copyWith(color: theme.mainColor),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

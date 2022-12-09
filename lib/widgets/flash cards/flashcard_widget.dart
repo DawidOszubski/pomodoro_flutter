@@ -1,21 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
-import 'package:pomodoro_flutter/views/flash%20cards/add_new.dart';
+import 'package:pomodoro_flutter/models/flashcards_model/flashcard_item_model.dart';
+import 'package:pomodoro_flutter/views/flash%20cards/learn_flashcards_screen.dart';
 
 class FlashcardWidget extends StatelessWidget {
   const FlashcardWidget({
     Key? key,
     required this.theme,
+    required this.flashcard,
   }) : super(key: key);
 
   final AppThemeModel theme;
-
+  final FlashcardItemModel flashcard;
   @override
   Widget build(BuildContext context) {
-    var minHeight = 100.0;
-    var maxHeight = 200.0;
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -23,44 +22,62 @@ class FlashcardWidget extends StatelessWidget {
           PageTransition(
             type: PageTransitionType.fade,
             duration: const Duration(
-              milliseconds: 350,
+              milliseconds: 100,
             ),
-            child: AddNew(),
+            child: const LearnFlashcardsScreen(),
           ),
         );
       },
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: minHeight,
-          maxHeight: maxHeight,
-          minWidth: MediaQuery.of(context).size.width,
-          maxWidth: MediaQuery.of(context).size.width,
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-              color: theme.backgroundColor,
-              borderRadius: BorderRadius.circular(20.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.6),
-                  offset: const Offset(
-                    2.0,
-                    2.0,
-                  ),
-                  spreadRadius: 0,
-                  blurRadius: 4,
+      child: Container(
+        height: MediaQuery.of(context).size.height / 8,
+        decoration: BoxDecoration(
+            color: theme.backgroundColor,
+            borderRadius: BorderRadius.circular(20.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.6),
+                offset: const Offset(
+                  2.0,
+                  2.0,
                 ),
-                BoxShadow(
-                  color: theme.mainColorDarker.withOpacity(0.6),
-                  offset: const Offset(
-                    3.0,
-                    3.0,
-                  ),
-                  spreadRadius: 0,
-                  blurRadius: 8,
+                spreadRadius: 0,
+                blurRadius: 4,
+              ),
+              BoxShadow(
+                color: theme.mainColorDarker.withOpacity(0.6),
+                offset: const Offset(
+                  3.0,
+                  3.0,
                 ),
-              ]),
-          child: Text("text"),
+                spreadRadius: 0,
+                blurRadius: 8,
+              ),
+            ]),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Text(
+                  softWrap: true,
+                  flashcard.question,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Icon(
+                Icons.edit,
+                size: 20,
+                color: theme.mainColorDarker,
+              ),
+            ),
+          ],
         ),
       ),
     );

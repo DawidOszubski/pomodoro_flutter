@@ -9,7 +9,7 @@ class DatabaseHelper {
     const flashcardSet =
         "CREATE TABLE FlashcardSet(id INTEGER PRIMARY KEY, title TEXT NOT NULL, subject TEXT, progressCount INTEGER, flashcardCount INTEGER );";
     const flashcards =
-        "CREATE TABLE Flashcards(flashcard_id INTEGER PRIMARY KEY, question TEXT NOT NULL, answer_text TEXT, answer_T_F BOOLEAN, answer_multiple TEXT, FK_flashcard_set_id INTEGER NOT NULL,FOREIGN KEY (FK_flashcard_set_id) REFERENCES FlashcardSet (id) ON DELETE CASCADE);";
+        "CREATE TABLE Flashcards(id INTEGER PRIMARY KEY, question TEXT NOT NULL, answerText TEXT, answerTF BOOLEAN, answerMultipleChoice TEXT, flashcardSetId INTEGER NOT NULL,FOREIGN KEY (flashcardSetId) REFERENCES FlashcardSet (id) ON DELETE CASCADE);";
 
     return openDatabase(
       join(await getDatabasesPath(), _dbName),

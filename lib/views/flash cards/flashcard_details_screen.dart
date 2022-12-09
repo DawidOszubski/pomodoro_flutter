@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
+import 'package:pomodoro_flutter/main.dart';
+import 'package:pomodoro_flutter/models/flashcards_model/flashcard_item_model.dart';
 import 'package:pomodoro_flutter/providers/flashcard_provider.dart';
-import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
 import 'package:pomodoro_flutter/widgets/rounded_add_button_widget.dart';
-import 'package:pomodoro_flutter/widgets/search_bar_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../constants/app_styles.dart';
@@ -29,24 +29,36 @@ class FlashCardDetailsScreen extends ConsumerStatefulWidget {
 }
 
 class _FlashCardDetailsScreenState extends ConsumerState<FlashCardDetailsScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, RouteAware {
   var isEmpty = false;
   final searchController = TextEditingController();
   var scale = 0.0;
   var minHeight = 100.0;
   var maxHeight = 200.0;
-  late final AnimationController _controller = AnimationController(
+  /* late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 1),
     vsync: this,
   );
   late final Animation<double> _animation = CurvedAnimation(
     parent: _controller,
     curve: Curves.fastOutSlowIn,
-  );
+  );*/
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void didPopNext() {
+    ref.refresh(getFlashcardsProvider(widget.flashCard.id!));
+    super.didPopNext();
+  }
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 
@@ -54,7 +66,8 @@ class _FlashCardDetailsScreenState extends ConsumerState<FlashCardDetailsScreen>
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
     final isSearch = ref.watch(isSearchProvider);
-    final getFlashcards = ref.watch(getFlashcardsProvider);
+    final getFlashcards =
+        ref.watch(getFlashcardsProvider(widget.flashCard.id!));
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -70,140 +83,153 @@ class _FlashCardDetailsScreenState extends ConsumerState<FlashCardDetailsScreen>
           children: [
             Container(
               color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Row(
-                      children: [
-                        !isSearch
-                            ? CustomButtonWidget(
-                                buttonText: "Nauka",
-                                buttonGradientColor: theme.gradientButton,
-                                shadowColor: theme.mainColorDarker,
-                                onTap: () {},
-                              )
-                            : Container(),
-                        SizedBox(
-                          width: !isSearch ? 8.0 : 0.0,
-                        ),
-                        Expanded(
-                          child: ScaleTransition(
-                            scale: _animation,
-                            alignment: Alignment.centerRight,
-                            child: isSearch
-                                ? Stack(
-                                    children: [
-                                      SearchBarWidget(
-                                        autofocus: true,
-                                        controller: searchController,
-                                        color: theme.mainColor,
-                                        hint: "Szukaj...",
-                                      ),
-                                      Align(
-                                          alignment: Alignment.centerRight,
-                                          child: InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                _controller
-                                                    .reverse()
-                                                    .then((value) {
-                                                  ref
-                                                      .read(isSearchProvider
-                                                          .state)
-                                                      .state = false;
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  /* Row(
+                    children: [
+                      !isSearch
+                          ? CustomButtonWidget(
+                              buttonText: "Nauka",
+                              buttonGradientColor: theme.gradientButton,
+                              shadowColor: theme.mainColorDarker,
+                              onTap: () {},
+                            )
+                          : Container(),
+                      SizedBox(
+                        width: !isSearch ? 8.0 : 0.0,
+                      ),
+                      Expanded(
+                        child: ScaleTransition(
+                          scale: _animation,
+                          alignment: Alignment.centerRight,
+                          child: isSearch
+                              ? Stack(
+                                  children: [
+                                    SearchBarWidget(
+                                      autofocus: true,
+                                      controller: searchController,
+                                      color: theme.mainColor,
+                                      hint: "Szukaj...",
+                                    ),
+                                    Align(
+                                        alignment: Alignment.centerRight,
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              _controller
+                                                  .reverse()
+                                                  .then((value) {
+                                                ref
+                                                    .read(isSearchProvider
+                                                        .state)
+                                                    .state = false;
 
-                                                  setState(() {
-                                                    searchController.clear();
-                                                  });
+                                                setState(() {
+                                                  searchController.clear();
                                                 });
                                               });
-                                            },
-                                            child: const Padding(
-                                              padding: EdgeInsets.all(12.0),
-                                              child: Icon(
-                                                Icons.close_rounded,
-                                                color: Colors.grey,
-                                              ),
+                                            });
+                                          },
+                                          child: const Padding(
+                                            padding: EdgeInsets.all(12.0),
+                                            child: Icon(
+                                              Icons.close_rounded,
+                                              color: Colors.grey,
                                             ),
-                                          )),
-                                    ],
-                                  )
-                                : Container(),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            _controller.forward();
-                            ref.read(isSearchProvider.state).state = true;
-                          },
-                          child: !isSearch
-                              ? Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Icon(
-                                    Icons.search,
-                                    color: theme.mainColor,
-                                    size: 30,
-                                  ),
+                                          ),
+                                        )),
+                                  ],
                                 )
                               : Container(),
                         ),
-                      ],
-                    ),
-                    Expanded(
-                      child: getFlashcards.when(
-                          data: (flashcards) {
-                            if (flashcards != null) {
-                              return ListView.builder(
-                                itemCount: flashcards.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 24.0,
-                                      vertical: 12.0,
-                                    ),
-                                    child: FlashcardWidget(theme: theme),
-                                  );
-                                },
-                              );
-                            } else {
-                              return Center(
-                                child: Container(
-                                  child: Text("Brak elementów do wyświetlenia"),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          _controller.forward();
+                          ref.read(isSearchProvider.state).state = true;
+                        },
+                        child: !isSearch
+                            ? Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Icon(
+                                  Icons.search,
+                                  color: theme.mainColor,
+                                  size: 30,
                                 ),
-                              );
-                            }
-                          },
-                          error: (err, s) => Center(
-                                child: Container(
-                                  child: Text("Error"),
-                                ),
-                              ),
-                          loading: () {
+                              )
+                            : Container(),
+                      ),
+                    ],
+                  ),*/
+                  Expanded(
+                    child: getFlashcards.when(
+                        data: (flashcards) {
+                          if (flashcards != null) {
                             return ListView.builder(
-                              itemCount: 5,
+                              itemCount: flashcards.length,
                               itemBuilder: (context, index) {
-                                return Shimmer.fromColors(
-                                  baseColor: Colors.grey.withOpacity(0.2),
-                                  highlightColor: Colors.white.withOpacity(0.4),
-                                  period: Duration(milliseconds: 1200),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 24.0,
-                                      vertical: 12.0,
+                                return Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 24.0,
+                                        vertical: 12.0,
+                                      ),
+                                      child: FlashcardWidget(
+                                        theme: theme,
+                                        flashcard: flashcards[index],
+                                      ),
                                     ),
-                                    child: FlashcardWidget(
-                                      theme: theme,
-                                    ),
-                                  ),
+                                    index == flashcards.length - 1
+                                        ? const SizedBox(
+                                            height: 100,
+                                          )
+                                        : Container()
+                                  ],
                                 );
                               },
                             );
-                          }),
-                    ),
-                  ],
-                ),
+                          } else {
+                            return Center(
+                              child: Container(
+                                child: Text("Brak elementów do wyświetlenia"),
+                              ),
+                            );
+                          }
+                        },
+                        error: (err, s) => Center(
+                              child: Container(
+                                child: Text("Error"),
+                              ),
+                            ),
+                        loading: () {
+                          return ListView.builder(
+                            itemCount: 5,
+                            itemBuilder: (context, index) {
+                              return Shimmer.fromColors(
+                                baseColor: Colors.grey.withOpacity(0.2),
+                                highlightColor: Colors.white.withOpacity(0.4),
+                                period: Duration(milliseconds: 1200),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24.0,
+                                    vertical: 12.0,
+                                  ),
+                                  child: FlashcardWidget(
+                                    theme: theme,
+                                    flashcard: FlashcardItemModel(
+                                      flashcardSetId: 0,
+                                      question: '',
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        }),
+                  ),
+                ],
               ),
             ),
             Positioned(

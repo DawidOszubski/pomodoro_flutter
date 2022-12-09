@@ -5,14 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/theme_provider.dart';
 
-class AddNew extends ConsumerStatefulWidget {
-  const AddNew({Key? key}) : super(key: key);
+class LearnFlashcardsScreen extends ConsumerStatefulWidget {
+  const LearnFlashcardsScreen({Key? key}) : super(key: key);
 
   @override
   _AddNewState createState() => _AddNewState();
 }
 
-class _AddNewState extends ConsumerState<AddNew> {
+class _AddNewState extends ConsumerState<LearnFlashcardsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);

@@ -94,21 +94,12 @@ class FlashcardService {
     final db = await DatabaseHelper.getDB();
     try {
       int? count = Sqflite.firstIntValue(await db.rawQuery(
-          'SELECT COUNT(*) FROM $dbNameFlashCards WHERE FK_flashcard_set_id = $flashcardSetId'));
+          'SELECT COUNT(*) FROM $dbNameFlashCards WHERE flashcardSetId = $flashcardSetId'));
       if (count != null) {
         return count;
       } else {
         return 0;
       }
-      /*final List<Map<String, dynamic>> maps = await db.query(dbNameFlashCards);
-
-      if (maps.isEmpty) {
-        return 0;
-      }
-
-      return List.generate(
-              maps.length, (index) => FlashcardItemModel.fromJson(maps[index]))
-          .length;*/
     } catch (e) {
       print(e);
       return 0;
@@ -120,15 +111,10 @@ class FlashcardService {
   }) async {
     final db = await DatabaseHelper.getDB();
     try {
-      return await db.rawInsert(
-          'INSERT INTO $dbNameFlashCards (question, answer_text,answer_T_F,answer_multiple, FK_flashcard_set_id) VALUES(?, ?, ?,?,? )',
-          [
-            flashCardItemModel.question,
-            flashCardItemModel.answerText,
-            flashCardItemModel.answerTF,
-            flashCardItemModel.answerMultipleChoice,
-            flashCardItemModel.flashcardSetId,
-          ]).then((value) {
+      return await db
+          .insert(dbNameFlashCards, flashCardItemModel.toJson(),
+              conflictAlgorithm: ConflictAlgorithm.replace)
+          .then((value) {
         debugPrint('Dodano nową fiszkę');
         return updateNumberOfFlashcards(
             flashcardSetId: flashCardItemModel.flashcardSetId);
@@ -139,15 +125,15 @@ class FlashcardService {
     }
   }
 
-  Future<List<FlashcardItemModel>?> getAllFlashcardsInSet() async {
+  Future<List<FlashcardItemModel>?> getAllFlashcardsInSet(
+      {required int flashcardSetId}) async {
     final db = await DatabaseHelper.getDB();
     try {
-      final List<Map<String, dynamic>> maps = await db.query(dbNameFlashCards);
-
+      final List<Map<String, dynamic>> maps = await db.rawQuery(
+          'SELECT * FROM $dbNameFlashCards WHERE flashcardSetId = $flashcardSetId');
       if (maps.isEmpty) {
         return null;
       }
-
       return List.generate(
           maps.length, (index) => FlashcardItemModel.fromJson(maps[index]));
     } catch (e) {
