@@ -44,3 +44,6 @@ final getFlashcardsProvider = FutureProvider.autoDispose
       .watch(flashcardServiceProvider)
       .getAllFlashcardsInSet(flashcardSetId: flashcardSetId);
 });
+
+final isNotificationVisibleProvider =
+    StateProvider.autoDispose<bool>((ref) => false);

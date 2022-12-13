@@ -15,6 +15,7 @@ import '../../providers/theme_provider.dart';
 import '../../widgets/base_screen_widget.dart';
 import '../../widgets/flash cards/flashcard_widget.dart';
 import 'add_new_flashcard_screen.dart';
+import 'learn_flashcards_screen.dart';
 
 class FlashCardDetailsScreen extends ConsumerStatefulWidget {
   const FlashCardDetailsScreen({
@@ -176,9 +177,25 @@ class _FlashCardDetailsScreenState extends ConsumerState<FlashCardDetailsScreen>
                                         horizontal: 24.0,
                                         vertical: 12.0,
                                       ),
-                                      child: FlashcardWidget(
-                                        theme: theme,
-                                        flashcard: flashcards[index],
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                              type: PageTransitionType.fade,
+                                              duration: const Duration(
+                                                milliseconds: 100,
+                                              ),
+                                              child: LearnFlashcardsScreen(
+                                                  flashcards: flashcards,
+                                                  index: index),
+                                            ),
+                                          );
+                                        },
+                                        child: FlashcardWidget(
+                                          theme: theme,
+                                          flashcard: flashcards[index],
+                                        ),
                                       ),
                                     ),
                                     index == flashcards.length - 1

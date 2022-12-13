@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import '../../providers/flashcard_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/base_screen_widget.dart';
 import '../../widgets/custom_button_widget.dart';
+import '../../widgets/notification_widget.dart';
 
 class AddNewFlashCardScreen extends ConsumerStatefulWidget {
   const AddNewFlashCardScreen({
@@ -54,6 +56,7 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isNotificationVisible = ref.watch(isNotificationVisibleProvider);
     final theme = ref.watch(appThemeProvider);
     return GestureDetector(
       onTap: () {
@@ -188,6 +191,17 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
                                           frontPageController.clear();
                                           backPagController.clear();
                                         });
+                                        ref
+                                            .read(isNotificationVisibleProvider
+                                                .state)
+                                            .state = true;
+                                        Timer(Duration(seconds: 2), () {
+                                          ref
+                                              .read(
+                                                  isNotificationVisibleProvider
+                                                      .state)
+                                              .state = false;
+                                        });
                                       }
                                     : null,
                                 buttonGradientColor: theme.gradientButton,
@@ -214,6 +228,9 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
                     ),
                   ],
                 ),
+                isNotificationVisible
+                    ? NotificationWidget(text: "Pomyślnie dodanie nową fiszkę")
+                    : Container(),
               ],
             ),
           ),
