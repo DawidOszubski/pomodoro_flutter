@@ -10,12 +10,15 @@ class DatabaseHelper {
         "CREATE TABLE FlashcardSet(id INTEGER PRIMARY KEY, title TEXT NOT NULL, subject TEXT, progressCount INTEGER, flashcardCount INTEGER );";
     const flashcards =
         "CREATE TABLE Flashcards(id INTEGER PRIMARY KEY, question TEXT NOT NULL, answerText TEXT, answerTF BOOLEAN, answerMultipleChoice TEXT, flashcardSetId INTEGER NOT NULL,FOREIGN KEY (flashcardSetId) REFERENCES FlashcardSet (id) ON DELETE CASCADE);";
+    const pomodoroSet =
+        "CREATE TABLE PomodoroSet(id INTEGER PRIMARY KEY, learnSectionTime INTEGER, breakTime INTEGER );";
 
     return openDatabase(
       join(await getDatabasesPath(), _dbName),
       onCreate: (db, version) async {
         await db.execute(flashcardSet);
         await db.execute(flashcards);
+        await db.execute(pomodoroSet);
       },
       onConfigure: _onConfigure,
       version: _version,

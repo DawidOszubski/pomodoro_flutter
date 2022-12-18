@@ -265,19 +265,6 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                               ),
                             ),
                           ),
-                          /* Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Czas jednej\nsekcji",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(
-                                    height: 8.0,
-                                  ),
-                                  Text("25 min"),
-                                ],
-                              ),*/
                         ],
                       ),
                     ),

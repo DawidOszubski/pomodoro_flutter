@@ -1,8 +1,7 @@
-import 'dart:ui';
-
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
+import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 
 import '../../../providers/theme_provider.dart';
 
@@ -19,156 +18,47 @@ class _CreateNewPomodoroSetScreenState
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: 10.0,
-          sigmaY: 10.0,
+    return BaseScreenWidget(
+      mainColor: theme.mainColor,
+      screenTitle: "Utwórz set Pomodoro",
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24.0,
         ),
-        child: Stack(
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                color: Colors.transparent,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: Center(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height / 1.5,
-                    //padding: EdgeInsets.all(24.0),
-                    // margin:
-                    //    EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0 * 8),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              color: theme.mainColorDarker,
-                              offset: Offset(4, 4),
-                              blurRadius: 15)
-                        ]),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 60,
-                          child: Stack(
-                            children: [
-                              Center(
-                                  child: Text("Stwórz własny set Pomodoro!")),
-                              Positioned(
-                                top: 0,
-                                right: 4,
-                                bottom: 0,
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Icon(
-                                      Icons.close_rounded,
-                                      color: theme.mainColor,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Column(
+            children: [
+              Text(
+                  "Stwórz własny set Pomodoro dopasowany do Ciebie!\n\nMożesz wybrać ile czas potrafisz zachować największe skupienie oraz ile potrzebuejsz czasu na przerwę pomiędzy każdym setem."),
+              Row(
+                children: [
+                  Text("Czas pojedyńczego setu Pomodoro"),
+                  InkWell(
+                    onTap: () async {
+                      /* showTimePicker(
+                          context: context, initialTime: TimeOfDay.now());*/
+                      var resultingDuration = await showDurationPicker(
+                        decoration: BoxDecoration(
+                          color: theme.backgroundColor,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 24.0,
-                              right: 24.0,
-                              bottom: 24.0,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Flexible(
-                                        child: Text("Czas jednego pomodoro")),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Flexible(child: TextField()),
-                                  ],
-                                ),
-                                Divider(
-                                  color: theme.mainColor,
-                                  height: 1,
-                                  thickness: 1,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        "Czas przerwy",
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Flexible(child: TextField()),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 60,
-                        ),
-                        CustomButtonWidget(
-                          buttonText: "Stwórz",
-                          onTap: () {},
-                          buttonGradientColor: theme.gradientButton,
-                          shadowColor: theme.mainColorDarker,
-                        ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Text("Anuluj"),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 24,
-                        ),
-                      ],
+                        context: context,
+                        initialTime: const Duration(minutes: 30),
+                      );
+                    },
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      color: Colors.yellow,
                     ),
                   ),
-                ),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

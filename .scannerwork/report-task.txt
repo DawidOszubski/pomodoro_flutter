@@ -1,6 +1,0 @@
-projectKey=flutter_projekt
-serverUrl=http://localhost:9000
-serverVersion=9.7.1.62043
-dashboardUrl=http://localhost:9000/dashboard?id=flutter_projekt
-ceTaskId=AYUI3easZVsjhAU396YC
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYUI3easZVsjhAU396YC

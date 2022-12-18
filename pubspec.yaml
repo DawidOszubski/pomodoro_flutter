@@ -39,6 +39,8 @@ dependencies:
   shimmer: ^2.0.0
   image_picker: ^0.8.6
   dropdown_button2: ^1.9.2
+  duration_picker: ^1.1.1
+  easy_localization: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +59,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - translations/
 
 
   uses-material-design: true

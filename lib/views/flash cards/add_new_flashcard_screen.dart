@@ -209,7 +209,7 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
                             const SizedBox(
                               height: 12.0,
                             ),
-                            InkWell(
+                            /* InkWell(
                               onTap: () {
                                 Navigator.pop(context);
                               },
@@ -221,7 +221,7 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
                                       .copyWith(color: theme.mainColor),
                                 ),
                               ),
-                            ),
+                            ),*/
                           ],
                         ),
                       ),
