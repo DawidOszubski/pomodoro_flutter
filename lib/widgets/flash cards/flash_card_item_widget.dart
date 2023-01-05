@@ -41,7 +41,7 @@ class _FlashCardItemWidgetState extends ConsumerState<FlashCardItemWidget> {
         Navigator.push(
           context,
           PageTransition(
-              type: PageTransitionType.rightToLeft,
+              type: PageTransitionType.fade,
               duration: const Duration(
                 milliseconds: 350,
               ),

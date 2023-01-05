@@ -15,6 +15,7 @@ import '../../providers/theme_provider.dart';
 import '../../widgets/base_screen_widget.dart';
 import '../../widgets/flash cards/flashcard_widget.dart';
 import 'add_new_flashcard_screen.dart';
+import 'delete_flashcard_screen.dart';
 import 'learn_flashcards_screen.dart';
 
 class FlashCardDetailsScreen extends ConsumerStatefulWidget {
@@ -178,6 +179,20 @@ class _FlashCardDetailsScreenState extends ConsumerState<FlashCardDetailsScreen>
                                         vertical: 12.0,
                                       ),
                                       child: InkWell(
+                                        onLongPress: () {
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                              child: DeleteFlashcardScreen(
+                                                  theme: theme,
+                                                  flashcard: flashcards[index]),
+                                              type: PageTransitionType.fade,
+                                              duration: const Duration(
+                                                milliseconds: 350,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                         onTap: () {
                                           Navigator.push(
                                             context,

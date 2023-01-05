@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
 import 'package:pomodoro_flutter/models/flashcards_model/flashcard_item_model.dart';
+
+import '../../views/flash cards/add_new_flashcard_screen.dart';
 
 class FlashcardWidget extends StatelessWidget {
   const FlashcardWidget({
@@ -54,12 +57,24 @@ class FlashcardWidget extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Icon(
-              Icons.edit,
-              size: 20,
-              color: theme.mainColorDarker,
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: AddNewFlashCardScreen(
+                        flashcardId: flashcard.id!,
+                        flashcard: flashcard,
+                      ),
+                      type: PageTransitionType.fade));
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Icon(
+                Icons.edit,
+                size: 20,
+                color: theme.mainColorDarker,
+              ),
             ),
           ),
         ],

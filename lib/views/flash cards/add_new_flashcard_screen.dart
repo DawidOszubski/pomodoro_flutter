@@ -23,9 +23,11 @@ class AddNewFlashCardScreen extends ConsumerStatefulWidget {
   const AddNewFlashCardScreen({
     Key? key,
     required this.flashcardId,
+    this.flashcard,
   }) : super(key: key);
 
   final int flashcardId;
+  final FlashcardItemModel? flashcard;
 
   @override
   _AddNewFlashCardScreenState createState() => _AddNewFlashCardScreenState();
@@ -46,6 +48,16 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
     'Wielokrotnego wyboru',
     'Prawda/Fałsz'
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (widget.flashcard != null) {
+      frontPageController.text = widget.flashcard!.question;
+      backPagController.text = widget.flashcard!.answerText!;
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -176,32 +188,46 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             CustomButtonWidget(
-                                buttonText: 'Dodaj',
+                                buttonText: widget.flashcard != null ? "Zmień" :'Dodaj',
                                 onTap: frontPageController.text.isNotEmpty &&
                                         backPagController.text.isNotEmpty
                                     ? () {
-                                        final flashcard = FlashcardItemModel(
-                                          question: frontPageController.text,
-                                          answerText: backPagController.text,
-                                          flashcardSetId: widget.flashcardId,
-                                        );
-                                        ref.read(addNewFlashcardItemProvider(
-                                            flashcard));
-                                        setState(() {
-                                          frontPageController.clear();
-                                          backPagController.clear();
-                                        });
-                                        ref
-                                            .read(isNotificationVisibleProvider
-                                                .state)
-                                            .state = true;
-                                        Timer(Duration(seconds: 2), () {
+                                        if (widget.flashcard != null) {
+                                          final flashcard = FlashcardItemModel(
+                                            id: widget.flashcard!.id,
+                                            question: frontPageController.text,
+                                            answerText: backPagController.text,
+                                            flashcardSetId: widget.flashcardId,
+                                          );
+                                          ref.read(updateFlashcardItemProvider(
+                                              flashcard));
+
+                                          Navigator.pop(context);
+                                        } else {
+                                          final flashcard = FlashcardItemModel(
+                                            question: frontPageController.text,
+                                            answerText: backPagController.text,
+                                            flashcardSetId: widget.flashcardId,
+                                          );
+                                          ref.read(addNewFlashcardItemProvider(
+                                              flashcard));
+                                          setState(() {
+                                            frontPageController.clear();
+                                            backPagController.clear();
+                                          });
                                           ref
                                               .read(
                                                   isNotificationVisibleProvider
                                                       .state)
-                                              .state = false;
-                                        });
+                                              .state = true;
+                                          Timer(Duration(seconds: 2), () {
+                                            ref
+                                                .read(
+                                                    isNotificationVisibleProvider
+                                                        .state)
+                                                .state = false;
+                                          });
+                                        }
                                       }
                                     : null,
                                 buttonGradientColor: theme.gradientButton,
@@ -229,7 +255,7 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
                   ],
                 ),
                 isNotificationVisible
-                    ? NotificationWidget(text: "Pomyślnie dodanie nową fiszkę")
+                    ? NotificationWidget(text: "Pomyślnie dodano nową fiszkę")
                     : Container(),
               ],
             ),

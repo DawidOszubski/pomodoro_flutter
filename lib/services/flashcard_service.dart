@@ -16,7 +16,6 @@ class FlashcardService {
       return await db.insert(dbNameFlashCardSet, flashCardModel.toJson(),
           conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
-      print(e);
       return 0;
     }
   }
@@ -125,6 +124,23 @@ class FlashcardService {
     }
   }
 
+  Future<void> updateFlashcard({
+    required FlashcardItemModel flashCardItemModel,
+  }) async {
+    final db = await DatabaseHelper.getDB();
+    try {
+      await db.rawUpdate(
+          'UPDATE $dbNameFlashCards SET question = ?, answerText = ? WHERE id = ?',
+          [
+            flashCardItemModel.question,
+            flashCardItemModel.answerText,
+            flashCardItemModel.id
+          ]);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<List<FlashcardItemModel>?> getAllFlashcardsInSet(
       {required int flashcardSetId}) async {
     final db = await DatabaseHelper.getDB();
@@ -140,6 +156,18 @@ class FlashcardService {
       print(e);
     }
     return null;
+  }
+
+  Future<void> deleteFlashcard(FlashcardItemModel flashCard) async {
+    final db = await DatabaseHelper.getDB();
+    await db.delete(
+      dbNameFlashCards,
+      where: 'id = ?',
+      whereArgs: [flashCard.id],
+    ).then(
+      (value) =>
+          updateNumberOfFlashcards(flashcardSetId: flashCard.flashcardSetId),
+    );
   }
 }
 

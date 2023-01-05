@@ -41,10 +41,6 @@ class MyApp extends ConsumerWidget {
             foregroundColor: MaterialStateColor.resolveWith(
               (states) => theme.mainColor,
             ),
-            /* backgroundColor:
-                MaterialStateColor.resolveWith((states) => Colors.orange),
-            overlayColor:
-                MaterialStateColor.resolveWith((states) => Colors.deepOrange),*/
           ),
         ),
         colorScheme: ColorScheme.fromSwatch().copyWith(

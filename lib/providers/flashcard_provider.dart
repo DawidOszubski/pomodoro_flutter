@@ -45,5 +45,17 @@ final getFlashcardsProvider = FutureProvider.autoDispose
       .getAllFlashcardsInSet(flashcardSetId: flashcardSetId);
 });
 
+final updateFlashcardItemProvider = FutureProvider.autoDispose
+    .family<void, FlashcardItemModel>((ref, flashCardItemModel) async {
+  return ref
+      .watch(flashcardServiceProvider)
+      .updateFlashcard(flashCardItemModel: flashCardItemModel);
+});
+
+final deleteFlashcardItemProvider = FutureProvider.autoDispose
+    .family<void, FlashcardItemModel>((ref, flashCardModel) async {
+  ref.watch(flashcardServiceProvider).deleteFlashcard(flashCardModel);
+});
+
 final isNotificationVisibleProvider =
     StateProvider.autoDispose<bool>((ref) => false);

@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
@@ -17,6 +18,8 @@ class PomodoroSetWidget extends ConsumerStatefulWidget {
 }
 
 class _PomodoroSetWidgetState extends ConsumerState<PomodoroSetWidget> {
+  String? selectedValue;
+
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
@@ -78,8 +81,32 @@ class _PomodoroSetWidgetState extends ConsumerState<PomodoroSetWidget> {
                 width: 20,
               ),
               Flexible(
-                child: Text(
-                  "8",
+                child: CustomDropdownButton2(
+                  offset: Offset(-30, 0),
+                  buttonWidth: 80,
+                  icon: Icon(Icons.arrow_drop_down),
+                  dropdownPadding: EdgeInsets.zero,
+                  iconSize: 20,
+                  iconEnabledColor: theme.mainColor,
+                  hint: 'Select Item',
+                  dropdownItems: [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "10"
+                  ],
+                  value: selectedValue,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedValue = value;
+                    });
+                  },
                 ),
               ),
             ],
