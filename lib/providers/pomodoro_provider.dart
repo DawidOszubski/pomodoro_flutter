@@ -24,3 +24,5 @@ final deletePomodoroSetProvider = FutureProvider.autoDispose
     .family<void, PomodoroSetModel>((ref, pomodoroSet) async {
   ref.watch(pomodoroServiceProvider).deletePomodoroSet(pomodoroSet);
 });
+
+final timerRepeatCountProvider = StateProvider.autoDispose<int>((ref) => 1);

@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
-import 'package:pomodoro_flutter/views/learn/pomodoro/timer_screen.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 import 'package:pomodoro_flutter/widgets/bottom_sheet_base_widget.dart';
 import 'package:shimmer/shimmer.dart';
@@ -67,7 +66,6 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
   @override
   void dispose() {
     _controller.dispose();
-
     super.dispose();
   }
 
@@ -86,6 +84,8 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
     ),
   ];
 
+  PomodoroSetModel? firstSet;
+
   var isTimerSet = false;
   int _currentIndex = 0;
   List<int> learnTime = [25, 35, 45, 60];
@@ -94,6 +94,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
     final pomodoroSet = ref.watch(getPomodoroSetsProvider);
+    final repeatCount = ref.watch(timerRepeatCountProvider.notifier).state;
     return BaseScreenWidget(
       resizeToAvoidBottomInsets: false,
       onTap: () {
@@ -127,9 +128,15 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                       focusColor: Colors.transparent,
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
-                      onTap: isTimerSet
-                          ? () {
-                              Navigator.push(
+                      onTap: () {
+                        if (isTimerSet) {
+                          print(ref
+                              .watch(getPomodoroSetsProvider)
+                              .value![_currentIndex]
+                              .learnSectionTime);
+                          print(ref.watch(timerRepeatCountProvider));
+
+                          /*Navigator.push(
                                 context,
                                 PageTransition(
                                   type: PageTransitionType.fade,
@@ -140,9 +147,11 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                                       pomodoroSetModel:
                                           pomodoroSetList[_currentIndex]),
                                 ),
-                              );
-                            }
-                          : null,
+                              );*/
+                        } else {
+                          _controller.forward();
+                        }
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
@@ -242,6 +251,11 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                           Expanded(
                             child: pomodoroSet.when(
                                 data: (pomodoroSet) {
+                                  setState(() {
+                                    if (pomodoroSet!.isNotEmpty) {
+                                      firstSet = pomodoroSet.first;
+                                    }
+                                  });
                                   return CarouselSlider(
                                     items: pomodoroSet!.isNotEmpty
                                         ? List.generate(
@@ -288,12 +302,11 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                                       aspectRatio: 1,
                                       initialPage: 0,
                                       onPageChanged: (index, reason) {
+                                        ref
+                                            .read(timerRepeatCountProvider
+                                                .notifier)
+                                            .state = 1;
                                         _currentIndex = index;
-                                        setState(() {
-                                          switch (_currentIndex) {
-                                            case 0:
-                                          }
-                                        });
                                       },
                                     ),
                                   );

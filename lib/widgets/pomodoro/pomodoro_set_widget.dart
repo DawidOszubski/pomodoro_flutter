@@ -6,6 +6,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/models/learn_models/pomodoro_set_model.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 
+import '../../providers/pomodoro_provider.dart';
 import '../../views/learn/pomodoro/create_new_pomodoro_set_screen.dart';
 
 class PomodoroSetWidget extends ConsumerStatefulWidget {
@@ -137,6 +138,8 @@ class _PomodoroSetWidgetState extends ConsumerState<PomodoroSetWidget> {
                     onChanged: (value) {
                       setState(() {
                         selectedValue = value;
+                        ref.read(timerRepeatCountProvider.notifier).state =
+                            int.tryParse(selectedValue!)!;
                       });
                     },
                   ),
