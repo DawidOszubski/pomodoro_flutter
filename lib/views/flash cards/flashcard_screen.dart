@@ -74,8 +74,26 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
                   );
                 } else {
                   return Center(
-                    child: Container(
-                      child: Text("Brak elementów do wyświetlenia"),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.info_outline,
+                          color: Colors.grey,
+                        ),
+                        SizedBox(
+                          width: 4.0,
+                        ),
+                        Flexible(
+                          child: Text(
+                            "noElements.text".tr(
+                              args: [
+                                "noElements.noFlashcards".tr(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 }

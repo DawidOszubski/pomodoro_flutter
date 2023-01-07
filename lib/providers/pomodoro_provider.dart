@@ -12,3 +12,15 @@ final getPomodoroSetsProvider =
     FutureProvider.autoDispose<List<PomodoroSetModel>?>((ref) async {
   return ref.watch(pomodoroServiceProvider).getAllPomodoroSets();
 });
+
+final updatePomodoroSetProvider = FutureProvider.autoDispose
+    .family<void, PomodoroSetModel>((ref, pomodoroSet) async {
+  return ref
+      .watch(pomodoroServiceProvider)
+      .updatePomodoroSet(pomodoroSet: pomodoroSet);
+});
+
+final deletePomodoroSetProvider = FutureProvider.autoDispose
+    .family<void, PomodoroSetModel>((ref, pomodoroSet) async {
+  ref.watch(pomodoroServiceProvider).deletePomodoroSet(pomodoroSet);
+});

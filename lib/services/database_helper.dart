@@ -1,4 +1,5 @@
 import 'package:path/path.dart';
+import 'package:pomodoro_flutter/models/learn_models/pomodoro_set_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
@@ -18,7 +19,29 @@ class DatabaseHelper {
       onCreate: (db, version) async {
         await db.execute(flashcardSet);
         await db.execute(flashcards);
-        await db.execute(pomodoroSet);
+        await db.execute(pomodoroSet).then((value) async {
+          await db.insert(
+            "PomodoroSet",
+            PomodoroSetModel(
+              learnSectionTime: 25,
+              breakTime: 5,
+            ).toJson(),
+          );
+          await db.insert(
+            "PomodoroSet",
+            PomodoroSetModel(
+              learnSectionTime: 35,
+              breakTime: 8,
+            ).toJson(),
+          );
+          await db.insert(
+            "PomodoroSet",
+            PomodoroSetModel(
+              learnSectionTime: 45,
+              breakTime: 10,
+            ).toJson(),
+          );
+        });
       },
       onConfigure: _onConfigure,
       version: _version,

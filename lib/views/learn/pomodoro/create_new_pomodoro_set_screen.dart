@@ -11,7 +11,14 @@ import '../../../models/learn_models/pomodoro_set_model.dart';
 import '../../../providers/theme_provider.dart';
 
 class CreateNewPomodoroSetScreen extends ConsumerStatefulWidget {
-  const CreateNewPomodoroSetScreen({Key? key}) : super(key: key);
+  const CreateNewPomodoroSetScreen({
+    Key? key,
+    this.isEdit,
+    this.pomodoroSet,
+  }) : super(key: key);
+
+  final bool? isEdit;
+  final PomodoroSetModel? pomodoroSet;
 
   @override
   _CreateNewPomodoroSetScreenState createState() =>
@@ -20,6 +27,15 @@ class CreateNewPomodoroSetScreen extends ConsumerStatefulWidget {
 
 class _CreateNewPomodoroSetScreenState
     extends ConsumerState<CreateNewPomodoroSetScreen> {
+  @override
+  void initState() {
+    if (widget.pomodoroSet != null) {
+      learnDuration = widget.pomodoroSet!.learnSectionTime;
+      breakDuration = widget.pomodoroSet!.breakTime;
+    }
+    super.initState();
+  }
+
   int? learnDuration;
   int? breakDuration;
 
@@ -28,7 +44,9 @@ class _CreateNewPomodoroSetScreenState
     final theme = ref.watch(appThemeProvider);
     return BaseScreenWidget(
       mainColor: theme.mainColor,
-      screenTitle: "pomodoro.createSet".tr(),
+      screenTitle: widget.isEdit == true
+          ? "pomodoro.editSet".tr()
+          : "pomodoro.createSet".tr(),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 24.0,
@@ -44,7 +62,9 @@ class _CreateNewPomodoroSetScreenState
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "pomodoro.createSetDescription".tr(),
+                    widget.isEdit == true
+                        ? "pomodoro.editSetDescription".tr()
+                        : "pomodoro.createSetDescription".tr(),
                     style: AppStyles.descriptionStyle,
                   ),
                   const SizedBox(
@@ -54,7 +74,10 @@ class _CreateNewPomodoroSetScreenState
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                     child: Row(
                       children: [
-                        Text("pomodoro.learnTime".tr()),
+                        Text(
+                          "pomodoro.learnTime".tr(),
+                          style: TextStyle(fontSize: 16),
+                        ),
                         InkWell(
                           onTap: () async {
                             await showDurationPicker(
@@ -149,18 +172,56 @@ class _CreateNewPomodoroSetScreenState
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
-                child: CustomButtonWidget(
-                    buttonText: "pomodoro.createPomodoroSetBtn".tr(),
-                    onTap: () {
-                      if (learnDuration != null && breakDuration != null) {
-                        final pomodoroSet = PomodoroSetModel(
-                            learnSectionTime: learnDuration!,
-                            breakTime: breakDuration!);
-                        ref.read(addPomodoroSetProvider(pomodoroSet));
-                        Navigator.pop(context);
-                      }
-                    },
-                    theme: theme),
+                child: widget.isEdit == true
+                    ? Column(
+                        children: [
+                          CustomButtonWidget(
+                              buttonText: "edit".tr(),
+                              onTap: () {
+                                if (learnDuration != null &&
+                                    breakDuration != null) {
+                                  final pomodoroSet = PomodoroSetModel(
+                                      id: widget.pomodoroSet!.id,
+                                      learnSectionTime: learnDuration!,
+                                      breakTime: breakDuration!);
+                                  ref.read(
+                                      updatePomodoroSetProvider(pomodoroSet));
+                                  Navigator.pop(context);
+                                }
+                              },
+                              theme: theme),
+                          SizedBox(
+                            height: 12.0,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              ref.read(deletePomodoroSetProvider(
+                                  widget.pomodoroSet!));
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Text(
+                                "delete".tr(),
+                                style: AppStyles.secondaryButtonStyle
+                                    .copyWith(color: theme.mainColor),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : CustomButtonWidget(
+                        buttonText: "pomodoro.createPomodoroSetBtn".tr(),
+                        onTap: () {
+                          if (learnDuration != null && breakDuration != null) {
+                            final pomodoroSet = PomodoroSetModel(
+                                learnSectionTime: learnDuration!,
+                                breakTime: breakDuration!);
+                            ref.read(addPomodoroSetProvider(pomodoroSet));
+                            Navigator.pop(context);
+                          }
+                        },
+                        theme: theme),
               ),
             ],
           ),

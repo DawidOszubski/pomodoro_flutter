@@ -4,9 +4,20 @@
   "testTitle": "Tytuł testu",
   "testDescription": "Opis testu / Dodatkowe informacje",
   "addTestBtn": "Dodaj test",
+  "start": "Start",
+  "choseSet": "Wybierz zestaw",
+  "delete": "Usuń",
+  "edit": "Edytuj",
+  "noElements": {
+    "text" : "Brak {} do wyświetlenia",
+    "noPomodoroSet": "setów pomodoro",
+    "noFlashcards": "fiszek"
+  },
   "pomodoro": {
     "createSet": "Utwórz set Pomodoro",
-    "createSetDescription": "Stwórz własny set Pomodoro dopasowany do Ciebie!\n\nMożesz wybrać ile czas potrafisz zachować największe skupienie oraz ile potrzebuejsz czasu na przerwę pomiędzy każdym setem.",
+    "editSet": "Edytuj set Pomodoro",
+    "createSetDescription": "Stwórz własny set Pomodoro dopasowany do Ciebie!\n\nMożesz wybrać ile czas potrafisz zachować największe skupienie oraz ile potrzebujesz czasu na przerwę pomiędzy każdym setem.",
+    "editSetDescription": "Edytuj set Pomodoro tak aby był dopasowany do Ciebie!\n\nMożesz wybrać ile czas potrafisz zachować największe skupienie oraz ile potrzebujesz czasu na przerwę pomiędzy każdym setem.",
     "breakTime": "Czas przerwy:",
     "learnTime": "Czas nauki:",
     "createPomodoroSetBtn":"Stwórz",

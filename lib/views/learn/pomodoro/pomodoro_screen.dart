@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -151,9 +152,7 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                         height: 145,
                         child: Center(
                           child: Text(
-                            isTimerSet
-                                ? "Start" //learnTime[_currentIndex].toString()
-                                : "Wybierz zestaw",
+                            isTimerSet ? "start".tr() : "choseSet".tr(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20.0,
@@ -243,34 +242,43 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                           Expanded(
                             child: pomodoroSet.when(
                                 data: (pomodoroSet) {
-                                  ;
                                   return CarouselSlider(
-                                    items: [
-                                          PomodoroSetWidget(
-                                              learnTime: pomodoroSetList[0]
-                                                  .learnSectionTime,
-                                              breakTime:
-                                                  pomodoroSetList[0].breakTime),
-                                          PomodoroSetWidget(
-                                              learnTime: pomodoroSetList[1]
-                                                  .learnSectionTime,
-                                              breakTime:
-                                                  pomodoroSetList[1].breakTime),
-                                          PomodoroSetWidget(
-                                              learnTime: pomodoroSetList[2]
-                                                  .learnSectionTime,
-                                              breakTime:
-                                                  pomodoroSetList[2].breakTime),
-                                        ] +
-                                        List.generate(
-                                          pomodoroSet!.length,
-                                          (index) => PomodoroSetWidget(
-                                            learnTime: pomodoroSet[index]
-                                                .learnSectionTime,
-                                            breakTime:
-                                                pomodoroSet[index].breakTime,
-                                          ),
-                                        ),
+                                    items: pomodoroSet!.isNotEmpty
+                                        ? List.generate(
+                                            pomodoroSet.length,
+                                            (index) => PomodoroSetWidget(
+                                              pomodoroSet: pomodoroSet[index],
+                                            ),
+                                          )
+                                        : [
+                                            Center(
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.info_outline,
+                                                    color: Colors.grey,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 4.0,
+                                                  ),
+                                                  Flexible(
+                                                    child: Text(
+                                                      "noElements.text".tr(
+                                                        args: [
+                                                          "noElements.noPomodoroSet"
+                                                              .tr(),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                     carouselController:
                                         buttonCarouselController,
                                     options: CarouselOptions(
@@ -293,20 +301,11 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                                 error: (err, s) => CarouselSlider(
                                       items: [
                                         PomodoroSetWidget(
-                                            learnTime: pomodoroSetList[0]
-                                                .learnSectionTime,
-                                            breakTime:
-                                                pomodoroSetList[0].breakTime),
+                                            pomodoroSet: pomodoroSetList[0]),
                                         PomodoroSetWidget(
-                                            learnTime: pomodoroSetList[1]
-                                                .learnSectionTime,
-                                            breakTime:
-                                                pomodoroSetList[1].breakTime),
+                                            pomodoroSet: pomodoroSetList[1]),
                                         PomodoroSetWidget(
-                                            learnTime: pomodoroSetList[2]
-                                                .learnSectionTime,
-                                            breakTime:
-                                                pomodoroSetList[2].breakTime),
+                                            pomodoroSet: pomodoroSetList[2]),
                                       ],
                                       carouselController:
                                           buttonCarouselController,
@@ -327,17 +326,36 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                                       ),
                                     ),
                                 loading: () {
-                                  return Shimmer.fromColors(
-                                    baseColor: Colors.grey.withOpacity(0.2),
-                                    highlightColor:
-                                        Colors.white.withOpacity(0.4),
-                                    period: Duration(milliseconds: 1200),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 24.0,
-                                        vertical: 12.0,
+                                  return CarouselSlider(
+                                    items: [
+                                      Shimmer.fromColors(
+                                        baseColor: Colors.grey.withOpacity(0.2),
+                                        highlightColor:
+                                            Colors.white.withOpacity(0.4),
+                                        period: Duration(milliseconds: 1200),
+                                        child: Container(
+                                          child: PomodoroSetWidget(
+                                              pomodoroSet: pomodoroSetList[0]),
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                      child: Container(),
+                                    ],
+                                    carouselController:
+                                        buttonCarouselController,
+                                    options: CarouselOptions(
+                                      autoPlay: false,
+                                      enlargeCenterPage: true,
+                                      viewportFraction: 1,
+                                      aspectRatio: 1,
+                                      initialPage: 0,
+                                      onPageChanged: (index, reason) {
+                                        _currentIndex = index;
+                                        setState(() {
+                                          switch (_currentIndex) {
+                                            case 0:
+                                          }
+                                        });
+                                      },
                                     ),
                                   );
                                 }),

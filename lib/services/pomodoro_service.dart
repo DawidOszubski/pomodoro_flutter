@@ -29,6 +29,32 @@ class PomodoroService {
     return List.generate(
         maps.length, (index) => PomodoroSetModel.fromJson(maps[index]));
   }
+
+  Future<void> deletePomodoroSet(PomodoroSetModel pomodoroSet) async {
+    final db = await DatabaseHelper.getDB();
+    await db.delete(
+      dbNamePomodoroSet,
+      where: 'id = ?',
+      whereArgs: [pomodoroSet.id],
+    );
+  }
+
+  Future<void> updatePomodoroSet({
+    required PomodoroSetModel pomodoroSet,
+  }) async {
+    final db = await DatabaseHelper.getDB();
+    try {
+      await db.rawUpdate(
+          'UPDATE $dbNamePomodoroSet SET learnSectionTime = ?, breakTime = ? WHERE id = ?',
+          [
+            pomodoroSet.learnSectionTime,
+            pomodoroSet.breakTime,
+            pomodoroSet.id
+          ]);
+    } catch (e) {
+      print(e);
+    }
+  }
 }
 
 final pomodoroServiceProvider =

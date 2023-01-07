@@ -35,6 +35,7 @@ class _BaseScreenWidgetState extends ConsumerState<BaseScreenWidget> {
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
         resizeToAvoidBottomInset: widget.resizeToAvoidBottomInsets,

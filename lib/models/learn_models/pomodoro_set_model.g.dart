@@ -8,12 +8,14 @@ part of 'pomodoro_set_model.dart';
 
 PomodoroSetModel _$PomodoroSetModelFromJson(Map<String, dynamic> json) =>
     PomodoroSetModel(
-      learnSectionTime: json['learnSectionTime'] as int,
-      breakTime: json['breakTime'] as int,
+      id: json['id'] as int?,
+      learnSectionTime: json['learnSectionTime'] as int?,
+      breakTime: json['breakTime'] as int?,
     );
 
 Map<String, dynamic> _$PomodoroSetModelToJson(PomodoroSetModel instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'learnSectionTime': instance.learnSectionTime,
       'breakTime': instance.breakTime,
     };

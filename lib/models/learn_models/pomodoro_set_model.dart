@@ -4,10 +4,11 @@ part 'pomodoro_set_model.g.dart';
 
 @JsonSerializable()
 class PomodoroSetModel {
-  final int learnSectionTime;
-  final int breakTime;
+  int? id;
+  int? learnSectionTime;
+  int? breakTime;
 
-  PomodoroSetModel({required this.learnSectionTime, required this.breakTime});
+  PomodoroSetModel({this.id, this.learnSectionTime, this.breakTime});
 
   factory PomodoroSetModel.fromJson(Map<String, dynamic> json) =>
       _$PomodoroSetModelFromJson(json);

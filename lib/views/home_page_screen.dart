@@ -5,7 +5,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/main.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/flash%20cards/flashcard_screen.dart';
-import 'package:pomodoro_flutter/views/learn/learn_screen.dart';
+import 'package:pomodoro_flutter/views/learn/pomodoro/pomodoro_screen.dart';
 import 'package:pomodoro_flutter/views/time%20table/time_table_screen.dart';
 import 'package:pomodoro_flutter/widgets/home_page_list_item_widget.dart';
 
@@ -154,7 +154,7 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen>
     mainScreenTabsList = [
       HomePageListItemWidget(
         imageAsset: AppAssets.learnIcon,
-        nextScreen: LearnScreen(),
+        nextScreen: PomodoroScreen(),
       ),
       HomePageListItemWidget(
         imageAsset: AppAssets.flashCardIcon,
