@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -122,7 +123,7 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
           ),
         ],
       ),
-      screenTitle: "Fiszki",
+      screenTitle: "flashcards".tr(),
       resizeToAvoidBottomInsets: false,
     );
   }

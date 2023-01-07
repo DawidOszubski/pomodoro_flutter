@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,99 +39,113 @@ class _ChangeColorScreenState extends ConsumerState<ChangeColorScreen> {
                 vertical: 60.0,
               ),
               margin: const EdgeInsets.symmetric(horizontal: 50.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              child: Column(
                 children: [
-                  Stack(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          ref.read(blueThemeProvider.state).state = false;
-                          ref.read(brownThemeProvider.state).state = false;
-                          ref.read(redThemeProvider.state).state = true;
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          alignment: Alignment.center,
-                          color: AppColors.mainColorRed,
-                          width: 40,
-                          height: 40,
-                        ),
-                      ),
-                      Visibility(
-                        visible: isPomodoroTheme,
-                        child: const SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: Icon(
-                            Icons.check,
-                            color: Colors.green,
-                            size: 40,
+                      Stack(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              ref.read(blueThemeProvider.state).state = false;
+                              ref.read(brownThemeProvider.state).state = false;
+                              ref.read(redThemeProvider.state).state = true;
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              color: AppColors.mainColorRed,
+                              width: 40,
+                              height: 40,
+                            ),
                           ),
-                        ),
-                      )
+                          Visibility(
+                            visible: isPomodoroTheme,
+                            child: const SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: Icon(
+                                Icons.check,
+                                color: Colors.green,
+                                size: 40,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Stack(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              ref.read(blueThemeProvider.state).state = true;
+                              ref.read(brownThemeProvider.state).state = false;
+                              ref.read(redThemeProvider.state).state = false;
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              color: AppColors.mainColorBlue,
+                              width: 40,
+                              height: 40,
+                            ),
+                          ),
+                          Visibility(
+                            visible: isAluniaTheme,
+                            child: const SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: Icon(
+                                Icons.check,
+                                color: Colors.green,
+                                size: 40,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Stack(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              ref.read(blueThemeProvider.state).state = false;
+                              ref.read(redThemeProvider.state).state = false;
+                              ref.read(brownThemeProvider.state).state = true;
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              alignment: Alignment.center,
+                              color: AppColors.mainColorBrown,
+                              width: 40,
+                              height: 40,
+                            ),
+                          ),
+                          Visibility(
+                            visible: isMainTheme,
+                            child: const SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: Icon(
+                                Icons.check,
+                                color: Colors.green,
+                                size: 40,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
-                  Stack(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          ref.read(blueThemeProvider.state).state = true;
-                          ref.read(brownThemeProvider.state).state = false;
-                          ref.read(redThemeProvider.state).state = false;
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          alignment: Alignment.center,
-                          color: AppColors.mainColorBlue,
-                          width: 40,
-                          height: 40,
-                        ),
-                      ),
-                      Visibility(
-                        visible: isAluniaTheme,
-                        child: const SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: Icon(
-                            Icons.check,
-                            color: Colors.green,
-                            size: 40,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Stack(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          ref.read(blueThemeProvider.state).state = false;
-                          ref.read(redThemeProvider.state).state = false;
-                          ref.read(brownThemeProvider.state).state = true;
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          alignment: Alignment.center,
-                          color: AppColors.mainColorBrown,
-                          width: 40,
-                          height: 40,
-                        ),
-                      ),
-                      Visibility(
-                        visible: isMainTheme,
-                        child: const SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: Icon(
-                            Icons.check,
-                            color: Colors.green,
-                            size: 40,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        context.setLocale(Locale('en', 'US'));
+                      },
+                      child: Text("klik".tr())),
+                  ElevatedButton(
+                      onPressed: () {
+                        context.setLocale(Locale('pl', 'PL'));
+                      },
+                      child: Text("klik".tr()))
                 ],
               ),
             ),

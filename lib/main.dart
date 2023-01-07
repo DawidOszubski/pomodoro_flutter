@@ -17,7 +17,7 @@ void main() async {
   runApp(
     ProviderScope(
       child: EasyLocalization(
-          supportedLocales: const [Locale('pl', 'PL')],
+          supportedLocales: const [Locale('pl', 'PL'), Locale('en', 'US')],
           path: 'translations',
           fallbackLocale: const Locale('pl', 'PL'),
           startLocale: const Locale('pl', 'PL'),

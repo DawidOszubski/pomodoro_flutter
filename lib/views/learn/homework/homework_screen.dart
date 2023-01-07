@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomodoro_flutter/providers/theme_provider.dart';
-import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 
+import '../../../providers/theme_provider.dart';
+import '../../../widgets/base_screen_widget.dart';
 import '../../../widgets/rounded_add_button_widget.dart';
 
-class TestScreen extends ConsumerStatefulWidget {
-  const TestScreen({Key? key}) : super(key: key);
+class HomeworkScreen extends ConsumerStatefulWidget {
+  const HomeworkScreen({Key? key}) : super(key: key);
 
   @override
-  _TestScreenState createState() => _TestScreenState();
+  _HomeworkScreenState createState() => _HomeworkScreenState();
 }
 
-class _TestScreenState extends ConsumerState<TestScreen> {
+class _HomeworkScreenState extends ConsumerState<HomeworkScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
@@ -36,7 +36,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
           ),
         ],
       ),
-      screenTitle: "Testy",
+      screenTitle: "Zadanka",
       resizeToAvoidBottomInsets: false,
     );
   }

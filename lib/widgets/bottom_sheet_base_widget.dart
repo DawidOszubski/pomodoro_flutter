@@ -32,7 +32,7 @@ class _BottomSheetBaseWidgetState extends ConsumerState<BottomSheetBaseWidget> {
           top: 40.0,
         ),
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
+        // height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           color: AppColors.backgroundColor,
           borderRadius: BorderRadius.only(
@@ -95,6 +95,7 @@ class _BottomSheetBaseWidgetState extends ConsumerState<BottomSheetBaseWidget> {
 class BottomSheetWidget {
   static Future<void> show(BuildContext context, Widget body) {
     return showMaterialModalBottomSheet(
+      expand: false,
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => BottomSheetBaseWidget(body: body),

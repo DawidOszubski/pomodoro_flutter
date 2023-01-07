@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:pomodoro_flutter/models/pomodoro_set_model.dart';
+import 'package:pomodoro_flutter/models/learn_models/pomodoro_set_model.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 

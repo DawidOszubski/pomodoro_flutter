@@ -12,7 +12,7 @@ import 'package:pomodoro_flutter/views/learn/pomodoro/timer_screen.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 import 'package:pomodoro_flutter/widgets/bottom_sheet_base_widget.dart';
 
-import '../../../models/pomodoro_set_model.dart';
+import '../../../models/learn_models/pomodoro_set_model.dart';
 import '../../../widgets/custom_button_widget.dart';
 import '../../../widgets/pomodoro/pomodoro_set_widget.dart';
 import 'create_new_pomodoro_set_screen.dart';

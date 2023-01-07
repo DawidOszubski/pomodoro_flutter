@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
+import 'package:pomodoro_flutter/views/learn/homework/homework_screen.dart';
 import 'package:pomodoro_flutter/views/learn/pomodoro/pomodoro_screen.dart';
-import 'package:pomodoro_flutter/views/learn/pomodoro/test_screen.dart';
-import 'package:pomodoro_flutter/views/learn/pomodoro/zadanka_screen.dart';
+import 'package:pomodoro_flutter/views/learn/test/test_screen.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 
 import '../../constants/app_assets.dart';
@@ -57,7 +57,7 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
                 ),
                 LearnScreenListItemWidget(
                   title: "Zadanka",
-                  nextScreen: ZadankaScreen(),
+                  nextScreen: HomeworkScreen(),
                 ),
               ],
             ),
