@@ -39,4 +39,8 @@ class AppStyles {
     fontSize: 16.0,
     fontWeight: FontWeight.bold,
   );
+  static const descriptionStyle = TextStyle(
+    fontSize: 18,
+    letterSpacing: 1.0,
+  );
 }

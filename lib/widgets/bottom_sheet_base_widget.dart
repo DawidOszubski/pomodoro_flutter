@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:pomodoro_flutter/constants/app_colors.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 
@@ -94,8 +93,12 @@ class _BottomSheetBaseWidgetState extends ConsumerState<BottomSheetBaseWidget> {
 
 class BottomSheetWidget {
   static Future<void> show(BuildContext context, Widget body) {
-    return showMaterialModalBottomSheet(
-      expand: false,
+    return showModalBottomSheet(
+      // expand: false,
+      // isScrollControlled: true,
+      enableDrag: true,
+      constraints:
+          BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => BottomSheetBaseWidget(body: body),

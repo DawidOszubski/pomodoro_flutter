@@ -48,6 +48,7 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
               data: (flashcards) {
                 if (flashcards != null) {
                   return ListView.builder(
+                    padding: EdgeInsets.zero,
                     itemCount: flashcards.length,
                     itemBuilder: (context, index) {
                       return Padding(
@@ -55,9 +56,18 @@ class _FlashCardScreenState extends ConsumerState<FlashCardScreen> {
                           horizontal: 24.0,
                           vertical: 12.0,
                         ),
-                        child: FlashCardItemWidget(
-                          flashcard: flashcards[index],
-                          theme: theme,
+                        child: Column(
+                          children: [
+                            FlashCardItemWidget(
+                              flashcard: flashcards[index],
+                              theme: theme,
+                            ),
+                            index == flashcards.length - 1
+                                ? const SizedBox(
+                                    height: 100,
+                                  )
+                                : Container()
+                          ],
                         ),
                       );
                     },

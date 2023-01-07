@@ -169,6 +169,7 @@ class _FlashCardDetailsScreenState extends ConsumerState<FlashCardDetailsScreen>
                         data: (flashcards) {
                           if (flashcards != null) {
                             return ListView.builder(
+                              padding: EdgeInsets.zero,
                               itemCount: flashcards.length,
                               itemBuilder: (context, index) {
                                 return Column(

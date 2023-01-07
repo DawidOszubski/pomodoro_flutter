@@ -1,4 +1,22 @@
 {
   "flashcards": "Fiszki",
-  "klik": "Kliknij"
+  "addTest": "Dodaj nowy test",
+  "testTitle": "Tytuł testu",
+  "testDescription": "Opis testu / Dodatkowe informacje",
+  "addTestBtn": "Dodaj test",
+  "pomodoro": {
+    "createSet": "Utwórz set Pomodoro",
+    "createSetDescription": "Stwórz własny set Pomodoro dopasowany do Ciebie!\n\nMożesz wybrać ile czas potrafisz zachować największe skupienie oraz ile potrzebuejsz czasu na przerwę pomiędzy każdym setem.",
+    "breakTime": "Czas przerwy:",
+    "learnTime": "Czas nauki:",
+    "createPomodoroSetBtn":"Stwórz",
+    "set": "Ustaw",
+    "minute": {
+      "minute": "{} minut",
+      "one": "{} minuta",
+      "minutes": "{} minuty"
+    },
+    "timeSnackBar": "Wybrany czas musi być większy niż 0"
+
+  }
 }

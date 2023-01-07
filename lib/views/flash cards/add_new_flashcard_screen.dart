@@ -188,50 +188,50 @@ class _AddNewFlashCardScreenState extends ConsumerState<AddNewFlashCardScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             CustomButtonWidget(
-                                buttonText: widget.flashcard != null ? "Zmień" :'Dodaj',
-                                onTap: frontPageController.text.isNotEmpty &&
-                                        backPagController.text.isNotEmpty
-                                    ? () {
-                                        if (widget.flashcard != null) {
-                                          final flashcard = FlashcardItemModel(
-                                            id: widget.flashcard!.id,
-                                            question: frontPageController.text,
-                                            answerText: backPagController.text,
-                                            flashcardSetId: widget.flashcardId,
-                                          );
-                                          ref.read(updateFlashcardItemProvider(
-                                              flashcard));
+                              buttonText:
+                                  widget.flashcard != null ? "Zmień" : 'Dodaj',
+                              onTap: frontPageController.text.isNotEmpty &&
+                                      backPagController.text.isNotEmpty
+                                  ? () {
+                                      if (widget.flashcard != null) {
+                                        final flashcard = FlashcardItemModel(
+                                          id: widget.flashcard!.id,
+                                          question: frontPageController.text,
+                                          answerText: backPagController.text,
+                                          flashcardSetId: widget.flashcardId,
+                                        );
+                                        ref.read(updateFlashcardItemProvider(
+                                            flashcard));
 
-                                          Navigator.pop(context);
-                                        } else {
-                                          final flashcard = FlashcardItemModel(
-                                            question: frontPageController.text,
-                                            answerText: backPagController.text,
-                                            flashcardSetId: widget.flashcardId,
-                                          );
-                                          ref.read(addNewFlashcardItemProvider(
-                                              flashcard));
-                                          setState(() {
-                                            frontPageController.clear();
-                                            backPagController.clear();
-                                          });
+                                        Navigator.pop(context);
+                                      } else {
+                                        final flashcard = FlashcardItemModel(
+                                          question: frontPageController.text,
+                                          answerText: backPagController.text,
+                                          flashcardSetId: widget.flashcardId,
+                                        );
+                                        ref.read(addNewFlashcardItemProvider(
+                                            flashcard));
+                                        setState(() {
+                                          frontPageController.clear();
+                                          backPagController.clear();
+                                        });
+                                        ref
+                                            .read(isNotificationVisibleProvider
+                                                .state)
+                                            .state = true;
+                                        Timer(Duration(seconds: 2), () {
                                           ref
                                               .read(
                                                   isNotificationVisibleProvider
                                                       .state)
-                                              .state = true;
-                                          Timer(Duration(seconds: 2), () {
-                                            ref
-                                                .read(
-                                                    isNotificationVisibleProvider
-                                                        .state)
-                                                .state = false;
-                                          });
-                                        }
+                                              .state = false;
+                                        });
                                       }
-                                    : null,
-                                buttonGradientColor: theme.gradientButton,
-                                shadowColor: theme.mainColorDarker),
+                                    }
+                                  : null,
+                              theme: theme,
+                            ),
                             const SizedBox(
                               height: 12.0,
                             ),

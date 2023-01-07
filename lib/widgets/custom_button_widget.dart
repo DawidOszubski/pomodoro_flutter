@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomodoro_flutter/constants/app_themes.dart';
 
 import '../constants/app_styles.dart';
 
@@ -6,15 +7,14 @@ class CustomButtonWidget extends StatefulWidget {
   const CustomButtonWidget({
     Key? key,
     required this.buttonText,
-    required this.buttonGradientColor,
-    required this.shadowColor,
     required this.onTap,
+    required this.theme,
   }) : super(key: key);
 
   final String buttonText;
-  final Gradient buttonGradientColor;
-  final Color shadowColor;
+
   final void Function()? onTap;
+  final AppThemeModel theme;
 
   @override
   State<CustomButtonWidget> createState() => _CustomButtonWidgetState();
@@ -43,16 +43,17 @@ class _CustomButtonWidgetState extends State<CustomButtonWidget> {
           horizontal: 30.0,
         ),
         decoration: BoxDecoration(
-            //color: widget.buttonColor,
-            gradient: widget.buttonGradientColor,
-            borderRadius: BorderRadius.circular(15.0),
-            boxShadow: [
-              BoxShadow(
-                  color: widget.shadowColor,
-                  offset: const Offset(2, 2),
-                  blurRadius: 6,
-                  spreadRadius: 1),
-            ]),
+          //color: widget.buttonColor,
+          gradient: widget.theme.gradientButton,
+          borderRadius: BorderRadius.circular(15.0),
+          boxShadow: [
+            BoxShadow(
+                color: widget.theme.mainColorDarker,
+                offset: const Offset(2, 6),
+                blurRadius: 2,
+                spreadRadius: 0),
+          ],
+        ),
         child: Text(
           widget.buttonText,
           style: textStyle,

@@ -45,28 +45,33 @@ class _HomePageListItemWidgetState extends ConsumerState<HomePageListItemWidget>
     final themeData = ref.watch(appThemeProvider);
     final DecorationTween decorationTween = DecorationTween(
       begin: BoxDecoration(
-        //color: themeData.mainColor,
         gradient: themeData.gradientButton,
         borderRadius: const BorderRadius.all(
           Radius.circular(20.0),
         ),
         boxShadow: [
           BoxShadow(
-            color: themeData.mainColorLighter,
-            offset: const Offset(-2.0, -2.0),
-            blurRadius: 20.0,
-            spreadRadius: 0.0,
+            color: themeData.mainColorLighter.withOpacity(0.6),
+            offset: const Offset(-1.0, -1.0),
+            blurRadius: 4.0,
+            spreadRadius: 1.0,
           ),
           BoxShadow(
             color: themeData.mainColorDarker,
-            offset: const Offset(4.0, 4.0),
+            offset: const Offset(4.0, 6.0),
             blurRadius: 3.0,
             spreadRadius: 1.0,
+          ),
+          BoxShadow(
+            color: themeData.mainColorDarker.withOpacity(0.9),
+            offset: const Offset(3.0, 6.0),
+            blurRadius: 0.0,
+            spreadRadius: 0.0,
           ),
         ],
       ),
       end: BoxDecoration(
-        color: themeData.mainColor,
+        gradient: themeData.gradientButton,
         borderRadius: const BorderRadius.all(
           Radius.circular(20.0),
         ),

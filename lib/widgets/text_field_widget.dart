@@ -9,6 +9,7 @@ class TextFieldWidget extends StatefulWidget {
     required this.color,
     this.autofocus,
     this.validator,
+    this.maxLines,
   }) : super(key: key);
 
   final String? textFieldTitle;
@@ -17,6 +18,7 @@ class TextFieldWidget extends StatefulWidget {
   final Color color;
   final bool? autofocus;
   final String? Function(String?)? validator;
+  final int? maxLines;
 
   @override
   State<TextFieldWidget> createState() => _TextFieldWidgetState();
@@ -44,7 +46,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             : Container(),
         TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          maxLines: 1,
+          maxLines: widget.maxLines,
           validator: widget.validator,
           autofocus: widget.autofocus != null ? widget.autofocus! : false,
           controller: widget.controller,

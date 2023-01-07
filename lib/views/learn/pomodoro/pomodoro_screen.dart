@@ -82,7 +82,6 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
     return BaseScreenWidget(
       resizeToAvoidBottomInsets: false,
       onTap: () {
-        //  cardKey.currentState!.toggleCard();
         BottomSheetWidget.show(
           context,
           Text(
@@ -92,76 +91,94 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
       mainColor: theme.mainColor,
       screenTitle: "Pomodoro",
       body: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            child: Hero(
-              tag: "timer",
-              child: Material(
-                child: Container(
-                  color: Colors.white,
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    children: [
-                      CircularPercentIndicator(
-                        radius: 90.0,
-                        animation: false,
-                        animationDuration: 1200,
-                        lineWidth: 12.0,
-                        percent: 1,
-                        linearGradient: theme.gradientButton,
-                        center: InkWell(
-                          hoverColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: isTimerSet
-                              ? () {
-                                  Navigator.push(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.fade,
-                                      duration: const Duration(
-                                        milliseconds: 650,
-                                      ),
-                                      child: TimerScreen(
-                                          pomodoroSetModel:
-                                              pomodoroSetList[_currentIndex]),
-                                    ),
-                                  );
-                                }
-                              : null,
-                          child: Container(
-                            padding: const EdgeInsets.all(24),
-                            decoration: BoxDecoration(
-                              gradient: theme.gradientButton,
-                              shape: BoxShape.circle,
-                            ),
-                            height: 145,
-                            child: Center(
-                              child: Text(
-                                isTimerSet
-                                    ? "Start" //learnTime[_currentIndex].toString()
-                                    : "Wybierz zestaw",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0,
-                                    color: Colors.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+          Container(
+            color: Colors.white,
+            width: MediaQuery.of(context).size.width,
+            child: Stack(
+              children: [
+                Center(
+                  child: CircularPercentIndicator(
+                    radius: 90.0,
+                    animation: false,
+                    animationDuration: 1200,
+                    lineWidth: 12.0,
+                    percent: 1,
+                    linearGradient: theme.gradientButton,
+                    center: InkWell(
+                      hoverColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: isTimerSet
+                          ? () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.fade,
+                                  duration: const Duration(
+                                    milliseconds: 450,
+                                  ),
+                                  child: TimerScreen(
+                                      pomodoroSetModel:
+                                          pomodoroSetList[_currentIndex]),
+                                ),
+                              );
+                            }
+                          : null,
+                      child: Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          gradient: theme.gradientButton,
+                          shape: BoxShape.circle,
+                        ),
+                        height: 145,
+                        child: Center(
+                          child: Text(
+                            isTimerSet
+                                ? "Start" //learnTime[_currentIndex].toString()
+                                : "Wybierz zestaw",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                color: Colors.white),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                        circularStrokeCap: CircularStrokeCap.butt,
-                        backgroundColor:
-                            theme.mainColorLighter.withOpacity(0.5),
-                        // progressColor: theme.mainColor,
                       ),
-                    ],
+                    ),
+                    circularStrokeCap: CircularStrokeCap.butt,
+                    backgroundColor: theme.mainColorLighter.withOpacity(0.5),
+                    // progressColor: theme.mainColor,
                   ),
                 ),
-              ),
+                Positioned(
+                  bottom: 0,
+                  right: 24,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.mainColorDarker,
+                          offset: Offset(1, 2),
+                          blurRadius: 2,
+                        )
+                      ],
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.airplanemode_active_outlined,
+                        color: theme.mainColor,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           /* Row(
@@ -287,15 +304,14 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
               ),
             ),
           ),
-          SizedBox(
-            height: 50,
-          ),
+          /* SizedBox(
+            height: 24,
+          ),*/
           Column(
             children: [
               CustomButtonWidget(
-                buttonGradientColor: theme.gradientButton,
+                theme: theme,
                 buttonText: "Gotowe zestawy",
-                shadowColor: theme.mainColorDarker,
                 onTap: () {
                   if (_controller.isAnimating || _controller.isCompleted) {
                     setState(() {
@@ -309,9 +325,8 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
                 child: CustomButtonWidget(
-                  buttonGradientColor: theme.gradientButton,
+                  theme: theme,
                   buttonText: "Stwórz własny",
-                  shadowColor: theme.mainColorDarker,
                   onTap: () {
                     Navigator.push(
                         context,

@@ -22,6 +22,10 @@ class TimerScreen extends ConsumerStatefulWidget {
 class _TimerScreenState extends ConsumerState<TimerScreen> {
   @override
   void initState() {
+    Timer(Duration(microseconds: 1), () {
+      scale = 1.5;
+      topMargin = 200;
+    });
     startTime(60 * 25);
     super.initState();
   }
@@ -34,6 +38,8 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
 
   //var timeRemaining = 25.0;
   var timerVar = 0;
+  var scale = 1.0;
+  var topMargin = 0.0;
   Timer? timer;
   int remainingSeconds = 60 * 25;
   String time = "25:00";
@@ -44,62 +50,67 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
 
     return BaseScreenWidget(
       screenTitle: "Uczymy się!",
-      body: Hero(
-        tag: "timer",
-        child: Material(
-          color: Colors.white,
-          child: AnimatedScale(
-            duration: const Duration(milliseconds: 200),
-            scale: 1.5,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularPercentIndicator(
-                  radius: 90.0,
-                  animation: false,
-                  animationDuration: 1200,
-                  lineWidth: 12.0,
-                  percent: timerVar / (60 * 25),
-                  center: Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      gradient: theme.gradient,
-                      shape: BoxShape.circle,
-                    ),
-                    height: 145,
-                    child: Center(
-                      child: Text(
-                        time, //"${widget.pomodoroSetModel.learnSectionTime - timer} min",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                            color: Colors.white),
-                        textAlign: TextAlign.center,
+      body: Stack(
+        children: [
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 400),
+            top: topMargin,
+            left: 0,
+            right: 0,
+            child: AnimatedScale(
+              duration: const Duration(milliseconds: 400),
+              scale: scale,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  CircularPercentIndicator(
+                    radius: 90.0,
+                    animation: false,
+                    animationDuration: 1200,
+                    lineWidth: 12.0,
+                    percent: timerVar / (60 * 25),
+                    center: Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        gradient: theme.gradient,
+                        shape: BoxShape.circle,
+                      ),
+                      height: 145,
+                      child: Center(
+                        child: Text(
+                          time, //"${widget.pomodoroSetModel.learnSectionTime - timer} min",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                              color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
+                    circularStrokeCap: CircularStrokeCap.butt,
+                    backgroundColor: theme.mainColorLighter.withOpacity(0.5),
+                    linearGradient: theme.gradientButton,
                   ),
-                  circularStrokeCap: CircularStrokeCap.butt,
-                  backgroundColor: theme.mainColorLighter.withOpacity(0.5),
-                  linearGradient: theme.gradientButton,
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.not_started_outlined,
-                    color: theme.mainColor,
-                    shadows: [
-                      Shadow(
-                          color: theme.mainColorDarker,
-                          offset: Offset(1, 1),
-                          blurRadius: 8)
-                    ],
-                    size: 45,
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.not_started_outlined,
+                      color: theme.mainColor,
+                      shadows: [
+                        Shadow(
+                            color: theme.mainColorDarker,
+                            offset: Offset(1, 1),
+                            blurRadius: 8)
+                      ],
+                      size: 45,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
       mainColor: theme.mainColor,
     );

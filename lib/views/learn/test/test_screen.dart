@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 
 import '../../../widgets/learn_screen/test_widget.dart';
 import '../../../widgets/rounded_add_button_widget.dart';
+import 'add_test_screen.dart';
 
 class TestScreen extends ConsumerStatefulWidget {
   const TestScreen({Key? key}) : super(key: key);
@@ -43,7 +45,13 @@ class _TestScreenState extends ConsumerState<TestScreen> {
               child: RoundedAddButtonWidget(
                 theme: theme,
                 onTap: () {
-                  print("XD");
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      type: PageTransitionType.fade,
+                      child: AddTestScreen(theme: theme),
+                    ),
+                  );
                 },
               ),
             ),

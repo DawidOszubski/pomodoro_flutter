@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/home_page_screen.dart';
@@ -13,7 +12,7 @@ void main() async {
   //initializeDateFormatting('pl');
   await Firebase.initializeApp();
 
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack, overlays: []);
+  //SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
   runApp(
     ProviderScope(
       child: EasyLocalization(

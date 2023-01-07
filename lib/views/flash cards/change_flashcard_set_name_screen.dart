@@ -51,8 +51,7 @@ class ChangeFlashcardSetNameScreen extends ConsumerWidget {
             ),
             CustomButtonWidget(
               buttonText: "Zmień",
-              buttonGradientColor: theme.gradientButton,
-              shadowColor: theme.mainColorDarker,
+              theme: theme,
               onTap: () {
                 if (flashCardController.text.isNotEmpty) {
                   final flashCard = FlashCardModel(

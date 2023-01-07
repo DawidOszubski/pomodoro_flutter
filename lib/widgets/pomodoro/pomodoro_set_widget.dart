@@ -21,6 +21,12 @@ class _PomodoroSetWidgetState extends ConsumerState<PomodoroSetWidget> {
   String? selectedValue;
 
   @override
+  void initState() {
+    selectedValue = "1";
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
     return Column(
@@ -82,6 +88,11 @@ class _PomodoroSetWidgetState extends ConsumerState<PomodoroSetWidget> {
               ),
               Flexible(
                 child: CustomDropdownButton2(
+                  buttonDecoration: BoxDecoration(
+                      border: Border.all(
+                        color: theme.mainColor,
+                      ),
+                      borderRadius: BorderRadius.circular(20)),
                   offset: Offset(-30, 0),
                   buttonWidth: 80,
                   icon: Icon(Icons.arrow_drop_down),
