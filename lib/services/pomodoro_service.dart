@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/models/learn_models/pomodoro_set_model.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -29,3 +30,6 @@ class PomodoroService {
         maps.length, (index) => PomodoroSetModel.fromJson(maps[index]));
   }
 }
+
+final pomodoroServiceProvider =
+    Provider<PomodoroService>((ref) => PomodoroService());

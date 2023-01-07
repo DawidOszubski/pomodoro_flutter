@@ -1,4 +1,5 @@
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
@@ -36,7 +37,11 @@ class _PomodoroSetWidgetState extends ConsumerState<PomodoroSetWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Flexible(child: Text("Czas jednego pomodoro")),
+              Flexible(
+                child: Text(
+                  "pomodoro.learnTime".tr(),
+                ),
+              ),
               SizedBox(
                 width: 20,
               ),
@@ -55,7 +60,7 @@ class _PomodoroSetWidgetState extends ConsumerState<PomodoroSetWidget> {
             children: [
               Flexible(
                 child: Text(
-                  "Czas przerwy",
+                  "pomodoro.breakTime".tr(),
                 ),
               ),
               SizedBox(

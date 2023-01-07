@@ -2,10 +2,12 @@ import 'package:duration_picker/duration_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pomodoro_flutter/providers/pomodoro_provider.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
 
 import '../../../constants/app_styles.dart';
+import '../../../models/learn_models/pomodoro_set_model.dart';
 import '../../../providers/theme_provider.dart';
 
 class CreateNewPomodoroSetScreen extends ConsumerStatefulWidget {
@@ -149,7 +151,15 @@ class _CreateNewPomodoroSetScreenState
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
                 child: CustomButtonWidget(
                     buttonText: "pomodoro.createPomodoroSetBtn".tr(),
-                    onTap: () {},
+                    onTap: () {
+                      if (learnDuration != null && breakDuration != null) {
+                        final pomodoroSet = PomodoroSetModel(
+                            learnSectionTime: learnDuration!,
+                            breakTime: breakDuration!);
+                        ref.read(addPomodoroSetProvider(pomodoroSet));
+                        Navigator.pop(context);
+                      }
+                    },
                     theme: theme),
               ),
             ],

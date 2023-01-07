@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,8 +10,11 @@ import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/learn/pomodoro/timer_screen.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 import 'package:pomodoro_flutter/widgets/bottom_sheet_base_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../../main.dart';
 import '../../../models/learn_models/pomodoro_set_model.dart';
+import '../../../providers/pomodoro_provider.dart';
 import '../../../widgets/custom_button_widget.dart';
 import '../../../widgets/pomodoro/pomodoro_set_widget.dart';
 import 'create_new_pomodoro_set_screen.dart';
@@ -25,7 +27,19 @@ class PomodoroScreen extends ConsumerStatefulWidget {
 }
 
 class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void didPopNext() {
+    ref.refresh(getPomodoroSetsProvider);
+    super.didPopNext();
+  }
+
   late final AnimationController _controller = AnimationController(
     duration: const Duration(milliseconds: 1500),
     vsync: this,
@@ -77,8 +91,8 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
   CarouselController buttonCarouselController = CarouselController();
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
     final theme = ref.watch(appThemeProvider);
+    final pomodoroSet = ref.watch(getPomodoroSetsProvider);
     return BaseScreenWidget(
       resizeToAvoidBottomInsets: false,
       onTap: () {
@@ -181,28 +195,6 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
               ],
             ),
           ),
-          /* Row(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black,
-                      offset: Offset(2, 2),
-                      blurRadius: 5,
-                    )
-                  ],
-                ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.airplanemode_active_outlined,
-                  ),
-                ),
-              ),
-            ],
-          ),*/
           const SizedBox(
             height: 50.0,
           ),
@@ -249,38 +241,106 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(
-                            child: CarouselSlider(
-                              items: [
-                                PomodoroSetWidget(
-                                    learnTime:
-                                        pomodoroSetList[0].learnSectionTime,
-                                    breakTime: pomodoroSetList[0].breakTime),
-                                PomodoroSetWidget(
-                                    learnTime:
-                                        pomodoroSetList[1].learnSectionTime,
-                                    breakTime: pomodoroSetList[1].breakTime),
-                                PomodoroSetWidget(
-                                    learnTime:
-                                        pomodoroSetList[2].learnSectionTime,
-                                    breakTime: pomodoroSetList[2].breakTime),
-                              ],
-                              carouselController: buttonCarouselController,
-                              options: CarouselOptions(
-                                autoPlay: false,
-                                enlargeCenterPage: true,
-                                viewportFraction: 1,
-                                aspectRatio: 1,
-                                initialPage: 0,
-                                onPageChanged: (index, reason) {
-                                  _currentIndex = index;
-                                  setState(() {
-                                    switch (_currentIndex) {
-                                      case 0:
-                                    }
-                                  });
+                            child: pomodoroSet.when(
+                                data: (pomodoroSet) {
+                                  ;
+                                  return CarouselSlider(
+                                    items: [
+                                          PomodoroSetWidget(
+                                              learnTime: pomodoroSetList[0]
+                                                  .learnSectionTime,
+                                              breakTime:
+                                                  pomodoroSetList[0].breakTime),
+                                          PomodoroSetWidget(
+                                              learnTime: pomodoroSetList[1]
+                                                  .learnSectionTime,
+                                              breakTime:
+                                                  pomodoroSetList[1].breakTime),
+                                          PomodoroSetWidget(
+                                              learnTime: pomodoroSetList[2]
+                                                  .learnSectionTime,
+                                              breakTime:
+                                                  pomodoroSetList[2].breakTime),
+                                        ] +
+                                        List.generate(
+                                          pomodoroSet!.length,
+                                          (index) => PomodoroSetWidget(
+                                            learnTime: pomodoroSet[index]
+                                                .learnSectionTime,
+                                            breakTime:
+                                                pomodoroSet[index].breakTime,
+                                          ),
+                                        ),
+                                    carouselController:
+                                        buttonCarouselController,
+                                    options: CarouselOptions(
+                                      autoPlay: false,
+                                      enlargeCenterPage: true,
+                                      viewportFraction: 1,
+                                      aspectRatio: 1,
+                                      initialPage: 0,
+                                      onPageChanged: (index, reason) {
+                                        _currentIndex = index;
+                                        setState(() {
+                                          switch (_currentIndex) {
+                                            case 0:
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  );
                                 },
-                              ),
-                            ),
+                                error: (err, s) => CarouselSlider(
+                                      items: [
+                                        PomodoroSetWidget(
+                                            learnTime: pomodoroSetList[0]
+                                                .learnSectionTime,
+                                            breakTime:
+                                                pomodoroSetList[0].breakTime),
+                                        PomodoroSetWidget(
+                                            learnTime: pomodoroSetList[1]
+                                                .learnSectionTime,
+                                            breakTime:
+                                                pomodoroSetList[1].breakTime),
+                                        PomodoroSetWidget(
+                                            learnTime: pomodoroSetList[2]
+                                                .learnSectionTime,
+                                            breakTime:
+                                                pomodoroSetList[2].breakTime),
+                                      ],
+                                      carouselController:
+                                          buttonCarouselController,
+                                      options: CarouselOptions(
+                                        autoPlay: false,
+                                        enlargeCenterPage: true,
+                                        viewportFraction: 1,
+                                        aspectRatio: 1,
+                                        initialPage: 0,
+                                        onPageChanged: (index, reason) {
+                                          _currentIndex = index;
+                                          setState(() {
+                                            switch (_currentIndex) {
+                                              case 0:
+                                            }
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                loading: () {
+                                  return Shimmer.fromColors(
+                                    baseColor: Colors.grey.withOpacity(0.2),
+                                    highlightColor:
+                                        Colors.white.withOpacity(0.4),
+                                    period: Duration(milliseconds: 1200),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 24.0,
+                                        vertical: 12.0,
+                                      ),
+                                      child: Container(),
+                                    ),
+                                  );
+                                }),
                           ),
                         ],
                       ),
