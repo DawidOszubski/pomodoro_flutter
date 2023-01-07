@@ -11,9 +11,11 @@ class TimerScreen extends ConsumerStatefulWidget {
   const TimerScreen({
     Key? key,
     required this.pomodoroSetModel,
+    required this.repeatCount,
   }) : super(key: key);
 
   final PomodoroSetModel pomodoroSetModel;
+  final int repeatCount;
 
   @override
   _TimerScreenState createState() => _TimerScreenState();
@@ -26,7 +28,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
       scale = 1.5;
       topMargin = 200;
     });
-    startTime(60 * 25);
+    startTime(60 * widget.pomodoroSetModel.learnSectionTime!);
     super.initState();
   }
 
@@ -36,13 +38,12 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     super.dispose();
   }
 
-  //var timeRemaining = 25.0;
   var timerVar = 0;
   var scale = 1.0;
   var topMargin = 0.0;
   Timer? timer;
-  int remainingSeconds = 60 * 25;
-  String time = "25:00";
+  int? remainingSeconds;
+  String? time;
   @override
   Widget build(BuildContext context) {
     var timeRemaining = widget.pomodoroSetModel.learnSectionTime;
@@ -69,7 +70,8 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                     animation: false,
                     animationDuration: 1200,
                     lineWidth: 12.0,
-                    percent: timerVar / (60 * 25),
+                    percent: timerVar /
+                        (60 * widget.pomodoroSetModel.learnSectionTime!),
                     center: Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
@@ -79,7 +81,9 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                       height: 145,
                       child: Center(
                         child: Text(
-                          time, //"${widget.pomodoroSetModel.learnSectionTime - timer} min",
+                          time == null
+                              ? "${widget.pomodoroSetModel.learnSectionTime}:00"
+                              : time!, //"${widget.pomodoroSetModel.learnSectionTime - timer} min",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20.0,
@@ -126,14 +130,14 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
         });
         timer.cancel();
       } else {
-        int minutes = remainingSeconds ~/ 60;
-        int seconds = (remainingSeconds % 60);
+        int minutes = remainingSeconds! ~/ 60;
+        int seconds = (remainingSeconds! % 60);
         setState(() {
           time = minutes.toString().padLeft(2, "0") +
               ":" +
               seconds.toString().padLeft(2, "0");
 
-          remainingSeconds--;
+          remainingSeconds = remainingSeconds! - 1;
           timerVar++;
         });
       }

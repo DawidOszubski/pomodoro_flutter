@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
+import 'package:pomodoro_flutter/views/learn/pomodoro/timer_screen.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 import 'package:pomodoro_flutter/widgets/bottom_sheet_base_widget.dart';
 import 'package:shimmer/shimmer.dart';
@@ -130,24 +131,22 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                       highlightColor: Colors.transparent,
                       onTap: () {
                         if (isTimerSet) {
-                          print(ref
-                              .watch(getPomodoroSetsProvider)
-                              .value![_currentIndex]
-                              .learnSectionTime);
-                          print(ref.watch(timerRepeatCountProvider));
-
-                          /*Navigator.push(
-                                context,
-                                PageTransition(
-                                  type: PageTransitionType.fade,
-                                  duration: const Duration(
-                                    milliseconds: 450,
-                                  ),
-                                  child: TimerScreen(
-                                      pomodoroSetModel:
-                                          pomodoroSetList[_currentIndex]),
-                                ),
-                              );*/
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.fade,
+                              duration: const Duration(
+                                milliseconds: 450,
+                              ),
+                              child: TimerScreen(
+                                pomodoroSetModel: ref
+                                    .watch(getPomodoroSetsProvider)
+                                    .value![_currentIndex],
+                                repeatCount:
+                                    ref.watch(timerRepeatCountProvider),
+                              ),
+                            ),
+                          );
                         } else {
                           _controller.forward();
                         }
