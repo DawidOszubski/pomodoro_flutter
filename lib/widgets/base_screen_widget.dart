@@ -14,6 +14,7 @@ class BaseScreenWidget extends ConsumerStatefulWidget {
     this.onTap,
     this.resizeToAvoidBottomInsets,
     this.actionIcon,
+    this.backIcon,
   }) : super(key: key);
 
   final Color mainColor;
@@ -22,6 +23,7 @@ class BaseScreenWidget extends ConsumerStatefulWidget {
   final void Function()? onTap;
   final bool? resizeToAvoidBottomInsets;
   final Icon? actionIcon;
+  final void Function()? backIcon;
 
   @override
   _BaseScreenWidgetState createState() => _BaseScreenWidgetState();
@@ -56,9 +58,10 @@ class _BaseScreenWidgetState extends ConsumerState<BaseScreenWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
+                            onTap: widget.backIcon ??
+                                () {
+                                  Navigator.pop(context);
+                                },
                             child: const Padding(
                               padding: EdgeInsets.symmetric(
                                 vertical: 18.0,

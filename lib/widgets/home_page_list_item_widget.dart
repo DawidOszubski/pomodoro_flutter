@@ -3,16 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
+import 'package:pomodoro_flutter/views/learn/pomodoro/timer_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePageListItemWidget extends ConsumerStatefulWidget {
   const HomePageListItemWidget({
     Key? key,
     required this.imageAsset,
     required this.nextScreen,
+    this.isPomodoroScreen,
   }) : super(key: key);
 
   final String imageAsset;
   final Widget nextScreen;
+  final bool? isPomodoroScreen;
   @override
   _HomePageListItemWidgetState createState() => _HomePageListItemWidgetState();
 }
@@ -25,15 +29,37 @@ class _HomePageListItemWidgetState extends ConsumerState<HomePageListItemWidget>
   )..addStatusListener(
       (status) {
         if (status == AnimationStatus.completed) {
-          Navigator.push(
-              context,
-              PageTransition(
-                  type: PageTransitionType.fade, child: widget.nextScreen));
+          if (widget.isPomodoroScreen != null) {
+            if (isTimerRunning) {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade, child: TimerScreen()));
+            } else {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade, child: widget.nextScreen));
+            }
+          } else {
+            Navigator.push(
+                context,
+                PageTransition(
+                    type: PageTransitionType.fade, child: widget.nextScreen));
+          }
+
           _controller.reverse();
         }
       },
     );
+  Future<void> getSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isTimerRunning = prefs.getString('startedTime') != null;
+    });
+  }
 
+  bool isTimerRunning = false;
   @override
   void dispose() {
     _controller.dispose();
@@ -78,7 +104,8 @@ class _HomePageListItemWidgetState extends ConsumerState<HomePageListItemWidget>
       ),
     );
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        await getSharedPreferences();
         _controller.forward();
       },
       child: DecoratedBoxTransition(

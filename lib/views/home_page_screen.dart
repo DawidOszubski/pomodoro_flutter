@@ -155,6 +155,7 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen>
       HomePageListItemWidget(
         imageAsset: AppAssets.learnIcon,
         nextScreen: PomodoroScreen(),
+        isPomodoroScreen: true,
       ),
       HomePageListItemWidget(
         imageAsset: AppAssets.flashCardIcon,
