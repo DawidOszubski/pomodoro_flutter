@@ -55,6 +55,9 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
         primaryColor: theme.mainColor,
         indicatorColor: theme.mainColor,
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: theme.mainColor,
+        ),
         textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(
             foregroundColor: MaterialStateColor.resolveWith(

@@ -2,12 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/models/notepad_models/notepad_model.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 
 import '../../providers/theme_provider.dart';
 import '../../widgets/notepad/notepad_widget.dart';
 import '../../widgets/rounded_add_button_widget.dart';
+import 'notepad_details_screen.dart';
 
 class NotepadScreen extends ConsumerStatefulWidget {
   const NotepadScreen({Key? key}) : super(key: key);
@@ -73,16 +75,16 @@ class _NotepadScreenState extends ConsumerState<NotepadScreen> {
               child: RoundedAddButtonWidget(
                 theme: theme,
                 onTap: () {
-                  /* Navigator.push(
+                  Navigator.push(
                     context,
                     PageTransition(
                       type: PageTransitionType.fade,
                       duration: const Duration(
                         milliseconds: 350,
                       ),
-                      child: CreateNewFlashcardSetScreen(theme: theme),
+                      child: NotepadDetailsScreen(theme: theme),
                     ),
-                  );*/
+                  );
                 },
               ),
             ),

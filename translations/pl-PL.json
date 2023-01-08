@@ -8,6 +8,8 @@
   "choseSet": "Wybierz zestaw",
   "delete": "Usuń",
   "edit": "Edytuj",
+
+  "title": "Tytuł",
   "noElements": {
     "text" : "Brak {} do wyświetlenia",
     "noPomodoroSet": "setów pomodoro",
@@ -36,7 +38,9 @@
     "language": "Język:"
   },
   "notepad": {
-    "title": "Notatnik"
+    "title": "Notatnik",
+    "edit": "Edytuj notatkę",
+    "create": "Utwórz notatkę"
   },
   "planner": {
     "title": "Planer"
