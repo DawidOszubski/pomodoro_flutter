@@ -56,6 +56,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
   int? remainingSeconds;
   String? time;
   bool isPaused = false;
+  int? learnTime;
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
@@ -94,7 +95,9 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                     percent: widget.pomodoroSetModel != null
                         ? timerVar /
                             (60 * widget.pomodoroSetModel!.learnSectionTime!)
-                        : timerVar / (25 * 60),
+                        : learnTime != null
+                            ? timerVar / (learnTime! * 60)
+                            : 0,
                     center: Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
@@ -188,7 +191,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     const duration = Duration(seconds: 1);
     remainingSeconds = seconds;
     timer = Timer.periodic(duration, (Timer timer) {
-      if (remainingSeconds == 0) {
+      if (remainingSeconds! < 0) {
         setState(() {
           time = "00:00";
         });
@@ -213,7 +216,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
   Future<void> getSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final learnTime =
+    learnTime =
         PomodoroSetModel.fromJson(jsonDecode(prefs.getString('pomodoroSet')!))
             .learnSectionTime;
     final startedTime = DateTime.parse(prefs.getString('startedTime')!);
@@ -222,9 +225,10 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
       print("finished");
     } else {
       setState(() {
+        learnTime = learnTime;
         timerVar = DateTime.now().difference(startedTime).inSeconds;
         startTime(DateTime.now()
-                .difference(startedTime.add(Duration(minutes: learnTime)))
+                .difference(startedTime.add(Duration(minutes: learnTime!)))
                 .inSeconds *
             -1);
       });
