@@ -45,7 +45,7 @@ class _NotepadDetailsScreenState extends State<NotepadDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseScreenWidget(
-        resizeToAvoidBottomInsets: false,
+        resizeToAvoidBottomInsets: true,
         mainColor: widget.theme.mainColor,
         screenTitle:
             widget.note != null ? "notepad.edit".tr() : "notepad.create".tr(),
@@ -70,8 +70,9 @@ class _NotepadDetailsScreenState extends State<NotepadDetailsScreen> {
                 ),
                 child: QuillToolbar.basic(
                   iconTheme: QuillIconTheme(
-                      iconSelectedFillColor: widget.theme.mainColor,
-                      borderRadius: 10.0,),
+                    iconSelectedFillColor: widget.theme.mainColor,
+                    borderRadius: 10.0,
+                  ),
                   controller: _controller,
                   showUndo: false,
                   showLink: false,
@@ -105,34 +106,21 @@ class _NotepadDetailsScreenState extends State<NotepadDetailsScreen> {
                   ),
                 ),
               ),
-              /* Text(
-                "title".tr(),
-                style: AppStyles.descriptionStyle,
-              ),*/
-              /*  const SizedBox(
-                height: 4.0,
-              ),
-              TextFieldWidget(
-                controller: noteTitleController,
-                color: widget.theme.mainColor,
-              ),
-              const SizedBox(
-                height: 24.0,
-              ),
-              TextFieldWidget(
-                controller: noteTitleController,
-                color: widget.theme.mainColor,
-                maxLines: 20,
-              ),*/
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 48.0),
-                child: Center(
-                  child: CustomButtonWidget(
-                      buttonText: "pomodoro.createPomodoroSetBtn".tr(),
-                      onTap: () {
-                        print(_controller.document.toDelta().toJson());
-                      },
-                      theme: widget.theme),
+              Visibility(
+                visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 12.0,
+                    bottom: 24.0,
+                  ),
+                  child: Center(
+                    child: CustomButtonWidget(
+                        buttonText: "pomodoro.createPomodoroSetBtn".tr(),
+                        onTap: () {
+                          print(_controller.document.toDelta().toJson());
+                        },
+                        theme: widget.theme),
+                  ),
                 ),
               ),
             ],
