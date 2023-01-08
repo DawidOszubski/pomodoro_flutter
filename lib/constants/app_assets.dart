@@ -17,4 +17,7 @@ class AppAssets {
   static const String pomodoroTimerBaseImage = 'assets/images/pomodoro.png';
   static const String pomodoroTimerHatImage = 'assets/images/pomodoro1.png';
   static const String trophyIcon = 'assets/icons/ic_trophy.png';
+  static const String settingsIcon = 'assets/icons/ic_settings.png';
+  static const String polandFlagIcon = 'assets/icons/ic_poland_flag.png';
+  static const String englandFlagIcon = 'assets/icons/ic_england_flag.png';
 }

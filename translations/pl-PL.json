@@ -29,5 +29,16 @@
     },
     "timeSnackBar": "Wybrany czas musi być większy niż 0"
 
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "theme": "Motyw aplikacji:",
+    "language": "Język:"
+  },
+  "notepad": {
+    "title": "Notatnik"
+  },
+  "planner": {
+    "title": "Planer"
   }
 }

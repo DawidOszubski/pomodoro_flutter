@@ -5,7 +5,7 @@ final blueThemeProvider = StateProvider((ref) {
   return false;
 });
 final redThemeProvider = StateProvider((ref) {
-  return true;
+  return false;
 });
 final brownThemeProvider = StateProvider((ref) {
   return false;

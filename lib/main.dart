@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/home_page_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 void main() async {
@@ -30,6 +31,25 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    Future<void> getThemePrefs() async {
+      final prefs = await SharedPreferences.getInstance();
+      final theme = prefs.getString('theme');
+      if (theme == null) {
+        ref.read(redThemeProvider.state).state = true;
+      } else {
+        if (theme == "red") {
+          ref.read(redThemeProvider.state).state = true;
+        }
+        if (theme == 'blue') {
+          ref.read(blueThemeProvider.state).state = true;
+        }
+        if (theme == 'brown') {
+          ref.read(brownThemeProvider.state).state = true;
+        }
+      }
+    }
+
+    getThemePrefs();
     final theme = ref.watch(appThemeProvider);
     return MaterialApp(
       theme: ThemeData(

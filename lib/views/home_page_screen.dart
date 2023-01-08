@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/main.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/flash%20cards/flashcard_screen.dart';
 import 'package:pomodoro_flutter/views/learn/pomodoro/pomodoro_screen.dart';
+import 'package:pomodoro_flutter/views/notepad/notepad_screen.dart';
+import 'package:pomodoro_flutter/views/planner/planner_screen.dart';
+import 'package:pomodoro_flutter/views/settings/settings_screen.dart';
 import 'package:pomodoro_flutter/views/time%20table/time_table_screen.dart';
 import 'package:pomodoro_flutter/widgets/home_page_list_item_widget.dart';
 
 import '../constants/app_assets.dart';
-import 'change_color_screen.dart';
 
 class HomePageScreen extends ConsumerStatefulWidget {
   const HomePageScreen({Key? key}) : super(key: key);
@@ -74,7 +75,7 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen>
                                 ? Image.asset(AppAssets.titleBlue)
                                 : Image.asset(AppAssets.titleBrown),
                       ),
-                      Positioned(
+                      /* Positioned(
                         right: 0,
                         top: 0,
                         child: IconButton(
@@ -94,7 +95,7 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen>
                             color: Colors.white,
                           ),
                         ),
-                      ),
+                      ),*/
                       Positioned(
                         bottom: 0,
                         left: 0,
@@ -163,19 +164,24 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen>
       ),
       HomePageListItemWidget(
         imageAsset: AppAssets.notepadIcon,
-        nextScreen: Container(),
+        nextScreen: NotepadScreen(),
       ),
       HomePageListItemWidget(
         imageAsset: AppAssets.timeTableIcon,
         nextScreen: TimeTableScreen(),
       ),
       HomePageListItemWidget(
-        imageAsset: AppAssets.albumIcon,
-        nextScreen: Container(),
+        imageAsset: AppAssets.dayPlanIcon,
+        nextScreen: PlannerScreen(),
       ),
       HomePageListItemWidget(
-        imageAsset: AppAssets.dayPlanIcon,
-        nextScreen: Container(),
+        imageAsset: AppAssets.settingsIcon,
+        /*icon: Icon(
+          Icons.settings,
+          color: Colors.white,
+          size: 80,
+        ),*/
+        nextScreen: SettingsScreen(),
       ),
     ];
   }

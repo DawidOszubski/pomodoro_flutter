@@ -1,4 +1,9 @@
 {
 "flashcards": "Flashcards",
-  "addTest": "Add new test"
+  "addTest": "Add new test",
+  "settings": {
+    "title": "Settings",
+    "theme": "Aplication theme:",
+    "language": "Language:"
+  }
 }

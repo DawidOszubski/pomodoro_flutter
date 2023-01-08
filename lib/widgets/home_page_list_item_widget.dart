@@ -6,22 +6,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/providers/pomodoro_provider.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
-import 'package:pomodoro_flutter/views/learn/pomodoro/timer_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/learn_models/pomodoro_set_model.dart';
+import '../views/learn/pomodoro/timer_screen.dart';
 
 class HomePageListItemWidget extends ConsumerStatefulWidget {
   const HomePageListItemWidget({
     Key? key,
-    required this.imageAsset,
+    this.imageAsset,
     required this.nextScreen,
     this.isPomodoroScreen,
+    this.icon,
   }) : super(key: key);
 
-  final String imageAsset;
+  final String? imageAsset;
   final Widget nextScreen;
   final bool? isPomodoroScreen;
+  final Widget? icon;
   @override
   _HomePageListItemWidgetState createState() => _HomePageListItemWidgetState();
 }
@@ -36,18 +38,11 @@ class _HomePageListItemWidgetState extends ConsumerState<HomePageListItemWidget>
         if (status == AnimationStatus.completed) {
           if (widget.isPomodoroScreen != null) {
             if (isTimerRunning) {
-              if(ref.watch(pomodoroLearnPhaseProvider).isNotEmpty) {
-                Navigator.push(
+              print(ref.watch(timerRemainingTime));
+              getTimerPrefs().then((value) => Navigator.push(
                   context,
                   PageTransition(
-                      type: PageTransitionType.fade, child: TimerScreen()));
-              }else{
-                getTimerPrefs().then((value) =>  Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.fade, child: TimerScreen())));
-
-              }
+                      type: PageTransitionType.fade, child: TimerScreen())));
             } else {
               Navigator.push(
                   context,
@@ -125,42 +120,53 @@ class _HomePageListItemWidgetState extends ConsumerState<HomePageListItemWidget>
         decoration: decorationTween.animate(_controller),
         child: Container(
           padding: const EdgeInsets.all(20.0),
-          child: Image.asset(
-            widget.imageAsset,
-            fit: BoxFit.contain,
-          ),
+          child: widget.imageAsset != null
+              ? Image.asset(
+                  widget.imageAsset!,
+                  fit: BoxFit.contain,
+                )
+              : widget.icon,
         ),
       ),
     );
   }
 
-  Future<void> getTimerPrefs()async{
+  Future<void> getTimerPrefs() async {
     final prefs = await SharedPreferences.getInstance();
-   final repeatCount =  prefs.getInt("repeatCount");
+    final repeatCount = prefs.getInt("repeatCount");
+    final startedTime = prefs.getString('startedTime');
+    var timeDiff =
+        DateTime.now().difference(DateTime.parse(startedTime!)).inSeconds;
+    final pomodoroSet =
+        PomodoroSetModel.fromJson(jsonDecode(prefs.getString('pomodoroSet')!));
     ref.read(pomodoroLearnPhaseProvider.notifier).state =
-        List.generate(
-        repeatCount!,
-    (index) {
-
-      if(repeatCount.isOdd){
+        List.generate(repeatCount!, (index) {
+      if (repeatCount.isOdd) {
         if (index % 2 == 0) {
-        return PomodoroSetModel.fromJson(jsonDecode(prefs.getString('pomodoroSet')!))
-            .learnSectionTime!;
-      } else {
-        return PomodoroSetModel.fromJson(jsonDecode(prefs.getString('pomodoroSet')!))
-            .breakTime!;
-      }
-      }else{
-        if (index % 2 == 0) {
-          return PomodoroSetModel.fromJson(jsonDecode(prefs.getString('pomodoroSet')!))
-              .learnSectionTime!;
+          return pomodoroSet.learnSectionTime!;
         } else {
-          return PomodoroSetModel.fromJson(jsonDecode(prefs.getString('pomodoroSet')!))
-              .breakTime!;
+          return pomodoroSet.breakTime!;
+        }
+      } else {
+        if (index % 2 == 0) {
+          return pomodoroSet.learnSectionTime!;
+        } else {
+          return pomodoroSet.breakTime!;
         }
       }
+    });
+    while (timeDiff >= ref.watch(pomodoroLearnPhaseProvider).first * 60) {
+      timeDiff -= ref.watch(pomodoroLearnPhaseProvider).first * 60;
+      ref.watch(pomodoroLearnPhaseProvider.notifier).state.removeAt(0);
+      if (ref.watch(pomodoroLearnPhaseProvider).isEmpty) {
+        prefs.remove('startedTime');
+        prefs.remove('repeatCount');
+        prefs.remove('pomodoroSet');
+        setState(() {
+          isTimerRunning = false;
+        });
+        return;
       }
-        );
-
+    }
   }
 }

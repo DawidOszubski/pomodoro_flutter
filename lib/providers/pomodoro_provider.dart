@@ -28,3 +28,6 @@ final deletePomodoroSetProvider = FutureProvider.autoDispose
 final timerRepeatCountProvider = StateProvider.autoDispose<int>((ref) => 1);
 
 final pomodoroLearnPhaseProvider = StateProvider<List<int>>((ref) => []);
+
+final timerRemainingTime = StateProvider<int?>(
+    (ref) => ref.watch(pomodoroLearnPhaseProvider).first * 60);

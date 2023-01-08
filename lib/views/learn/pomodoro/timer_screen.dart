@@ -13,6 +13,7 @@ import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/app_assets.dart';
+import '../../../constants/app_styles.dart';
 import '../../../providers/pomodoro_provider.dart';
 
 class TimerScreen extends ConsumerStatefulWidget {
@@ -34,14 +35,16 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
   void initState() {
     print("init");
     // checkIfEnd();
-    getTimerStatus();
-    Timer(Duration(microseconds: 1), () {
+    Timer(const Duration(microseconds: 1), () {
       scale = 1.5;
       topMargin = 200;
+      opacity = 1.0;
     });
     if (widget.pomodoroSetModel != null) {
       writeSharedPreferences();
       startTime(60 * widget.pomodoroSetModel!.learnSectionTime!);
+    } else {
+      getTimerStatus();
     }
     super.initState();
   }
@@ -55,6 +58,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
   var timerVar = 0;
   var scale = 1.0;
   var topMargin = 0.0;
+  var opacity = 0.0;
   Timer? timer;
   int? remainingSeconds;
   String? time;
@@ -65,6 +69,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
   bool isFinished = false;
   @override
   Widget build(BuildContext context) {
+    remainingSeconds = ref.watch(timerRemainingTime);
     final theme = ref.watch(appThemeProvider);
     final pomodoroPhases = ref.read(pomodoroLearnPhaseProvider);
     return BaseScreenWidget(
@@ -89,19 +94,25 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                   top: 24.0,
                   left: 0,
                   right: 0,
-                  child: Container(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 48.0),
-                      child: Center(
-                        child: Text(
-                          pomodoroPhases.isNotEmpty
-                              ? pomodoroPhases.length.isOdd
-                                  ? "Etap ${repeatCount! - ((pomodoroPhases.length + 1) / 2).floor() + 1}/${repeatCount!}"
-                                  : "Czas na przerwę! "
-                              : "Gratulację skończyłeś sejsę Pomodoro!\nTak trzymaj!!",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 26.0),
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 400),
+                    opacity: opacity,
+                    child: Container(
+                      width: double.infinity,
+                      child: FittedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 48.0),
+                          child: Center(
+                            child: Text(
+                              !isFinished
+                                  ? pomodoroPhases.length.isOdd
+                                      ? "Etap ${repeatCount! - ((pomodoroPhases.length + 1) / 2).floor() + 1}/${repeatCount!}"
+                                      : "Czas na przerwę! "
+                                  : "Gratulację!\nSkończyłeś sejsę Pomodoro!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 18.0),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -169,56 +180,81 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                     backgroundColor: theme.mainColorLighter.withOpacity(0.5),
                     linearGradient: theme.gradientButton,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isPaused = !isPaused;
-                          });
-                        },
-                        child: Icon(
-                          !isPaused
-                              ? Icons.pause_circle_outline_outlined
-                              : Icons.play_circle_outline_outlined,
-                          color: theme.mainColor,
-                          shadows: [
-                            Shadow(
-                                color: theme.mainColorDarker,
-                                offset: Offset(1, 1),
-                                blurRadius: 8)
-                          ],
-                          size: 45,
+                  Visibility(
+                    visible: !isFinished,
+                    maintainState: true,
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              isPaused = !isPaused;
+                            });
+                          },
+                          child: Icon(
+                            !isPaused
+                                ? Icons.pause_circle_outline_outlined
+                                : Icons.play_circle_outline_outlined,
+                            color: theme.mainColor,
+                            shadows: [
+                              Shadow(
+                                  color: theme.mainColorDarker,
+                                  offset: Offset(1, 1),
+                                  blurRadius: 8)
+                            ],
+                            size: 45,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 8.0,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          final prefs = await SharedPreferences.getInstance();
-                          prefs.remove("startedTime");
-                          ref.invalidate(pomodoroLearnPhaseProvider);
+                        SizedBox(
+                          width: 8.0,
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            prefs.remove("startedTime");
+                            ref.invalidate(pomodoroLearnPhaseProvider);
+                            Navigator.pop(context);
+                          },
+                          child: Icon(
+                            Icons.stop_circle_outlined,
+                            color: theme.mainColor,
+                            shadows: [
+                              Shadow(
+                                  color: theme.mainColorDarker,
+                                  offset: Offset(1, 1),
+                                  blurRadius: 8)
+                            ],
+                            size: 45,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                      visible: isFinished,
+                      maintainState: true,
+                      maintainSize: true,
+                      maintainAnimation: true,
+                      child: InkWell(
+                        onTap: () {
                           Navigator.pop(context);
                         },
-                        child: Icon(
-                          Icons.stop_circle_outlined,
-                          color: theme.mainColor,
-                          shadows: [
-                            Shadow(
-                                color: theme.mainColorDarker,
-                                offset: Offset(1, 1),
-                                blurRadius: 8)
-                          ],
-                          size: 45,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Zakończ",
+                            style: AppStyles.secondaryButtonStyle
+                                .copyWith(color: theme.mainColor),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      )),
                   InkWell(
                     onTap: () {
                       print(ref.watch(pomodoroLearnPhaseProvider));
+                      print(ref.watch(timerRemainingTime));
                     },
                     child: Container(
                       width: 40,
@@ -252,6 +288,48 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
 
   startTime(int seconds) {
     const duration = Duration(seconds: 1);
+    //remainingSeconds = ref.watch(timerRemainingTime);
+    timer = Timer.periodic(duration, (Timer timer) {
+      if (remainingSeconds! < 0) {
+        setState(() {
+          time = "00:00";
+        });
+        timer.cancel();
+        ref.read(pomodoroLearnPhaseProvider).removeAt(0);
+        if (ref.read(pomodoroLearnPhaseProvider).isEmpty) {
+          setState(() {
+            isFinished = true;
+          });
+          clearSharedPreferences();
+        } else {
+          setState(() {
+            learnTime = ref.read(pomodoroLearnPhaseProvider).first;
+            print(learnTime);
+            timerVar = 0;
+          });
+          startTime(ref.read(pomodoroLearnPhaseProvider).first * 60);
+        }
+      } else {
+        int minutes = remainingSeconds! ~/ 60;
+        int seconds = (remainingSeconds! % 60);
+        if (!isPaused) {
+          setState(() {
+            time = minutes.toString().padLeft(2, "0") +
+                ":" +
+                seconds.toString().padLeft(2, "0");
+
+            //remainingSeconds = remainingSeconds! - 1;
+            ref.read(timerRemainingTime.notifier).state =
+                ref.read(timerRemainingTime.notifier).state! - 1;
+            print(ref.watch(timerRemainingTime));
+            timerVar++;
+          });
+        }
+      }
+    });
+  }
+  /*startTime(int seconds) {
+    const duration = Duration(seconds: 1);
     remainingSeconds = seconds;
     timer = Timer.periodic(duration, (Timer timer) {
       if (remainingSeconds! < 0) {
@@ -264,7 +342,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
           setState(() {
             isFinished = true;
           });
-          print("Pomodoro ukończone");
+          clearSharedPreferences();
         } else {
           setState(() {
             learnTime = ref.read(pomodoroLearnPhaseProvider).first;
@@ -288,37 +366,33 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
         }
       }
     });
-  }
+  }*/
 
   Future<void> getTimerStatus() async {
     final currentPhase = ref.read(pomodoroLearnPhaseProvider).first;
-    learnTime = currentPhase;
-    final prefs = await SharedPreferences.getInstance();
-    totalCount = prefs.getInt("repeatCount");
-    repeatCount = ((totalCount! + 1) / 2).floor();
-    /* if (widget.pomodoroSetModel != null) {
-    } else {
-      final prefs = await SharedPreferences.getInstance();
 
+    final prefs = await SharedPreferences.getInstance();
+    final startedTime = prefs.getString('startedTime');
+    final timeR =
+        DateTime.now().difference(DateTime.parse(startedTime!)).inSeconds;
+    // if(timerR > )
+    setState(() {
+      //remainingSeconds = timeR - ;
+      /* time = "00:30";
+      remainingSeconds = 300;
+      timerVar = 30;*/
       learnTime = currentPhase;
-      final startedTime = DateTime.parse(prefs.getString('startedTime')!);
-      if (DateTime.now()
-          .isAfter(startedTime.add(Duration(minutes: learnTime!)))) {
-        print("finished");
-      } else {
-        setState(() {
-          learnTime = learnTime;
-          timerVar = DateTime.now().difference(startedTime).inSeconds;
-          startTime(DateTime.now()
-                  .difference(startedTime.add(Duration(minutes: learnTime!)))
-                  .inSeconds *
-              -1);
-        });
-      }
-    }*/
+      totalCount = prefs.getInt("repeatCount");
+      repeatCount = ((totalCount! + 1) / 2).floor();
+    });
+    startTime(learnTime! * 60);
   }
 
   Future<void> writeSharedPreferences() async {
+    final currentPhase = ref.read(pomodoroLearnPhaseProvider).first;
+    learnTime = currentPhase;
+    totalCount = widget.repeatCount;
+    repeatCount = widget.repeatCount;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('startedTime', DateTime.now().toString());
     if (widget.pomodoroSetModel != null) {
@@ -328,10 +402,15 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     }
   }
 
-  /*Future<void> checkIfEnd() async {
-    final time = await getSharedPreferences();
-    if (time != null) {
-      print(PomodoroSetModel.fromJson(jsonDecode(time)).learnSectionTime);
-    }
-  }*/
+  void startTimer() {
+    ref.read(timerRemainingTime.notifier).state =
+        ref.watch(pomodoroLearnPhaseProvider).first;
+  }
+
+  Future<void> clearSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('startedTime');
+    prefs.remove('repeatCount');
+    prefs.remove('pomodoroSet');
+  }
 }
