@@ -131,6 +131,22 @@ class _PomodoroScreenState extends ConsumerState<PomodoroScreen>
                       highlightColor: Colors.transparent,
                       onTap: () {
                         if (isTimerSet) {
+                          ref.read(pomodoroLearnPhaseProvider.notifier).state =
+                              List.generate(
+                                  (ref.watch(timerRepeatCountProvider) * 2) - 1,
+                                  (index) {
+                            if (index % 2 == 0) {
+                              return ref
+                                  .watch(getPomodoroSetsProvider)
+                                  .value![_currentIndex]
+                                  .learnSectionTime!;
+                            } else {
+                              return ref
+                                  .watch(getPomodoroSetsProvider)
+                                  .value![_currentIndex]
+                                  .breakTime!;
+                            }
+                          });
                           Navigator.push(
                             context,
                             PageTransition(

@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:pomodoro_flutter/providers/pomodoro_provider.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/learn/pomodoro/timer_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/learn_models/pomodoro_set_model.dart';
 
 class HomePageListItemWidget extends ConsumerStatefulWidget {
   const HomePageListItemWidget({
@@ -31,10 +36,18 @@ class _HomePageListItemWidgetState extends ConsumerState<HomePageListItemWidget>
         if (status == AnimationStatus.completed) {
           if (widget.isPomodoroScreen != null) {
             if (isTimerRunning) {
-              Navigator.push(
+              if(ref.watch(pomodoroLearnPhaseProvider).isNotEmpty) {
+                Navigator.push(
                   context,
                   PageTransition(
                       type: PageTransitionType.fade, child: TimerScreen()));
+              }else{
+                getTimerPrefs().then((value) =>  Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.fade, child: TimerScreen())));
+
+              }
             } else {
               Navigator.push(
                   context,
@@ -119,5 +132,35 @@ class _HomePageListItemWidgetState extends ConsumerState<HomePageListItemWidget>
         ),
       ),
     );
+  }
+
+  Future<void> getTimerPrefs()async{
+    final prefs = await SharedPreferences.getInstance();
+   final repeatCount =  prefs.getInt("repeatCount");
+    ref.read(pomodoroLearnPhaseProvider.notifier).state =
+        List.generate(
+        repeatCount!,
+    (index) {
+
+      if(repeatCount.isOdd){
+        if (index % 2 == 0) {
+        return PomodoroSetModel.fromJson(jsonDecode(prefs.getString('pomodoroSet')!))
+            .learnSectionTime!;
+      } else {
+        return PomodoroSetModel.fromJson(jsonDecode(prefs.getString('pomodoroSet')!))
+            .breakTime!;
+      }
+      }else{
+        if (index % 2 == 0) {
+          return PomodoroSetModel.fromJson(jsonDecode(prefs.getString('pomodoroSet')!))
+              .learnSectionTime!;
+        } else {
+          return PomodoroSetModel.fromJson(jsonDecode(prefs.getString('pomodoroSet')!))
+              .breakTime!;
+        }
+      }
+      }
+        );
+
   }
 }

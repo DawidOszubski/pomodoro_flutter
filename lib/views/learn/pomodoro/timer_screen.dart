@@ -12,6 +12,9 @@ import 'package:pomodoro_flutter/views/home_page_screen.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../constants/app_assets.dart';
+import '../../../providers/pomodoro_provider.dart';
+
 class TimerScreen extends ConsumerStatefulWidget {
   const TimerScreen({
     Key? key,
@@ -31,7 +34,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
   void initState() {
     print("init");
     // checkIfEnd();
-    getSharedPreferences();
+    getTimerStatus();
     Timer(Duration(microseconds: 1), () {
       scale = 1.5;
       topMargin = 200;
@@ -57,12 +60,19 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
   String? time;
   bool isPaused = false;
   int? learnTime;
+  int? repeatCount;
+  int? totalCount;
+  bool isFinished = false;
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
-
+    final pomodoroPhases = ref.read(pomodoroLearnPhaseProvider);
     return BaseScreenWidget(
-      screenTitle: "Uczymy się!",
+      screenTitle: pomodoroPhases.isNotEmpty
+          ? pomodoroPhases.length.isOdd
+              ? "Uczymy się!"
+              : "Przerwa"
+          : "Uczymy się!",
       backIcon: () {
         Navigator.of(context).pushAndRemoveUntil(
             PageTransition(
@@ -74,6 +84,30 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
       },
       body: Stack(
         children: [
+          repeatCount != null
+              ? Positioned(
+                  top: 24.0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 48.0),
+                      child: Center(
+                        child: Text(
+                          pomodoroPhases.isNotEmpty
+                              ? pomodoroPhases.length.isOdd
+                                  ? "Etap ${repeatCount! - ((pomodoroPhases.length + 1) / 2).floor() + 1}/${repeatCount!}"
+                                  : "Czas na przerwę! "
+                              : "Gratulację skończyłeś sejsę Pomodoro!\nTak trzymaj!!",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 26.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 400),
             top: widget.pomodoroSetModel != null ? topMargin : 200,
@@ -92,12 +126,11 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                     animation: false,
                     animationDuration: 1200,
                     lineWidth: 12.0,
-                    percent: widget.pomodoroSetModel != null
-                        ? timerVar /
-                            (60 * widget.pomodoroSetModel!.learnSectionTime!)
-                        : learnTime != null
-                            ? timerVar / (learnTime! * 60)
-                            : 0,
+                    percent: isFinished
+                        ? 1
+                        : ref.watch(pomodoroLearnPhaseProvider).isNotEmpty
+                            ? percent(timerVar / (learnTime! * 60))
+                            : 0.0,
                     center: Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
@@ -107,20 +140,25 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                       height: 145,
                       child: Center(
                         child: time != null
-                            ? Text(
-                                widget.pomodoroSetModel != null
-                                    ? time == null
-                                        ? "${widget.pomodoroSetModel!.learnSectionTime}:00"
-                                        : time!
-                                    : time == null
-                                        ? ""
-                                        : "$time", //"${widget.pomodoroSetModel.learnSectionTime - timer} min",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0,
-                                    color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )
+                            ? isFinished
+                                ? Image.asset(
+                                    AppAssets.trophyIcon,
+                                    color: Colors.white,
+                                  )
+                                : Text(
+                                    widget.pomodoroSetModel != null
+                                        ? time == null
+                                            ? "${widget.pomodoroSetModel!.learnSectionTime}:00"
+                                            : time!
+                                        : time == null
+                                            ? ""
+                                            : "$time",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20.0,
+                                        color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  )
                             : SpinKitPouringHourGlass(
                                 color: Colors.white,
                                 size: 50.0,
@@ -161,6 +199,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                         onTap: () async {
                           final prefs = await SharedPreferences.getInstance();
                           prefs.remove("startedTime");
+                          ref.invalidate(pomodoroLearnPhaseProvider);
                           Navigator.pop(context);
                         },
                         child: Icon(
@@ -177,6 +216,16 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                       ),
                     ],
                   ),
+                  InkWell(
+                    onTap: () {
+                      print(ref.watch(pomodoroLearnPhaseProvider));
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      color: Colors.black,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -185,6 +234,20 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
       ),
       mainColor: theme.mainColor,
     );
+  }
+
+  double percent(double percentage) {
+    if (percentage >= 0 && percentage <= 1) {
+      return percentage;
+    } else {
+      if (percentage < 0) {
+        return 0.0;
+      }
+      if (percentage > 1) {
+        return 1.0;
+      }
+    }
+    return 0.0;
   }
 
   startTime(int seconds) {
@@ -196,6 +259,20 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
           time = "00:00";
         });
         timer.cancel();
+        ref.read(pomodoroLearnPhaseProvider).removeAt(0);
+        if (ref.read(pomodoroLearnPhaseProvider).isEmpty) {
+          setState(() {
+            isFinished = true;
+          });
+          print("Pomodoro ukończone");
+        } else {
+          setState(() {
+            learnTime = ref.read(pomodoroLearnPhaseProvider).first;
+            print(learnTime);
+            timerVar = 0;
+          });
+          startTime(ref.read(pomodoroLearnPhaseProvider).first * 60);
+        }
       } else {
         int minutes = remainingSeconds! ~/ 60;
         int seconds = (remainingSeconds! % 60);
@@ -213,33 +290,39 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     });
   }
 
-  Future<void> getSharedPreferences() async {
+  Future<void> getTimerStatus() async {
+    final currentPhase = ref.read(pomodoroLearnPhaseProvider).first;
+    learnTime = currentPhase;
     final prefs = await SharedPreferences.getInstance();
-
-    learnTime =
-        PomodoroSetModel.fromJson(jsonDecode(prefs.getString('pomodoroSet')!))
-            .learnSectionTime;
-    final startedTime = DateTime.parse(prefs.getString('startedTime')!);
-    if (DateTime.now()
-        .isAfter(startedTime.add(Duration(minutes: learnTime!)))) {
-      print("finished");
+    totalCount = prefs.getInt("repeatCount");
+    repeatCount = ((totalCount! + 1) / 2).floor();
+    /* if (widget.pomodoroSetModel != null) {
     } else {
-      setState(() {
-        learnTime = learnTime;
-        timerVar = DateTime.now().difference(startedTime).inSeconds;
-        startTime(DateTime.now()
-                .difference(startedTime.add(Duration(minutes: learnTime!)))
-                .inSeconds *
-            -1);
-      });
-    }
+      final prefs = await SharedPreferences.getInstance();
+
+      learnTime = currentPhase;
+      final startedTime = DateTime.parse(prefs.getString('startedTime')!);
+      if (DateTime.now()
+          .isAfter(startedTime.add(Duration(minutes: learnTime!)))) {
+        print("finished");
+      } else {
+        setState(() {
+          learnTime = learnTime;
+          timerVar = DateTime.now().difference(startedTime).inSeconds;
+          startTime(DateTime.now()
+                  .difference(startedTime.add(Duration(minutes: learnTime!)))
+                  .inSeconds *
+              -1);
+        });
+      }
+    }*/
   }
 
   Future<void> writeSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('startedTime', DateTime.now().toString());
     if (widget.pomodoroSetModel != null) {
-      await prefs.setInt('repeatCount', widget.repeatCount!);
+      await prefs.setInt('repeatCount', widget.repeatCount! * 2 - 1);
       await prefs.setString(
           'pomodoroSet', jsonEncode(widget.pomodoroSetModel!.toJson()));
     }

@@ -16,4 +16,5 @@ class AppAssets {
   static const String aluniaHmmBeerImage = 'assets/images/alunia_hmm_beer.png';
   static const String pomodoroTimerBaseImage = 'assets/images/pomodoro.png';
   static const String pomodoroTimerHatImage = 'assets/images/pomodoro1.png';
+  static const String trophyIcon = 'assets/icons/ic_trophy.png';
 }
