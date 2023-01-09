@@ -1,12 +1,18 @@
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
 import 'package:pomodoro_flutter/models/notepad_models/notepad_model.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
 import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
+import 'package:pomodoro_flutter/widgets/text_field_widget.dart';
 
-class NotepadDetailsScreen extends StatefulWidget {
+import '../../services/notepad_service.dart';
+
+class NotepadDetailsScreen extends ConsumerStatefulWidget {
   const NotepadDetailsScreen({
     Key? key,
     required this.theme,
@@ -16,10 +22,10 @@ class NotepadDetailsScreen extends StatefulWidget {
   final AppThemeModel theme;
   final NotepadModel? note;
   @override
-  State<NotepadDetailsScreen> createState() => _NotepadDetailsScreenState();
+  _NotepadDetailsScreenState createState() => _NotepadDetailsScreenState();
 }
 
-class _NotepadDetailsScreenState extends State<NotepadDetailsScreen> {
+class _NotepadDetailsScreenState extends ConsumerState<NotepadDetailsScreen> {
   final noteTitleController = TextEditingController();
   final noteDescriptionController = TextEditingController();
   final _controller = QuillController.basic();
@@ -29,6 +35,8 @@ class _NotepadDetailsScreenState extends State<NotepadDetailsScreen> {
       if (widget.note!.title != null) {
         noteTitleController.text = widget.note!.title!;
       }
+      _controller.document =
+          Document.fromJson(jsonDecode(widget.note!.description!));
       noteDescriptionController.text = widget.note!.description!;
     }
     super.initState();
@@ -54,6 +62,13 @@ class _NotepadDetailsScreenState extends State<NotepadDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              TextFieldWidget(
+                  controller: noteTitleController,
+                  color: widget.theme.mainColor,
+                  hint: "title".tr()),
+              const SizedBox(
+                height: 24,
+              ),
               Container(
                 width: double.infinity,
                 height: 50.0,
@@ -107,7 +122,8 @@ class _NotepadDetailsScreenState extends State<NotepadDetailsScreen> {
                 ),
               ),
               Visibility(
-                visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+                visible:
+                    true, // MediaQuery.of(context).viewInsets.bottom == 0.0,
                 child: Padding(
                   padding: const EdgeInsets.only(
                     top: 12.0,
@@ -115,9 +131,37 @@ class _NotepadDetailsScreenState extends State<NotepadDetailsScreen> {
                   ),
                   child: Center(
                     child: CustomButtonWidget(
-                        buttonText: "pomodoro.createPomodoroSetBtn".tr(),
+                        buttonText: widget.note != null
+                            ? "save".tr()
+                            : "pomodoro.createPomodoroSetBtn".tr(),
                         onTap: () {
-                          print(_controller.document.toDelta().toJson());
+                          if (_controller.document.toPlainText().length > 1) {
+                            if (widget.note != null) {
+                              final note = NotepadModel(
+                                  id: widget.note!.id,
+                                  title: noteTitleController.text,
+                                  description: jsonEncode(
+                                      _controller.document.toDelta().toJson()),
+                                  date: widget.note!.date);
+
+                              ref
+                                  .watch(notepadServiceProvider)
+                                  .updateNote(notepadModel: note)
+                                  .then((value) => Navigator.pop(context));
+                            } else {
+                              final note = NotepadModel(
+                                  title: noteTitleController.text,
+                                  description: jsonEncode(
+                                      _controller.document.toDelta().toJson()),
+                                  date: DateFormat('dd/MM/yyyy')
+                                      .format(DateTime.now()));
+
+                              ref
+                                  .read(notepadServiceProvider)
+                                  .createNote(note)
+                                  .then((value) => Navigator.pop(context));
+                            }
+                          }
                         },
                         theme: widget.theme),
                   ),

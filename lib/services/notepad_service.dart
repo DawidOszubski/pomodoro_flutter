@@ -16,6 +16,29 @@ class NotepadService {
       print(e);
     }
   }
+
+  Future<List<NotepadModel>?> getAllNotes() async {
+    final db = await DatabaseHelper.getDB();
+
+    final List<Map<String, dynamic>> maps = await db.query(dbNotepad);
+
+    if (maps.isEmpty) {
+      return null;
+    }
+
+    return List.generate(
+        maps.length, (index) => NotepadModel.fromJson(maps[index]));
+  }
+
+  Future<void> updateNote({required NotepadModel notepadModel}) async {
+    final db = await DatabaseHelper.getDB();
+    try {
+      await db.rawUpdate('UPDATE $dbNotepad SET description = ? WHERE id = ?',
+          [notepadModel.description, notepadModel.id]);
+    } catch (e) {
+      print(e);
+    }
+  }
 }
 
 final notepadServiceProvider =

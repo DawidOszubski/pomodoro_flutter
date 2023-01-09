@@ -25,6 +25,7 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen>
   late List<Widget> mainScreenTabsList = [];
   @override
   void initState() {
+    FocusManager.instance.primaryFocus?.unfocus();
     fillList();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -38,6 +39,7 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen>
 
   @override
   void didPopNext() {
+    FocusScope.of(context).unfocus();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
       systemNavigationBarColor: Colors.transparent,
       statusBarColor: Colors.transparent,
@@ -52,6 +54,7 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen>
     final redTheme = ref.watch(redThemeProvider);
     final blueTheme = ref.watch(blueThemeProvider);
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,

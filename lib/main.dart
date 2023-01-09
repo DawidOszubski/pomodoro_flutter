@@ -1,10 +1,14 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/home_page_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'constants/app_assets.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 void main() async {
@@ -12,8 +16,13 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   //initializeDateFormatting('pl');
   await Firebase.initializeApp();
-
-  //SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.white,
+    statusBarColor: Colors.transparent,
+    statusBarBrightness: Brightness.light,
+    statusBarIconBrightness: Brightness.light,
+    systemNavigationBarIconBrightness: Brightness.light,
+  ));
   runApp(
     ProviderScope(
       child: EasyLocalization(
@@ -53,6 +62,7 @@ class MyApp extends ConsumerWidget {
     final theme = ref.watch(appThemeProvider);
     return MaterialApp(
       theme: ThemeData(
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(),
         primaryColor: theme.mainColor,
         indicatorColor: theme.mainColor,
         textSelectionTheme: TextSelectionThemeData(
@@ -74,7 +84,31 @@ class MyApp extends ConsumerWidget {
       locale: context.locale,
       debugShowCheckedModeBanner: false,
       navigatorObservers: [routeObserver],
-      home: HomePageScreen(),
+      home: const AnimatedSplash(),
     );
+  }
+}
+
+class AnimatedSplash extends StatelessWidget {
+  const AnimatedSplash({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSplashScreen(
+        splash: Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned.fill(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Image.asset(AppAssets.titleImage),
+                ],
+              ),
+            ),
+          ],
+        ),
+        nextScreen: HomePageScreen());
   }
 }
