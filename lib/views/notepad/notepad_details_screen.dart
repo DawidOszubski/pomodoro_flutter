@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
 import 'package:pomodoro_flutter/models/notepad_models/notepad_model.dart';
 import 'package:pomodoro_flutter/widgets/base_screen_widget.dart';
@@ -11,6 +12,7 @@ import 'package:pomodoro_flutter/widgets/custom_button_widget.dart';
 import 'package:pomodoro_flutter/widgets/text_field_widget.dart';
 
 import '../../services/notepad_service.dart';
+import 'delete_note_screen.dart';
 
 class NotepadDetailsScreen extends ConsumerStatefulWidget {
   const NotepadDetailsScreen({
@@ -53,6 +55,29 @@ class _NotepadDetailsScreenState extends ConsumerState<NotepadDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseScreenWidget(
+        onTap: widget.note != null
+            ? () {
+                FocusScope.of(context).unfocus();
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.fade,
+                    duration: const Duration(
+                      milliseconds: 100,
+                    ),
+                    child: DeleteNoteScreen(
+                      theme: widget.theme,
+                      note: widget.note!,
+                      isDoublePop: true,
+                    ),
+                  ),
+                );
+              }
+            : null,
+        actionIcon: const Icon(
+          Icons.delete,
+          color: Colors.white,
+        ),
         resizeToAvoidBottomInsets: true,
         mainColor: widget.theme.mainColor,
         screenTitle:
@@ -125,9 +150,9 @@ class _NotepadDetailsScreenState extends ConsumerState<NotepadDetailsScreen> {
                 visible:
                     true, // MediaQuery.of(context).viewInsets.bottom == 0.0,
                 child: Padding(
-                  padding: const EdgeInsets.only(
+                  padding: EdgeInsets.only(
                     top: 12.0,
-                    bottom: 24.0,
+                    bottom: 24.0 + MediaQuery.of(context).padding.bottom,
                   ),
                   child: Center(
                     child: CustomButtonWidget(

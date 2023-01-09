@@ -23,9 +23,9 @@ class RoundedAddButtonWidget extends StatelessWidget {
           boxShadow: [
             BoxShadow(
                 color: theme.mainColorDarker,
-                offset: const Offset(2, 2),
-                blurRadius: 5,
-                spreadRadius: 1),
+                offset: const Offset(1, 1),
+                blurRadius: 2,
+                spreadRadius: 2),
           ],
         ),
         child: const FittedBox(

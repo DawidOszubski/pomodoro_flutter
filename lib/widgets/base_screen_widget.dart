@@ -130,9 +130,9 @@ class _BaseScreenWidgetState extends ConsumerState<BaseScreenWidget> {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 24.0,
-                  bottom: MediaQuery.of(context).padding.bottom,
+                  bottom: 0,
                 ),
                 child: widget.body,
               ),

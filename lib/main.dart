@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/providers/theme_provider.dart';
 import 'package:pomodoro_flutter/views/home_page_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,19 +96,36 @@ class AnimatedSplash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
-        splash: Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned.fill(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Image.asset(AppAssets.titleImage),
-                ],
+        splashIconSize: double.infinity,
+        curve: Curves.bounceInOut,
+        splashTransition: SplashTransition.fadeTransition,
+        pageTransitionType: PageTransitionType.fade,
+        animationDuration: const Duration(milliseconds: 1500),
+        duration: 800,
+        splash: Padding(
+          padding: const EdgeInsets.all(40.0),
+          child: Stack(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisSize: MainAxisSize.max,
+            children: [
+              Positioned(
+                top: 60,
+                left: 0,
+                right: 0,
+                child: Image.asset(
+                  AppAssets.mainTitleImage,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                ),
               ),
-            ),
-          ],
+              //SizedBox(height: 120.0),
+              Center(
+                child: Image.asset(
+                  AppAssets.appIcon,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                ),
+              ),
+            ],
+          ),
         ),
         nextScreen: HomePageScreen());
   }

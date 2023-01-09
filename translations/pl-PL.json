@@ -9,6 +9,8 @@
   "delete": "Usuń",
   "edit": "Edytuj",
   "save": "Zapisz",
+  "yes": "TAK",
+  "no": "NIE",
 
   "title": "Tytuł",
   "noElements": {
@@ -41,7 +43,9 @@
   "notepad": {
     "title": "Notatnik",
     "edit": "Edytuj notatkę",
-    "create": "Utwórz notatkę"
+    "create": "Utwórz notatkę",
+    "deleteTitle": "Usuń notatkę",
+    "deleteDescription": "Czy jestes pewien, że chcesz usunąć notatkę?"
   },
   "planner": {
     "title": "Planer"

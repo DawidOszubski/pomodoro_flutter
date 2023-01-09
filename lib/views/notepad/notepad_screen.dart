@@ -80,45 +80,14 @@ class _NotepadScreenState extends ConsumerState<NotepadScreen> with RouteAware {
               },
               error: (err, s) => Center(
                     child: Container(
-                      child: Text("Error"),
+                      child: Text("Wystąpił bład"),
                     ),
                   ),
               loading: () {
                 return Container();
               }),
-          /* MasonryGridView.builder(
-            padding: const EdgeInsets.only(
-              bottom: 24.0,
-              top: 12.0,
-              left: 24.0,
-              right: 24.0,
-            ),
-            gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2),
-            itemCount: 12,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  NotepadWidget(
-                    notepad: NotepadModel(
-                        title: "dsadawd",
-                        description: "dawdawd",
-                        date: DateTime.now().toString()),
-                  ),
-                  index == 11
-                      ? const SizedBox(
-                          height: 80,
-                        )
-                      : Container(),
-                ],
-              );
-            },
-          ),*/
           Positioned(
-            bottom: 24.0,
+            bottom: 24.0 + MediaQuery.of(context).padding.bottom,
             right: 24.0,
             child: SizedBox(
               width: 60,

@@ -157,7 +157,7 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen>
   void fillList() {
     mainScreenTabsList = [
       HomePageListItemWidget(
-        imageAsset: AppAssets.learnIcon,
+        imageAsset: AppAssets.appIcon,
         nextScreen: PomodoroScreen(),
         isPomodoroScreen: true,
       ),

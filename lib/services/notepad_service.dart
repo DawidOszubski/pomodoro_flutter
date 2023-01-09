@@ -39,6 +39,15 @@ class NotepadService {
       print(e);
     }
   }
+
+  Future<void> deleteNote(NotepadModel notepadModel) async {
+    final db = await DatabaseHelper.getDB();
+    await db.delete(
+      dbNotepad,
+      where: 'id = ?',
+      whereArgs: [notepadModel.id],
+    );
+  }
 }
 
 final notepadServiceProvider =

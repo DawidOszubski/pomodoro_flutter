@@ -2,13 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
 import 'package:pomodoro_flutter/models/notepad_models/notepad_model.dart';
 
+import '../../views/notepad/delete_note_screen.dart';
 import '../../views/notepad/notepad_details_screen.dart';
 
-class NotepadWidget extends StatefulWidget {
+class NotepadWidget extends ConsumerStatefulWidget {
   const NotepadWidget({
     Key? key,
     required this.note,
@@ -18,13 +20,28 @@ class NotepadWidget extends StatefulWidget {
   final NotepadModel note;
   final AppThemeModel theme;
   @override
-  State<NotepadWidget> createState() => _NotepadWidgetState();
+  _NotepadWidgetState createState() => _NotepadWidgetState();
 }
 
-class _NotepadWidgetState extends State<NotepadWidget> {
+class _NotepadWidgetState extends ConsumerState<NotepadWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onLongPress: () {
+        Navigator.push(
+          context,
+          PageTransition(
+            type: PageTransitionType.fade,
+            duration: const Duration(
+              milliseconds: 100,
+            ),
+            child: DeleteNoteScreen(
+              theme: widget.theme,
+              note: widget.note,
+            ),
+          ),
+        );
+      },
       onTap: () {
         Navigator.push(
           context,

@@ -20,4 +20,6 @@ class AppAssets {
   static const String settingsIcon = 'assets/icons/ic_settings.png';
   static const String polandFlagIcon = 'assets/icons/ic_poland_flag.png';
   static const String englandFlagIcon = 'assets/icons/ic_england_flag.png';
+  static const String mainTitleImage = 'assets/images/title_main.png';
+  static const String appIcon = 'assets/icons/ic_app3.png';
 }
