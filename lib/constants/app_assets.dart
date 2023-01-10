@@ -1,10 +1,10 @@
 class AppAssets {
   static const String learnIcon = 'assets/icons/ic_learn.png';
-  static const String flashCardIcon = 'assets/icons/ic_flashcards.png';
-  static const String notepadIcon = 'assets/icons/ic_notepad.png';
-  static const String timeTableIcon = 'assets/icons/ic_timetable.png';
+  static const String flashCardIcon = 'assets/icons/flashcards2_ic.png';
+  static const String notepadIcon = 'assets/icons/notepad_ic.png';
+  static const String timeTableIcon = 'assets/icons/calendar_ic.png';
   static const String albumIcon = 'assets/icons/ic_album.png';
-  static const String dayPlanIcon = 'assets/icons/ic_day_plan.png';
+  static const String dayPlanIcon = 'assets/icons/planner_ic.png';
   static const String titleImage = 'assets/images/img_title.png';
   static const String aluniaHiImage = 'assets/images/alunia_hi.png';
   static const String titleBlue = 'assets/images/titleBlue.png';

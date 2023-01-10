@@ -18,12 +18,16 @@ class HomePageListItemWidget extends ConsumerStatefulWidget {
     required this.nextScreen,
     this.isPomodoroScreen,
     this.icon,
+    this.isNotepad,
+    this.isFlashards,
   }) : super(key: key);
 
   final String? imageAsset;
   final Widget nextScreen;
   final bool? isPomodoroScreen;
   final Widget? icon;
+  final bool? isNotepad;
+  final bool? isFlashards;
   @override
   _HomePageListItemWidgetState createState() => _HomePageListItemWidgetState();
 }
@@ -119,7 +123,21 @@ class _HomePageListItemWidgetState extends ConsumerState<HomePageListItemWidget>
       child: DecoratedBoxTransition(
         decoration: decorationTween.animate(_controller),
         child: Container(
-          padding: const EdgeInsets.all(20.0),
+          padding: widget.isFlashards == true
+              ? EdgeInsets.only(
+                  top: 10.0,
+                  bottom: 0.0,
+                  right: 10.0,
+                  left: 15.0,
+                )
+              : widget.isNotepad == true
+                  ? EdgeInsets.only(
+                      top: 10.0,
+                      bottom: 10.0,
+                      right: 0.0,
+                      left: 20.0,
+                    )
+                  : const EdgeInsets.all(20.0),
           child: widget.imageAsset != null
               ? Image.asset(
                   widget.imageAsset!,

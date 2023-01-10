@@ -15,6 +15,7 @@ class BaseScreenWidget extends ConsumerStatefulWidget {
     this.resizeToAvoidBottomInsets,
     this.actionIcon,
     this.backIcon,
+    this.isTabBar,
   }) : super(key: key);
 
   final Color mainColor;
@@ -24,6 +25,7 @@ class BaseScreenWidget extends ConsumerStatefulWidget {
   final bool? resizeToAvoidBottomInsets;
   final Icon? actionIcon;
   final void Function()? backIcon;
+  final bool? isTabBar;
 
   @override
   _BaseScreenWidgetState createState() => _BaseScreenWidgetState();
@@ -130,8 +132,8 @@ class _BaseScreenWidgetState extends ConsumerState<BaseScreenWidget> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 24.0,
+                padding: EdgeInsets.only(
+                  top: widget.isTabBar == true ? 0.0 : 24.0,
                   bottom: 0,
                 ),
                 child: widget.body,

@@ -21,7 +21,7 @@ class _HomeworkScreenState extends ConsumerState<HomeworkScreen> {
       body: Stack(
         children: [
           Positioned(
-            bottom: 24.0,
+            bottom: 24.0 + MediaQuery.of(context).padding.bottom,
             right: 24.0,
             child: SizedBox(
               width: 60,

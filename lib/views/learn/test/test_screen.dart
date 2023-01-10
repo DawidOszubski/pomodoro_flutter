@@ -37,7 +37,7 @@ class _TestScreenState extends ConsumerState<TestScreen> {
             },
           ),
           Positioned(
-            bottom: 24.0,
+            bottom: 24.0 + MediaQuery.of(context).padding.bottom,
             right: 24.0,
             child: SizedBox(
               width: 60,

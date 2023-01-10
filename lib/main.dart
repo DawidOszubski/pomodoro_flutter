@@ -63,6 +63,9 @@ class MyApp extends ConsumerWidget {
     final theme = ref.watch(appThemeProvider);
     return MaterialApp(
       theme: ThemeData(
+        scrollbarTheme: ScrollbarThemeData().copyWith(
+            thumbColor: MaterialStateProperty.all(theme.mainColor),
+            mainAxisMargin: 20),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(),
         primaryColor: theme.mainColor,
         indicatorColor: theme.mainColor,

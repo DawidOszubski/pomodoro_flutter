@@ -134,8 +134,9 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                 children: [
                   CircularPercentIndicator(
                     radius: 90.0,
-                    animation: false,
-                    animationDuration: 1200,
+                    animation: true,
+                    animateFromLastPercent: true,
+                    animationDuration: 1000,
                     lineWidth: 12.0,
                     percent: isFinished
                         ? 1
@@ -166,7 +167,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                                             : "$time",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20.0,
+                                        fontSize: 30.0,
                                         color: Colors.white),
                                     textAlign: TextAlign.center,
                                   )
@@ -176,7 +177,7 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                               ),
                       ),
                     ),
-                    circularStrokeCap: CircularStrokeCap.butt,
+                    circularStrokeCap: CircularStrokeCap.round,
                     backgroundColor: theme.mainColorLighter.withOpacity(0.5),
                     linearGradient: theme.gradientButton,
                   ),

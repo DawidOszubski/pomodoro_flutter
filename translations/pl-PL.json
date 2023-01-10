@@ -48,6 +48,8 @@
     "deleteDescription": "Czy jestes pewien, że chcesz usunąć notatkę?"
   },
   "planner": {
-    "title": "Planer"
+    "title": "Planer",
+    "todoList": "Lista zadań",
+    "timeManagementMatrix" : "Matryca zarządzania czasem"
   }
 }

@@ -164,26 +164,23 @@ class _HomePageScreenState extends ConsumerState<HomePageScreen>
       HomePageListItemWidget(
         imageAsset: AppAssets.flashCardIcon,
         nextScreen: FlashCardScreen(),
+        isFlashards: true,
       ),
       HomePageListItemWidget(
         imageAsset: AppAssets.notepadIcon,
+        isNotepad: true,
         nextScreen: NotepadScreen(),
-      ),
-      HomePageListItemWidget(
-        imageAsset: AppAssets.timeTableIcon,
-        nextScreen: TimeTableScreen(),
       ),
       HomePageListItemWidget(
         imageAsset: AppAssets.dayPlanIcon,
         nextScreen: PlannerScreen(),
       ),
       HomePageListItemWidget(
+        imageAsset: AppAssets.timeTableIcon,
+        nextScreen: TimeTableScreen(),
+      ),
+      HomePageListItemWidget(
         imageAsset: AppAssets.settingsIcon,
-        /*icon: Icon(
-          Icons.settings,
-          color: Colors.white,
-          size: 80,
-        ),*/
         nextScreen: SettingsScreen(),
       ),
     ];
