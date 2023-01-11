@@ -33,8 +33,9 @@ class NotepadService {
   Future<void> updateNote({required NotepadModel notepadModel}) async {
     final db = await DatabaseHelper.getDB();
     try {
-      await db.rawUpdate('UPDATE $dbNotepad SET description = ? WHERE id = ?',
-          [notepadModel.description, notepadModel.id]);
+      await db.rawUpdate(
+          'UPDATE $dbNotepad SET title = ?, description = ? WHERE id = ?',
+          [notepadModel.title, notepadModel.description, notepadModel.id]);
     } catch (e) {
       print(e);
     }

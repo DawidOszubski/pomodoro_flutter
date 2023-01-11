@@ -16,7 +16,7 @@ class DatabaseHelper {
     const notepad =
         "CREATE TABLE Notepad(id INTEGER PRIMARY KEY, title TEXT, description TEXT, date TEXT );";
     const task =
-        "CREATE TABLE Task(id INTEGER PRIMARY KEY, title TEXT, description TEXT, taskPriority TEXT, isDone INTEGER, date TEXT );";
+        "CREATE TABLE Task(id INTEGER PRIMARY KEY, title TEXT, description TEXT, isImportant TEXT, isUrgent TEXT, isDone INTEGER, date TEXT );";
 
     return openDatabase(
       join(await getDatabasesPath(), _dbName),

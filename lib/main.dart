@@ -80,6 +80,9 @@ class MyApp extends ConsumerWidget {
           ),
         ),
         colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: theme.mainColor, // header background color
+          onPrimary: Colors.white, // header text color
+          onSurface: Colors.black,
           secondary: theme.mainColor,
         ),
       ),

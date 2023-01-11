@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../enum/planner_enum.dart';
-
 part 'task_model.g.dart';
 
 @JsonSerializable()
@@ -9,15 +7,17 @@ class TaskModel {
   int? id;
   String? title;
   String? description;
-  TaskPriority? taskPriority;
-  bool? isDone;
+  String? isImportant;
+  String? isUrgent;
+  int? isDone;
   String? date;
 
   TaskModel({
     this.id,
     this.title,
     this.description,
-    this.taskPriority,
+    this.isImportant,
+    this.isUrgent,
     this.isDone,
     this.date,
   });

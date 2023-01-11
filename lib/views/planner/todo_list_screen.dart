@@ -2,9 +2,14 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
 
+import '../../main.dart';
+import '../../providers/task_provider.dart';
 import '../../widgets/planner/planner_item_widget.dart';
+import 'add_task_screen.dart';
+import 'delete_task_screen.dart';
 
 class ToDoListScreen extends ConsumerStatefulWidget {
   const ToDoListScreen({
@@ -17,12 +22,38 @@ class ToDoListScreen extends ConsumerStatefulWidget {
   _ToDoListScreenState createState() => _ToDoListScreenState();
 }
 
-class _ToDoListScreenState extends ConsumerState<ToDoListScreen> {
-  final List<String> items = ['planner.today'.tr(), 'planner.thisWeek'.tr()];
+class _ToDoListScreenState extends ConsumerState<ToDoListScreen>
+    with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void didPopNext() {
+    ref.refresh(
+      getTasksProvider(
+        selectDate(selectedDate: selectedValue!),
+      ),
+    );
+    super.didPopNext();
+  }
+
+  final List<String> items = [
+    'planner.today'.tr(),
+    'planner.thisWeek'.tr(),
+    "planner.all".tr()
+  ];
   String? selectedValue = 'planner.today'.tr();
 
   @override
   Widget build(BuildContext context) {
+    final tasks = ref.watch(
+      getTasksProvider(
+        selectDate(selectedDate: selectedValue!),
+      ),
+    );
     return Column(
       children: [
         Padding(
@@ -81,7 +112,7 @@ class _ToDoListScreenState extends ConsumerState<ToDoListScreen> {
                   offset: const Offset(0, 0),
                 ),
               ),
-              Expanded(
+              /*Expanded(
                 child: Center(
                   child: Text(
                     "planner.selectAll".tr(),
@@ -89,55 +120,113 @@ class _ToDoListScreenState extends ConsumerState<ToDoListScreen> {
                     style: TextStyle(color: widget.theme.mainColor),
                   ),
                 ),
-              ),
+              ),*/
             ],
           ),
         ),
         Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: PlannerItemWidget(theme: widget.theme),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: PlannerItemWidget(theme: widget.theme),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: PlannerItemWidget(theme: widget.theme),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: PlannerItemWidget(theme: widget.theme),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: PlannerItemWidget(theme: widget.theme),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: PlannerItemWidget(theme: widget.theme),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: PlannerItemWidget(theme: widget.theme),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: PlannerItemWidget(theme: widget.theme),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: PlannerItemWidget(theme: widget.theme),
-                ),
-              ],
+          child: tasks.when(
+            data: (tasks) {
+              if (tasks != null) {
+                return ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0,
+                              vertical: 12.0,
+                            ),
+                            child: InkWell(
+                              onLongPress: () {
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                    type: PageTransitionType.fade,
+                                    child: DeleteTaskScreen(
+                                        theme: widget.theme,
+                                        task: tasks[index]),
+                                  ),
+                                );
+                              },
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                    type: PageTransitionType.fade,
+                                    duration: const Duration(
+                                      milliseconds: 350,
+                                    ),
+                                    child: AddTaskScreen(
+                                        theme: widget.theme,
+                                        task: tasks[index]),
+                                  ),
+                                );
+                              },
+                              child: PlannerItemWidget(
+                                  theme: widget.theme, task: tasks[index]),
+                            ),
+                          ),
+                          index == tasks.length - 1
+                              ? SizedBox(
+                                  height: 90 +
+                                      MediaQuery.of(context).padding.bottom,
+                                )
+                              : Container(),
+                        ],
+                      );
+                    });
+              } else {
+                return Container();
+              }
+            },
+            error: (err, s) => Center(
+              child: Container(
+                child: Text("Error"),
+              ),
             ),
+            loading: () {
+              return Container(); /* ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey.withOpacity(0.2),
+                    highlightColor: Colors.white.withOpacity(0.4),
+                    period: Duration(milliseconds: 1200),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0,
+                        vertical: 12.0,
+                      ),
+                      child: PlannerItemWidget(
+                          theme: widget.theme, task: TaskModel()),
+                    ),
+                  );
+                },
+              );*/
+            },
           ),
         ),
       ],
     );
+  }
+
+  String? selectDate({required String selectedDate}) {
+    if (selectedDate == 'planner.today'.tr()) {
+      return DateFormat('yyyy-MM-DD').format(
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+      );
+    }
+    if (selectedDate == 'planner.thisWeek'.tr()) {
+      return DateFormat('yyyy-MM-DD').format(
+        DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day + 7),
+      );
+    }
+    if (selectedDate == "planner.all".tr()) {
+      return null;
+    }
   }
 }

@@ -11,6 +11,8 @@
   "save": "Zapisz",
   "yes": "TAK",
   "no": "NIE",
+  "choose": "Wybierz",
+  "create": "Stwórz",
 
   "title": "Tytuł",
   "noElements": {
@@ -54,6 +56,18 @@
     "createTask": "Stwórz zadanie",
     "today": "Dzisiaj",
     "thisWeek": "Ten tydzień",
-    "selectAll": "Zaznacz wszystkie"
+    "all": "Wszystkie",
+    "selectAll": "Zaznacz wszystkie",
+    "deadline": "Termin",
+    "important": "WAŻNE",
+    "notImportant": "NIEWAŻNE",
+    "urgent": "PILNE",
+    "notUrgent": "NIEPILNE",
+    "deleteTitle1": "Usuń zadanie",
+    "deleteDescription1": "Czy jestes pewien, że chcesz usunąć to zadanie?"
+  },
+  "error": {
+    "cantBeEmpty": "Pole nie może być puste",
+    "titleToLong": "Tytuł za długi"
   }
 }
