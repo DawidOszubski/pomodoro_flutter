@@ -15,6 +15,8 @@ class DatabaseHelper {
         "CREATE TABLE PomodoroSet(id INTEGER PRIMARY KEY, learnSectionTime INTEGER, breakTime INTEGER );";
     const notepad =
         "CREATE TABLE Notepad(id INTEGER PRIMARY KEY, title TEXT, description TEXT, date TEXT );";
+    const task =
+        "CREATE TABLE Task(id INTEGER PRIMARY KEY, title TEXT, description TEXT, taskPriority TEXT, isDone INTEGER, date TEXT );";
 
     return openDatabase(
       join(await getDatabasesPath(), _dbName),
@@ -22,6 +24,7 @@ class DatabaseHelper {
         await db.execute(flashcardSet);
         await db.execute(flashcards);
         await db.execute(notepad);
+        await db.execute(task);
         await db.execute(pomodoroSet).then((value) async {
           await db.insert(
             "PomodoroSet",

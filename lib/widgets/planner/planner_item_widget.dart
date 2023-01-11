@@ -31,32 +31,42 @@ class _PlannerItemWidgetState extends State<PlannerItemWidget> {
               blurRadius: 4),
         ],
       ),
-      child: Row(
-        children: [
-          Transform.scale(
-            scale: 1.6,
-            child: Checkbox(
-              value: isSelected,
-              side: BorderSide(
-                color: Colors.black,
-                width: 1,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Transform.scale(
+                scale: 1.6,
+                child: Checkbox(
+                  value: isSelected,
+                  side: BorderSide(
+                    color: Colors.grey.withOpacity(0.6),
+                    width: 1,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      isSelected = value!;
+                    });
+                  },
+                  fillColor: MaterialStateProperty.resolveWith((states) {
+                    // If the button is pressed, return green, otherwise blue
+                    if (states.contains(MaterialState.selected)) {
+                      return Colors.green;
+                    }
+                    return Colors.white;
+                  }),
+                ),
               ),
-              onChanged: (value) {
-                setState(() {
-                  isSelected = value!;
-                });
-              },
-              fillColor: MaterialStateProperty.resolveWith((states) {
-                // If the button is pressed, return green, otherwise blue
-                if (states.contains(MaterialState.selected)) {
-                  return Colors.green;
-                }
-                return Colors.white;
-              }),
             ),
-          ),
-          Text("Zadanie"),
-        ],
+            const SizedBox(
+              width: 8.0,
+            ),
+            Text("Zadanie"),
+          ],
+        ),
       ),
     );
   }

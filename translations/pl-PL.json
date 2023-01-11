@@ -50,6 +50,10 @@
   "planner": {
     "title": "Planer",
     "todoList": "Lista zadań",
-    "timeManagementMatrix" : "Matryca zarządzania czasem"
+    "timeManagementMatrix" : "Matryca zarządzania czasem",
+    "createTask": "Stwórz zadanie",
+    "today": "Dzisiaj",
+    "thisWeek": "Ten tydzień",
+    "selectAll": "Zaznacz wszystkie"
   }
 }

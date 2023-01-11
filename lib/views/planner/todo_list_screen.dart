@@ -1,4 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomodoro_flutter/constants/app_themes.dart';
@@ -17,8 +18,8 @@ class ToDoListScreen extends ConsumerStatefulWidget {
 }
 
 class _ToDoListScreenState extends ConsumerState<ToDoListScreen> {
-  final List<String> items = ['Dzisiaj', 'Ten tydzień'];
-  String? selectedValue = 'Dzisiaj';
+  final List<String> items = ['planner.today'.tr(), 'planner.thisWeek'.tr()];
+  String? selectedValue = 'planner.today'.tr();
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +84,7 @@ class _ToDoListScreenState extends ConsumerState<ToDoListScreen> {
               Expanded(
                 child: Center(
                   child: Text(
-                    "Oznacz wszystkie",
+                    "planner.selectAll".tr(),
                     textAlign: TextAlign.center,
                     style: TextStyle(color: widget.theme.mainColor),
                   ),
@@ -92,10 +93,50 @@ class _ToDoListScreenState extends ConsumerState<ToDoListScreen> {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: PlannerItemWidget(theme: widget.theme),
-        )
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: PlannerItemWidget(theme: widget.theme),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: PlannerItemWidget(theme: widget.theme),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: PlannerItemWidget(theme: widget.theme),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: PlannerItemWidget(theme: widget.theme),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: PlannerItemWidget(theme: widget.theme),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: PlannerItemWidget(theme: widget.theme),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: PlannerItemWidget(theme: widget.theme),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: PlannerItemWidget(theme: widget.theme),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: PlannerItemWidget(theme: widget.theme),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

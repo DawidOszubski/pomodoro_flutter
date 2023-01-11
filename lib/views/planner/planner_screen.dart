@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:pomodoro_flutter/views/planner/add_task_screen.dart';
 import 'package:pomodoro_flutter/views/planner/todo_list_screen.dart';
 
 import '../../providers/theme_provider.dart';
@@ -96,7 +98,18 @@ class _PlannerScreenState extends ConsumerState<PlannerScreen>
               height: 60,
               child: RoundedAddButtonWidget(
                 theme: theme,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      type: PageTransitionType.fade,
+                      duration: const Duration(
+                        milliseconds: 350,
+                      ),
+                      child: AddTaskScreen(theme: theme),
+                    ),
+                  );
+                },
               ),
             ),
           ),

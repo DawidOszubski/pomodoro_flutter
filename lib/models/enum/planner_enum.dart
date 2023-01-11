@@ -1,0 +1,1 @@
+enum TaskPriority { URGENT, NOT_URGENT, IMPORTANT, NOT_IMPORTANT }
